@@ -18,7 +18,7 @@ jobs:
         script: |
           export NVM_DIR=~/.nvm
           source ~/.nvm/nvm.sh
-          cd /var/www/electro4ort.pto
+          cd /var/www/electro4ort.pro
           git pull
           pnpm i
           pnpm build
