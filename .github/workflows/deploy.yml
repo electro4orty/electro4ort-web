@@ -20,5 +20,5 @@ jobs:
           source ~/.nvm/nvm.sh
           cd /var/www/chat.olehhapuk.com.ua
           git pull
-          pnpm i -P
+          pnpm i
           pnpm build
