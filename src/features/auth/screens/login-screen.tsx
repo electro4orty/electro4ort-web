@@ -6,6 +6,8 @@ import { useAuthStore } from '@/store/auth-store';
 import { Button } from '@/components/ui/button';
 import { loginService } from '../services/login.service';
 import FormField from '@/components/ui/form-field';
+import { Link } from 'react-router-dom';
+import { getRegisterPath } from '@/app/constants/router-paths';
 
 const validationSchema = z.object({
   username: z.string().min(1).max(32),
@@ -65,6 +67,9 @@ export default function LoginScreen() {
 
       <Button type="submit" disabled={isPending}>
         Login
+      </Button>
+      <Button asChild variant="link">
+        <Link to={getRegisterPath()}>Register</Link>
       </Button>
     </form>
   );

@@ -6,6 +6,8 @@ import { registerService } from '../services/register.service';
 import { useAuthStore } from '@/store/auth-store';
 import { Button } from '@/components/ui/button';
 import FormField from '@/components/ui/form-field';
+import { Link } from 'react-router-dom';
+import { getLoginPath } from '@/app/constants/router-paths';
 
 const validationSchema = z
   .object({
@@ -55,6 +57,7 @@ export default function RegisterScreen() {
 
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
+      <h1 className="text-3xl font-semibold mb-4 text-center">Register</h1>
       <div className="flex flex-col gap-3 w-80 mb-4">
         <FormField
           label="Username"
@@ -96,6 +99,9 @@ export default function RegisterScreen() {
 
       <Button type="submit" disabled={isPending}>
         Register
+      </Button>
+      <Button asChild variant="link">
+        <Link to={getLoginPath()}>Login</Link>
       </Button>
     </form>
   );
