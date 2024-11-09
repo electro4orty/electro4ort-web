@@ -4,7 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createMessageService } from '../services/create-message.service';
+import {
+  CreateMessageDTO,
+  createMessageService,
+} from '../services/create-message.service';
 import { useAuthStore } from '@/store/auth-store';
 import {
   DropdownMenu,
@@ -21,6 +24,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { uploadFilesService } from '../services/upload-file.service';
 
 interface ChatEditorFormData {
   message: string;
@@ -40,6 +44,8 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
   });
   const queryClient = useQueryClient();
   const [uploadModalType, setUploadModalType] = useState<string | null>(null);
+  const [attachments, setAttachments] =
+    useState<CreateMessageDTO['attachments']>(undefined);
 
   const { mutate } = useMutation({
     mutationFn: createMessageService,
@@ -59,6 +65,7 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
       body: data.message,
       roomId,
       userId: user.id,
+      attachments,
     });
     form.reset();
   };
@@ -85,6 +92,20 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
 
   return (
     <div className="px-2 py-3">
+      {attachments && attachments.length !== 0 && (
+        <div className="flex flex-wrap gap-1 mb-2">
+          {attachments.map((attachment) => (
+            <img
+              key={attachment.fileName}
+              src={`${import.meta.env.VITE_API_URL}/api/attachments/${
+                attachment.fileName
+              }`}
+              className="block size-[80px] object-cover object-center overflow-hidden rounded-lg"
+            />
+          ))}
+        </div>
+      )}
+
       <div className="flex gap-1">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -149,11 +170,22 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
             <DialogTitle>File upload</DialogTitle>
             <DialogDescription>File upload</DialogDescription>
           </DialogHeader>
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+
+              uploadFilesService(roomId, new FormData(e.currentTarget)).then(
+                (res) => {
+                  setAttachments(res);
+                  setUploadModalType(null);
+                }
+              );
+            }}
+          >
             <div className="mb-2">
-              <Input type="file" />
+              <Input type="file" name="files" />
             </div>
-            <Button type="submit">Send</Button>
+            <Button type="submit">Upload</Button>
           </form>
         </DialogContent>
       </Dialog>

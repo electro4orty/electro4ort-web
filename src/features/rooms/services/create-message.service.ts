@@ -1,10 +1,15 @@
 import { socket } from '@/lib/socket';
 import { Message } from '@/types/message';
 
-interface CreateMessageDTO {
+export interface CreateMessageDTO {
   roomId: string;
   userId: string;
   body: string;
+  attachments?: {
+    fileName: string;
+    size: number;
+    mimeType: string;
+  }[];
 }
 
 export async function createMessageService(data: CreateMessageDTO) {

@@ -1,3 +1,4 @@
+import { Attachment } from './attachment';
 import { User } from './user';
 
 export interface Message {
@@ -6,4 +7,5 @@ export interface Message {
   authorId: string;
   author: User;
   body: string;
+  attachments: (Attachment | null)[] | null;
 }

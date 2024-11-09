@@ -36,6 +36,21 @@ export default function ChatMessage({ message }: ChatMessageProps) {
         <h5 className="font-semibold text-sm text-muted-foreground">
           {message.author.displayName}
         </h5>
+        {message.attachments && message.attachments.length !== 0 && (
+          <div className="flex flex-wrap gap-1">
+            {message.attachments
+              .filter((attachment) => !!attachment)
+              .map((attachment) => (
+                <img
+                  key={attachment.fileName}
+                  src={`${import.meta.env.VITE_API_URL}/api/attachments/${
+                    attachment.fileName
+                  }`}
+                  className="block size-[120px] object-cover object-center overflow-hidden rounded-lg"
+                />
+              ))}
+          </div>
+        )}
         <p>{message.body}</p>
       </div>
     </div>
