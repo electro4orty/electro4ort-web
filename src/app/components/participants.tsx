@@ -42,7 +42,9 @@ export default function Participants({ hubSlug }: ParticipantsProps) {
   });
 
   const handleInviteLinkCopyClick = async () => {
-    await navigator.clipboard.writeText(getHubPath(hubSlug));
+    await navigator.clipboard.writeText(
+      `${window.location.origin}${getHubPath(hubSlug)}`
+    );
     toast('Invite link copied');
     setIsInviteCopied(true);
     setTimeout(() => {
