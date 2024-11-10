@@ -3,7 +3,8 @@ import AppSidebar from '../components/app-sidebar';
 import { SidebarRoot, SidebarTrigger } from '@/components/ui/sidebar';
 import { useAuthCheck } from '@/features/auth/hooks/use-auth-check';
 import { useEffect } from 'react';
-import { socket } from '@/lib/socket';
+import { socket, WsException } from '@/lib/socket';
+import { toast } from 'sonner';
 
 export default function HubLayout() {
   useAuthCheck();
@@ -19,6 +20,18 @@ export default function HubLayout() {
       hubSlug,
     });
   }, [hubSlug]);
+
+  useEffect(() => {
+    const handleException = (exception: WsException) => {
+      toast.error(exception.message);
+    };
+
+    socket.on('exception', handleException);
+
+    return () => {
+      socket.off('exception', handleException);
+    };
+  }, []);
 
   return (
     <SidebarRoot>

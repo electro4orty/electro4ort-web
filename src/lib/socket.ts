@@ -2,8 +2,14 @@ import { useAuthStore } from '@/store/auth-store';
 import { Message } from '@/types/message';
 import { io, Socket } from 'socket.io-client';
 
+export interface WsException {
+  status: string;
+  message: string;
+}
+
 interface ListenEvents {
   message: (message: Message) => void;
+  exception: (exception: WsException) => void;
 }
 
 interface EmitEvents {

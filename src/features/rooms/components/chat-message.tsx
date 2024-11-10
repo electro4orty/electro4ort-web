@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/auth-store';
 import { Message } from '@/types/message';
@@ -16,8 +17,8 @@ export default function ChatMessage({ message }: ChatMessageProps) {
     <div
       key={message.id}
       className={cn(
-        'flex gap-1.5 max-w-[80%]',
-        isMine && 'self-end flex-row-reverse'
+        'flex self-start gap-2 max-w-[80%] bg-neutral-900 rounded-lg pl-2 pr-3 py-1',
+        isMine && 'self-end flex-row-reverse pl-3 pr-2'
       )}
     >
       <div className="py-1.5">
@@ -51,7 +52,13 @@ export default function ChatMessage({ message }: ChatMessageProps) {
               ))}
           </div>
         )}
-        <p>{message.body}</p>
+        <p className="mb-1">{message.body}</p>
+        <time
+          dateTime={message.createdAt}
+          className="text-sm text-muted-foreground leading-tight block"
+        >
+          {format(message.createdAt, 'dd.MM.yyyy HH:mm')}
+        </time>
       </div>
     </div>
   );

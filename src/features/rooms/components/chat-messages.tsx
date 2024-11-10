@@ -3,27 +3,30 @@ import { socket } from '@/lib/socket';
 import { Button } from '@/components/ui/button';
 import { useMessages } from '../hooks/use-messages';
 import ChatMessage from './chat-message';
+import { Message } from '@/types/message';
+import { appendMessage } from '../utils/append-message';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ChatMessagesProps {
   roomId: string;
 }
 
 export default function ChatMessages({ roomId }: ChatMessagesProps) {
-  const {
-    data,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-    appendMessage,
-  } = useMessages(roomId);
+  const { data, isFetchingNextPage, hasNextPage, fetchNextPage } =
+    useMessages(roomId);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    socket.on('message', appendMessage);
+    const handleMessage = (message: Message) => {
+      appendMessage(queryClient, message);
+    };
+
+    socket.on('message', handleMessage);
 
     return () => {
-      socket.off('message', appendMessage);
+      socket.off('message', handleMessage);
     };
-  }, [appendMessage]);
+  }, [queryClient]);
 
   if (!data || data.pages.length === 0) {
     return <span className="px-3">Empty</span>;

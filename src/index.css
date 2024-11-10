@@ -79,6 +79,9 @@
   * {
     @apply border-border;
   }
+  :root {
+    color-scheme: light dark;
+  }
   body {
     @apply bg-background text-foreground;
   }

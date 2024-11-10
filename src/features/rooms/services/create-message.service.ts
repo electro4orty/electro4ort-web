@@ -5,11 +5,13 @@ export interface CreateMessageDTO {
   roomId: string;
   userId: string;
   body: string;
-  attachments?: {
-    fileName: string;
-    size: number;
-    mimeType: string;
-  }[];
+  attachments:
+    | {
+        fileName: string;
+        size: number;
+        mimeType: string;
+      }[]
+    | null;
 }
 
 export async function createMessageService(data: CreateMessageDTO) {

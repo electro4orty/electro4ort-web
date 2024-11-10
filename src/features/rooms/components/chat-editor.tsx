@@ -9,13 +9,7 @@ import {
   createMessageService,
 } from '../services/create-message.service';
 import { useAuthStore } from '@/store/auth-store';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { File, Image, Plus, Video } from 'lucide-react';
+import { Upload, X } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -25,6 +19,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { uploadFilesService } from '../services/upload-file.service';
+import { appendMessage } from '../utils/append-message';
 
 interface ChatEditorFormData {
   message: string;
@@ -42,17 +37,15 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
       message: '',
     },
   });
-  const queryClient = useQueryClient();
-  const [uploadModalType, setUploadModalType] = useState<string | null>(null);
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [attachments, setAttachments] =
-    useState<CreateMessageDTO['attachments']>(undefined);
+    useState<CreateMessageDTO['attachments']>(null);
+  const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
     mutationFn: createMessageService,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['rooms', roomId, 'messages'],
-      });
+    onSuccess: (message) => {
+      appendMessage(queryClient, message);
     },
   });
 
@@ -68,6 +61,7 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
       attachments,
     });
     form.reset();
+    setAttachments(null);
   };
 
   const handleTextareaKeyDown = (
@@ -95,39 +89,41 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
       {attachments && attachments.length !== 0 && (
         <div className="flex flex-wrap gap-1 mb-2">
           {attachments.map((attachment) => (
-            <img
-              key={attachment.fileName}
-              src={`${import.meta.env.VITE_API_URL}/api/attachments/${
-                attachment.fileName
-              }`}
-              className="block size-[80px] object-cover object-center overflow-hidden rounded-lg"
-            />
+            <div key={attachment.fileName} className="relative group">
+              <img
+                src={`${import.meta.env.VITE_API_URL}/api/attachments/${
+                  attachment.fileName
+                }`}
+                className="block size-[80px] object-cover object-center overflow-hidden rounded-lg"
+              />
+              <button
+                type="button"
+                className="absolute inset-0 hidden group-hover:flex justify-center items-center bg-black/50"
+                onClick={() =>
+                  setAttachments((prev) =>
+                    prev
+                      ? prev.filter(
+                          (item) => item.fileName !== attachment.fileName
+                        )
+                      : null
+                  )
+                }
+              >
+                <X />
+              </button>
+            </div>
           ))}
         </div>
       )}
 
       <div className="flex gap-1">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="ghost">
-              <Plus className="size-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent side="top" align="start">
-            <DropdownMenuItem onClick={() => setUploadModalType('file')}>
-              <File className="size-4 mr-2" />
-              File
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setUploadModalType('image')}>
-              <Image className="size-4 mr-2" />
-              Image
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setUploadModalType('video')}>
-              <Video className="size-4 mr-2" />
-              Video
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={() => setIsUploadDialogOpen(true)}
+        >
+          <Upload className="size-4" />
+        </Button>
         <form
           ref={formRef}
           onSubmit={form.handleSubmit(handleSubmit)}
@@ -161,10 +157,7 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
         - New line
       </div>
 
-      <Dialog
-        open={uploadModalType === 'file'}
-        onOpenChange={(value) => setUploadModalType(value ? 'file' : null)}
-      >
+      <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>File upload</DialogTitle>
@@ -177,40 +170,16 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
               uploadFilesService(roomId, new FormData(e.currentTarget)).then(
                 (res) => {
                   setAttachments(res);
-                  setUploadModalType(null);
+                  setIsUploadDialogOpen(false);
                 }
               );
             }}
           >
             <div className="mb-2">
-              <Input type="file" name="files" />
+              <Input type="file" name="files" multiple />
             </div>
             <Button type="submit">Upload</Button>
           </form>
-        </DialogContent>
-      </Dialog>
-      <Dialog
-        open={uploadModalType === 'image'}
-        onOpenChange={(value) => setUploadModalType(value ? 'image' : null)}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Image upload</DialogTitle>
-            <DialogDescription>Image upload</DialogDescription>
-          </DialogHeader>
-          Image upload
-        </DialogContent>
-      </Dialog>
-      <Dialog
-        open={uploadModalType === 'video'}
-        onOpenChange={(value) => setUploadModalType(value ? 'video' : null)}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Video upload</DialogTitle>
-            <DialogDescription>Video upload</DialogDescription>
-          </DialogHeader>
-          Video upload
         </DialogContent>
       </Dialog>
     </div>
