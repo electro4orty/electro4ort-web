@@ -3,6 +3,8 @@ import Chat from '../components/chat';
 import { useQuery } from '@tanstack/react-query';
 import { getRoomService } from '../services/get-room.service';
 import { getDashboardPath } from '@/app/constants/router-paths';
+import { useEffect } from 'react';
+import { roomsSocket } from '@/lib/socket';
 
 export default function RoomScreen() {
   const { roomId } = useParams();
@@ -13,6 +15,14 @@ export default function RoomScreen() {
     enabled: !!roomId,
     retry: false,
   });
+
+  useEffect(() => {
+    if (roomId) {
+      roomsSocket.emit('join', {
+        roomId,
+      });
+    }
+  }, [roomId]);
 
   if (!roomId) {
     return null;

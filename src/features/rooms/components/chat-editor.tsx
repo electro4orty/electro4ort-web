@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
@@ -20,6 +20,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { uploadFilesService } from '../services/upload-file.service';
 import { appendMessage } from '../utils/append-message';
+import { User } from '@/types/user';
+import { roomsSocket } from '@/lib/socket';
 
 interface ChatEditorFormData {
   message: string;
@@ -41,6 +43,25 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
   const [attachments, setAttachments] =
     useState<CreateMessageDTO['attachments']>(null);
   const queryClient = useQueryClient();
+  const [typingUser, setTypingUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const handleTyping = (user: User) => {
+      setTypingUser(user);
+    };
+
+    const handleTypingStopped = () => {
+      setTypingUser(null);
+    };
+
+    roomsSocket.on('typing', handleTyping);
+    roomsSocket.on('typingStopped', handleTypingStopped);
+
+    return () => {
+      roomsSocket.off('typing', handleTyping);
+      roomsSocket.off('typingStopped', handleTypingStopped);
+    };
+  });
 
   const { mutate } = useMutation({
     mutationFn: createMessageService,
@@ -83,6 +104,15 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
   };
 
   const { onChange, ...messageProps } = form.register('message');
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    handleTextareaKeyUp(e);
+    onChange(e);
+
+    if (user) {
+      roomsSocket.emit('type', { userId: user.id, roomId });
+    }
+  };
 
   return (
     <div className="px-2 py-3">
@@ -134,10 +164,7 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
             className="resize-none max-h-40"
             rows={1}
             onKeyDown={handleTextareaKeyDown}
-            onChange={(e) => {
-              handleTextareaKeyUp(e);
-              onChange(e);
-            }}
+            onChange={handleChange}
             {...messageProps}
           />
           <Button type="submit" size="sm">
@@ -146,15 +173,22 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
         </form>
       </div>
 
-      <div className="text-sm">
-        <Badge variant="secondary" className="rounded-xl px-1 py-0.5">
-          Enter
-        </Badge>{' '}
-        - Send,{' '}
-        <Badge variant="secondary" className="rounded-xl px-1 py-0.5">
-          Shift + Enter
-        </Badge>{' '}
-        - New line
+      <div className="flex justify-between items-end">
+        <div className="text-sm">
+          <Badge variant="secondary" className="rounded-xl px-1 py-0.5">
+            Enter
+          </Badge>{' '}
+          - Send,{' '}
+          <Badge variant="secondary" className="rounded-xl px-1 py-0.5">
+            Shift + Enter
+          </Badge>{' '}
+          - New line
+        </div>
+        {typingUser && (
+          <p className="text-sm text-muted-foreground">
+            {typingUser.displayName} is typing
+          </p>
+        )}
       </div>
 
       <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
