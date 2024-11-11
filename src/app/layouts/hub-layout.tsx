@@ -5,9 +5,11 @@ import { useAuthCheck } from '@/features/auth/hooks/use-auth-check';
 import { useEffect } from 'react';
 import { socket, WsException } from '@/lib/socket';
 import { toast } from 'sonner';
+import { useAuthStore } from '@/store/auth-store';
 
 export default function HubLayout() {
   useAuthCheck();
+  const { user } = useAuthStore();
 
   const { hubSlug } = useParams();
 
@@ -32,6 +34,20 @@ export default function HubLayout() {
       socket.off('exception', handleException);
     };
   }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (user) {
+        socket.emit('ping', {
+          userId: user.id,
+        });
+      }
+    }, 30_000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [user]);
 
   return (
     <SidebarRoot>

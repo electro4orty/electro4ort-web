@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
 import { useState } from 'react';
+import UserStatusIndicator from '@/components/user-status-indicator';
 
 interface ParticipantsProps {
   hubSlug: string;
@@ -85,16 +86,22 @@ export default function Participants({ hubSlug }: ParticipantsProps) {
                   <SidebarMenuItem key={user.id}>
                     <SidebarMenuButton asChild>
                       <NavLink to={getHubPath('')}>
-                        <Avatar className="size-6">
-                          <AvatarImage
-                            src={user.avatar ?? undefined}
-                            alt={user.displayName}
+                        <div className="relative">
+                          <Avatar className="size-7">
+                            <AvatarImage
+                              src={user.avatar ?? undefined}
+                              alt={user.displayName}
+                            />
+                            <AvatarFallback>
+                              {user.displayName[0].toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          <UserStatusIndicator
+                            status={user.status}
+                            className="absolute bottom-0.5 right-0.5"
                           />
-                          <AvatarFallback>
-                            {user.displayName[0].toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                        {user.displayName}
+                        </div>
+                        <span>{user.displayName}</span>
                       </NavLink>
                     </SidebarMenuButton>
                     <DropdownMenu>

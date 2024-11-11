@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/auth-store';
 import { Message } from '@/types/message';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import UserStatusIndicator from '@/components/user-status-indicator';
 
 interface ChatMessageProps {
   message: Message;
@@ -15,23 +16,28 @@ export default function ChatMessage({ message }: ChatMessageProps) {
 
   return (
     <div
-      key={message.id}
       className={cn(
         'flex self-start gap-2 max-w-[80%] bg-neutral-900 rounded-lg pl-2 pr-3 py-1',
         isMine && 'self-end flex-row-reverse pl-3 pr-2'
       )}
     >
       <div className="py-1.5">
-        <Avatar>
-          <AvatarImage
-            src={message.author.avatar ?? undefined}
-            alt={message.author.displayName}
-            className="size-10 object-cover object-center rounded-full"
+        <div className="relative">
+          <Avatar>
+            <AvatarImage
+              src={message.author.avatar ?? undefined}
+              alt={message.author.displayName}
+              className="size-10 object-cover object-center rounded-full"
+            />
+            <AvatarFallback>
+              {message.author.displayName[0].toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <UserStatusIndicator
+            status={message.author.status}
+            className="absolute bottom-0.5 right-0.5"
           />
-          <AvatarFallback>
-            {message.author.displayName[0].toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
+        </div>
       </div>
       <div>
         <h5 className="font-semibold text-sm text-muted-foreground">

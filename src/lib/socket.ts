@@ -19,6 +19,7 @@ interface EmitEvents {
   ) => void;
   join: (data: { hubSlug: string }) => void;
   leave: (data: { hubSlug: string }) => void;
+  ping: (data: { userId: string }) => void;
 }
 
 export const socket = io(import.meta.env.VITE_API_URL, {

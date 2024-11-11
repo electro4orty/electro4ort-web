@@ -1,3 +1,8 @@
+export enum UserStatus {
+  ONLINE = 'online',
+  OFFLINE = 'offline',
+}
+
 export interface User {
   id: string;
   username: string;
@@ -5,4 +10,5 @@ export interface User {
   displayName: string;
   birthDate: string;
   avatar: string | null;
+  status: UserStatus;
 }
