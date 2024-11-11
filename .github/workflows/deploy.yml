@@ -1,24 +1,21 @@
 name: Deploy
 
-on:
-  push:
-    branches: [ "main" ]
-  workflow_dispatch:
+on: workflow_dispatch
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands
-      uses: appleboy/ssh-action@v1.1.0
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_KEY }}
-        script: |
-          export NVM_DIR=~/.nvm
-          source ~/.nvm/nvm.sh
-          cd /var/www/electro4ort.pro
-          git pull
-          pnpm i
-          pnpm build
+      - name: executing remote ssh commands
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            cd /var/www/electro4ort.pro
+            git pull
+            pnpm i
+            pnpm build
