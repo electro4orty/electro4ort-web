@@ -33,10 +33,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
               {message.author.displayName[0].toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <UserStatusIndicator
-            status={message.author.status}
-            className="absolute bottom-0.5 right-0.5"
-          />
+          <UserStatusIndicator status={message.author.status} />
         </div>
       </div>
       <div>
