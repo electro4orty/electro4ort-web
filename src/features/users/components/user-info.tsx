@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Pencil } from 'lucide-react';
 import { useState } from 'react';
 import EditUserForm from './edit-user-form';
+import { getFileUrl } from '@/utils/get-file-url';
 
 interface UserInfoProps {
   userId: string;
@@ -45,7 +46,7 @@ export default function UserInfo({ userId }: UserInfoProps) {
         <div className="flex gap-2">
           <Avatar className="size-12">
             <AvatarImage
-              src={data.avatar ?? undefined}
+              src={data.avatar ? getFileUrl(data.avatar) : undefined}
               alt={data.displayName}
             />
             <AvatarFallback>{data.displayName[0].toUpperCase()}</AvatarFallback>

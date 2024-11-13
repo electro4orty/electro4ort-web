@@ -16,6 +16,7 @@ import { format } from 'date-fns';
 import { FormField as FormController } from '@/components/ui/form';
 import { uploadAvatarService } from '../services/upload-avatar.service';
 import { getFileUrl } from '@/utils/get-file-url';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 
 interface EditUserFormData {
   username: string;
@@ -99,7 +100,11 @@ export default function EditUserForm({
                       uploadAvatarMutate(e.target.files[0])
                     }
                   />
-                  <img src={getFileUrl(field.value)} />
+                  {field.value && (
+                    <Avatar>
+                      <AvatarImage src={getFileUrl(field.value)} />
+                    </Avatar>
+                  )}
                 </div>
               )}
             />
