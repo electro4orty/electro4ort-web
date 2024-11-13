@@ -32,7 +32,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
                   : undefined
               }
               alt={message.author.displayName}
-              className="size-10 object-cover object-center rounded-full"
+              className="size-10"
             />
             <AvatarFallback>
               {message.author.displayName[0].toUpperCase()}
