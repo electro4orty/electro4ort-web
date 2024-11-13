@@ -24,6 +24,7 @@ import { User } from '@/types/user';
 import { roomsSocket } from '@/lib/socket';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useDebounce } from 'use-debounce';
 
 interface ChatEditorFormData {
   message: string;
@@ -51,6 +52,7 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
     useState<CreateMessageDTO['attachments']>(null);
   const queryClient = useQueryClient();
   const [typingUser, setTypingUser] = useState<User | null>(null);
+  const [debouncedTypingUser] = useDebounce(typingUser, 100);
 
   useEffect(() => {
     const handleTyping = (user: User) => {
@@ -164,11 +166,11 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
         <form
           ref={formRef}
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="flex gap-1 mb-1.5 grow"
+          className="flex items-center gap-2 mb-1.5 grow"
         >
           <Textarea
             placeholder="Write a message"
-            className="resize-none max-h-40"
+            className="resize-none max-h-40 focus-visible:ring-offset-0"
             rows={1}
             min={1}
             max={10000}
@@ -176,13 +178,13 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
             onChange={handleChange}
             {...messageProps}
           />
-          <Button type="submit" size="sm">
+          <Button type="submit" className="h-full" size="sm">
             Send
           </Button>
         </form>
       </div>
 
-      <div className="flex justify-between items-end">
+      <div className="flex justify-between items-end min-h-3.5">
         <div className="text-sm hidden md:block">
           <Badge variant="secondary" className="rounded-xl px-1 py-0.5">
             Enter
@@ -193,9 +195,9 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
           </Badge>{' '}
           - New line
         </div>
-        {typingUser && (
-          <p className="text-sm text-muted-foreground">
-            {typingUser.displayName} is typing
+        {debouncedTypingUser && (
+          <p className="text-sm text-muted-foreground leading-none">
+            {debouncedTypingUser.displayName} is typing
           </p>
         )}
       </div>

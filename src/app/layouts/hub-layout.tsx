@@ -58,7 +58,7 @@ export default function HubLayout() {
 
           <img src="/logo-wide.png" width="180px" alt="Electro4ort" />
         </div>
-        <div className="h-full pt-[44px] md:pt-0">
+        <div className="h-full pt-[60px] md:pt-0">
           <Outlet />
         </div>
       </div>
