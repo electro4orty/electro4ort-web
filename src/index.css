@@ -78,6 +78,7 @@
 @layer base {
   * {
     @apply border-border;
+    scrollbar-width: thin;
   }
   :root {
     color-scheme: light dark;

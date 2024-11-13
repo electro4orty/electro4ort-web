@@ -9,7 +9,7 @@ import {
   createMessageService,
 } from '../services/create-message.service';
 import { useAuthStore } from '@/store/auth-store';
-import { Upload, X } from 'lucide-react';
+import { ImagePlay, Upload, X } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -25,6 +25,7 @@ import { roomsSocket } from '@/lib/socket';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDebounce } from 'use-debounce';
+import GifSelector from './gif-selector';
 
 interface ChatEditorFormData {
   message: string;
@@ -48,6 +49,7 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
     resolver: zodResolver(validationSchema),
   });
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [isGifDialogOpen, setIsGifDialogOpen] = useState(false);
   const [attachments, setAttachments] =
     useState<CreateMessageDTO['attachments']>(null);
   const queryClient = useQueryClient();
@@ -76,6 +78,7 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
     mutationFn: createMessageService,
     onSuccess: (message) => {
       appendMessage(queryClient, message);
+      setIsGifDialogOpen(false);
     },
   });
 
@@ -163,6 +166,13 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
         >
           <Upload className="size-4" />
         </Button>
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={() => setIsGifDialogOpen(true)}
+        >
+          <ImagePlay className="size-4" />
+        </Button>
         <form
           ref={formRef}
           onSubmit={form.handleSubmit(handleSubmit)}
@@ -228,6 +238,22 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
             </div>
             <Button type="submit">Upload</Button>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isGifDialogOpen} onOpenChange={setIsGifDialogOpen}>
+        <DialogContent>
+          <GifSelector
+            onSelect={(url) =>
+              user &&
+              mutate({
+                attachments: null,
+                body: url,
+                roomId,
+                userId: user.id,
+              })
+            }
+          />
         </DialogContent>
       </Dialog>
     </div>
