@@ -93,6 +93,7 @@ export default function EditUserForm({
                   <Input
                     type="file"
                     placeholder="Avatar"
+                    accept="image/*"
                     onChange={(e) =>
                       e.target.files?.[0] &&
                       uploadAvatarMutate(e.target.files[0])
