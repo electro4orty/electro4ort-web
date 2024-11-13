@@ -204,7 +204,9 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>File upload</DialogTitle>
-            <DialogDescription>File upload</DialogDescription>
+            <DialogDescription className="sr-only">
+              File upload
+            </DialogDescription>
           </DialogHeader>
           <form
             onSubmit={(e) => {
