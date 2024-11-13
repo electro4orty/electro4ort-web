@@ -22,10 +22,16 @@ import { uploadFilesService } from '../services/upload-file.service';
 import { appendMessage } from '../utils/append-message';
 import { User } from '@/types/user';
 import { roomsSocket } from '@/lib/socket';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 interface ChatEditorFormData {
   message: string;
 }
+
+const validationSchema = z.object({
+  message: z.string().min(1).max(10000),
+});
 
 interface ChatEditorProps {
   roomId: string;
@@ -38,6 +44,7 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
     defaultValues: {
       message: '',
     },
+    resolver: zodResolver(validationSchema),
   });
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [attachments, setAttachments] =
@@ -163,6 +170,8 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
             placeholder="Write a message"
             className="resize-none max-h-40"
             rows={1}
+            min={1}
+            max={10000}
             onKeyDown={handleTextareaKeyDown}
             onChange={handleChange}
             {...messageProps}
@@ -174,7 +183,7 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
       </div>
 
       <div className="flex justify-between items-end">
-        <div className="text-sm">
+        <div className="text-sm hidden md:block">
           <Badge variant="secondary" className="rounded-xl px-1 py-0.5">
             Enter
           </Badge>{' '}
