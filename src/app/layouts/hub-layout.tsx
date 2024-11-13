@@ -56,7 +56,9 @@ export default function HubLayout() {
         <div className="flex items-center gap-2 md:hidden border-b px-2 py-2 fixed left-0 right-0">
           <SidebarTrigger />
 
-          <img src="/logo-wide.png" width="180px" alt="Electro4ort" />
+          <button type="button" onClick={() => window.location.reload()}>
+            <img src="/logo-wide.png" width="180px" alt="Electro4ort" />
+          </button>
         </div>
         <div className="h-full pt-[60px] md:pt-0">
           <Outlet />
