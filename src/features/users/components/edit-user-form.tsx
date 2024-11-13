@@ -14,6 +14,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { format } from 'date-fns';
 import { FormField as FormController } from '@/components/ui/form';
+import { uploadAvatarService } from '../services/upload-avatar.service';
+import { getFileUrl } from '@/utils/get-file-url';
 
 interface EditUserFormData {
   username: string;
@@ -38,7 +40,9 @@ export default function EditUserForm({
       username: user.username,
       displayName: user.displayName,
       avatar: user.avatar ?? '',
-      birthDate: user.birthDate,
+      // TODO: Remove after api schema update
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      birthDate: user.birthDate ?? '',
     },
   });
 
@@ -55,6 +59,13 @@ export default function EditUserForm({
       data,
     });
   };
+
+  const { mutate: uploadAvatarMutate } = useMutation({
+    mutationFn: uploadAvatarService,
+    onSuccess: (data) => {
+      form.setValue('avatar', data.fileName);
+    },
+  });
 
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -75,10 +86,25 @@ export default function EditUserForm({
         />
         <FormField
           label="Avatar"
-          inputProps={{
-            placeholder: 'Avatar',
-            ...form.register('avatar'),
-          }}
+          render={() => (
+            <FormController
+              control={form.control}
+              name="avatar"
+              render={({ field }) => (
+                <div>
+                  <Input
+                    type="file"
+                    placeholder="Avatar"
+                    onChange={(e) =>
+                      e.target.files?.[0] &&
+                      uploadAvatarMutate(e.target.files[0])
+                    }
+                  />
+                  <img src={getFileUrl(field.value)} />
+                </div>
+              )}
+            />
+          )}
         />
         <FormField
           label="Birth date"
@@ -92,7 +118,7 @@ export default function EditUserForm({
                     <Input
                       type="text"
                       value={
-                        typeof field.value === 'string'
+                        typeof field.value === 'string' && field.value
                           ? format(field.value, 'dd.MM.yyyy')
                           : undefined
                       }

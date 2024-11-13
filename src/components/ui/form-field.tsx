@@ -5,8 +5,8 @@ import { Label } from './label';
 interface FormFieldProps<TFieldValues extends FieldValues = FieldValues> {
   label?: string;
   fieldState?: ReturnType<UseFormGetFieldState<TFieldValues>>;
-  inputProps: InputProps;
-  render?: (props: InputProps) => React.ReactNode;
+  inputProps?: InputProps;
+  render?: (props?: InputProps) => React.ReactNode;
 }
 
 export default function FormField({

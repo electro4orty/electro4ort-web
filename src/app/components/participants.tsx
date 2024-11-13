@@ -29,6 +29,7 @@ import {
 import { toast } from 'sonner';
 import { useState } from 'react';
 import UserStatusIndicator from '@/components/user-status-indicator';
+import { getFileUrl } from '@/utils/get-file-url';
 
 interface ParticipantsProps {
   hubSlug: string;
@@ -89,7 +90,11 @@ export default function Participants({ hubSlug }: ParticipantsProps) {
                         <div className="relative">
                           <Avatar className="size-7">
                             <AvatarImage
-                              src={user.avatar ?? undefined}
+                              src={
+                                user.avatar
+                                  ? getFileUrl(user.avatar)
+                                  : undefined
+                              }
                               alt={user.displayName}
                             />
                             <AvatarFallback>

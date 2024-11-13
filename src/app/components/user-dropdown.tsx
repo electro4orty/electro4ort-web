@@ -17,6 +17,8 @@ import {
 } from '@/components/ui/dialog';
 import UserInfo from '@/features/users/components/user-info';
 import { useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getFileUrl } from '@/utils/get-file-url';
 
 export default function UserDropdown() {
   const { user, logout } = useAuthStore();
@@ -32,11 +34,15 @@ export default function UserDropdown() {
         <DropdownMenuTrigger asChild>
           <SidebarMenuButton size="lg">
             {user.avatar ? (
-              <img
-                src={user.avatar}
-                alt={user.displayName}
-                className="size-8 rounded-full object-cover object-center"
-              />
+              <Avatar className="size-8">
+                <AvatarImage
+                  src={user.avatar ? getFileUrl(user.avatar) : undefined}
+                  alt={user.displayName}
+                />
+                <AvatarFallback>
+                  {user.displayName[0].toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
             ) : (
               <User2 />
             )}

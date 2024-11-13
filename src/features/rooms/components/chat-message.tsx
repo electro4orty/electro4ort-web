@@ -4,6 +4,7 @@ import { useAuthStore } from '@/store/auth-store';
 import { Message } from '@/types/message';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import UserStatusIndicator from '@/components/user-status-indicator';
+import { getFileUrl } from '@/utils/get-file-url';
 
 interface ChatMessageProps {
   message: Message;
@@ -25,7 +26,11 @@ export default function ChatMessage({ message }: ChatMessageProps) {
         <div className="relative">
           <Avatar>
             <AvatarImage
-              src={message.author.avatar ?? undefined}
+              src={
+                message.author.avatar
+                  ? getFileUrl(message.author.avatar)
+                  : undefined
+              }
               alt={message.author.displayName}
               className="size-10 object-cover object-center rounded-full"
             />
@@ -47,9 +52,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
               .map((attachment) => (
                 <img
                   key={attachment.fileName}
-                  src={`${import.meta.env.VITE_API_URL}/api/attachments/${
-                    attachment.fileName
-                  }`}
+                  src={getFileUrl(attachment.fileName)}
                   className="block size-[120px] object-cover object-center overflow-hidden rounded-lg"
                 />
               ))}
