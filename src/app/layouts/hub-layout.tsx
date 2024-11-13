@@ -53,8 +53,10 @@ export default function HubLayout() {
     <SidebarRoot>
       <AppSidebar />
       <div className="grow h-full">
-        <div className="block md:hidden bg-secondary px-2 py-1.5 fixed left-0 right-0">
+        <div className="flex items-center gap-2 md:hidden border-b px-2 py-2 fixed left-0 right-0">
           <SidebarTrigger />
+
+          <img src="/logo-wide.png" width="180px" alt="Electro4ort" />
         </div>
         <div className="h-full pt-[44px] md:pt-0">
           <Outlet />
