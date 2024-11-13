@@ -35,7 +35,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
   );
 
   if (message.type === MessageType.GIF) {
-    content = <video src={message.body} autoPlay loop muted />;
+    content = <video src={message.body} autoPlay loop muted playsInline />;
   }
 
   return (

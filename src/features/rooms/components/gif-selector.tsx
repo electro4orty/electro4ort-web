@@ -57,7 +57,13 @@ export default function GifSelector({ onSelect }: GifSelectorProps) {
             type="button"
             onClick={() => onSelect(gif.media_formats.loopedmp4.url)}
           >
-            <video src={gif.media_formats.loopedmp4.url} loop autoPlay muted />
+            <video
+              src={gif.media_formats.loopedmp4.url}
+              loop
+              autoPlay
+              muted
+              playsInline
+            />
           </button>
         ))}
       </div>
