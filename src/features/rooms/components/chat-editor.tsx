@@ -218,8 +218,9 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
               );
             }}
           >
-            <div className="mb-2">
+            <div className="mb-3">
               <Input type="file" name="files" multiple />
+              <p className="text-muted-foreground text-sm mt-1">Max: 5mb</p>
             </div>
             <Button type="submit">Upload</Button>
           </form>
