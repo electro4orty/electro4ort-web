@@ -41,7 +41,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
           <UserStatusIndicator status={message.author.status} />
         </div>
       </div>
-      <div>
+      <div className="flex flex-col max-w-full">
         <h5 className="font-semibold text-sm text-muted-foreground">
           {message.author.displayName}
         </h5>
@@ -58,7 +58,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
               ))}
           </div>
         )}
-        <p className="mb-1">{message.body}</p>
+        <p className="mb-1 break-dance">{message.body}</p>
         <time
           dateTime={message.createdAt}
           className="text-sm text-muted-foreground leading-tight block"

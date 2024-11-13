@@ -86,3 +86,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .break-dance {
+    word-break: break-word;
+  }
+}

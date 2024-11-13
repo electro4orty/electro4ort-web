@@ -8,7 +8,7 @@ interface ChatProps {
 export default function Chat({ roomId }: ChatProps) {
   return (
     <div className="flex flex-col h-full">
-      <div className="grow overflow-y-scroll flex flex-col-reverse">
+      <div className="grow overflow-y-auto flex flex-col-reverse">
         <ChatMessages roomId={roomId} />
       </div>
       <ChatEditor roomId={roomId} />

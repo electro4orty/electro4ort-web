@@ -33,7 +33,7 @@ export default function ChatMessages({ roomId }: ChatMessagesProps) {
   }
 
   return (
-    <div className="flex flex-col-reverse gap-1 px-3">
+    <div className="flex flex-col-reverse gap-1 px-3 pt-3">
       {data.pages.map((page, i) => (
         <Fragment key={i}>
           {page.data.map((message) => (
