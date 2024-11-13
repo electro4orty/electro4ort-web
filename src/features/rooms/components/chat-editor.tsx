@@ -26,6 +26,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDebounce } from 'use-debounce';
 import GifSelector from './gif-selector';
+import { MessageType } from '@/types/message';
 
 interface ChatEditorFormData {
   message: string;
@@ -92,6 +93,7 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
       roomId,
       userId: user.id,
       attachments,
+      type: MessageType.TEXT,
     });
     form.reset();
     setAttachments(null);
@@ -251,6 +253,7 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
                 body: url,
                 roomId,
                 userId: user.id,
+                type: MessageType.GIF,
               })
             }
           />

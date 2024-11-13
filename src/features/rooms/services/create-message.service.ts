@@ -1,5 +1,5 @@
 import { socket } from '@/lib/socket';
-import { Message } from '@/types/message';
+import { Message, MessageType } from '@/types/message';
 
 export interface CreateMessageDTO {
   roomId: string;
@@ -12,6 +12,7 @@ export interface CreateMessageDTO {
         mimeType: string;
       }[]
     | null;
+  type: MessageType;
 }
 
 export async function createMessageService(data: CreateMessageDTO) {
