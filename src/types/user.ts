@@ -8,7 +8,7 @@ export interface User {
   username: string;
   password: string;
   displayName: string;
-  birthDate: string;
+  birthDate: string | null;
   avatar: string | null;
   status: UserStatus;
 }

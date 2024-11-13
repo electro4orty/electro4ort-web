@@ -40,8 +40,6 @@ export default function EditUserForm({
       username: user.username,
       displayName: user.displayName,
       avatar: user.avatar ?? '',
-      // TODO: Remove after api schema update
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       birthDate: user.birthDate ?? '',
     },
   });
