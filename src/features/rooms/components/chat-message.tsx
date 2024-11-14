@@ -5,6 +5,7 @@ import { Message, MessageType } from '@/types/message';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import UserStatusIndicator from '@/components/user-status-indicator';
 import { getFileUrl } from '@/utils/get-file-url';
+import { useEffect, useState } from 'react';
 
 interface ChatMessageProps {
   message: Message;
@@ -12,8 +13,29 @@ interface ChatMessageProps {
 
 export default function ChatMessage({ message }: ChatMessageProps) {
   const { user } = useAuthStore();
+  const [tikTok, setTikTok] = useState<{
+    embed_product_id: string;
+    html: string;
+  } | null>(null);
 
   const isMine = user && message.authorId === user.id;
+
+  useEffect(() => {
+    if (!message.body.includes('tiktok.com')) {
+      return;
+    }
+
+    fetch(`https://www.tiktok.com/oembed?url=${message.body}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setTikTok(
+          data as {
+            embed_product_id: string;
+            html: string;
+          }
+        );
+      });
+  }, [message.body]);
 
   let content = (
     <>
@@ -30,7 +52,22 @@ export default function ChatMessage({ message }: ChatMessageProps) {
             ))}
         </div>
       )}
-      <p className="mb-1 break-dance">{message.body}</p>
+      {tikTok ? (
+        <div className="mb-1 break-dance max-w-[400px]">
+          <iframe
+            src={`https://www.tiktok.com/player/v1/${tikTok.embed_product_id}`}
+            width={300}
+            height={550}
+          />
+          <div
+            dangerouslySetInnerHTML={{
+              __html: tikTok.html,
+            }}
+          ></div>
+        </div>
+      ) : (
+        <p className="mb-1 break-dance">{message.body}</p>
+      )}
     </>
   );
 
