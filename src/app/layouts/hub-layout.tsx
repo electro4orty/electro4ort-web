@@ -1,7 +1,7 @@
 import { Outlet, useParams } from 'react-router-dom';
 import AppSidebar from '../components/app-sidebar';
 import { SidebarRoot, SidebarTrigger } from '@/components/ui/sidebar';
-import { useAuthCheck } from '../hooks/use-auth-check';
+import { useAuthCheck } from '@/features/auth/hooks/use-auth-check';
 import { useEffect } from 'react';
 import { socket, WsException } from '@/lib/socket';
 import { toast } from 'sonner';

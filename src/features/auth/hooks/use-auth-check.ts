@@ -1,8 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import { getMeService } from '../../features/auth/services/get-me.service';
+import { getMeService } from '../services/get-me.service';
 import { useEffect, useRef } from 'react';
 import { useAuthStore } from '@/store/auth-store';
-import { registerSW } from '../config/register-sw';
 
 export function useAuthCheck() {
   const { login, logout, token } = useAuthStore();
@@ -16,7 +15,6 @@ export function useAuthCheck() {
       }
       login(data);
       isCheckedRef.current = true;
-      registerSW(data.user.id);
     },
     onError: () => {
       logout();
