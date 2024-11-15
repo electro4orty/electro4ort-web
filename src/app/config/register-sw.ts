@@ -7,6 +7,7 @@ export async function registerSW(userId: string) {
 
   try {
     const sw = await navigator.serviceWorker.register('/sw.js');
+    await sw.update();
     const subscription = await sw.pushManager.subscribe({
       applicationServerKey: import.meta.env.VITE_WEB_PUSH_PUBLIC_KEY,
       userVisibleOnly: true,
