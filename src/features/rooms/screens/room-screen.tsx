@@ -24,6 +24,34 @@ export default function RoomScreen() {
     }
   }, [roomId]);
 
+  useEffect(() => {
+    if (!('serviceWorker' in navigator)) {
+      return;
+    }
+
+    navigator.serviceWorker.addEventListener('message', (e) => {
+      const data = e.data as { type: string; roomId: string } | null;
+      if (!data) {
+        return;
+      }
+
+      switch (data.type) {
+        case 'check_active_room':
+          if (data.roomId === roomId) {
+            navigator.serviceWorker.getRegistration().then((registration) => {
+              registration?.active?.postMessage({
+                type: 'check_active_room',
+              });
+            });
+          }
+          break;
+
+        default:
+          break;
+      }
+    });
+  }, [roomId]);
+
   if (!roomId) {
     return null;
   }

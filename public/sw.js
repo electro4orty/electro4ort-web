@@ -3,7 +3,7 @@ self.addEventListener('push', (e) => {
 
   e.waitUntil(
     self.registration.showNotification(message.title, {
-      body: message.message,
+      body: message.body,
     })
   );
 });
