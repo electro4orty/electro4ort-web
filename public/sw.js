@@ -28,7 +28,7 @@ self.addEventListener('push', (e) => {
 
 self.addEventListener('message', (e) => {
   if (e.data?.type === 'user-activity') {
-    if (timeoutId && e.data.documentVisibility === 'visible') {
+    if (timeoutId && e.data.isActive) {
       e.waitUntil(self.clearTimeout(timeoutId));
     }
   }
