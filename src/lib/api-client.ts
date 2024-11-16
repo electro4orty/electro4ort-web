@@ -1,6 +1,7 @@
 import { useAuthStore } from '@/store/auth-store';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { debounce } from 'lodash';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -17,10 +18,10 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error: Error) => {
-    toast.error(error.message);
-    throw error;
-  }
-);
+const handleError = debounce((error: Error) => {
+  console.log(error);
+  toast.error(error.message);
+  throw error;
+}, 300);
+
+apiClient.interceptors.response.use((response) => response, handleError);
