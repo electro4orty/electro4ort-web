@@ -16,7 +16,7 @@ export async function registerSW(user: User) {
       if (e.data.type === 'check-user-activity') {
         sw.active?.postMessage({
           type: 'user-activity',
-          isActive: document.visibilityState === 'visible' || isActive,
+          isActive: isActive && document.visibilityState === 'visible',
         });
       }
     };
