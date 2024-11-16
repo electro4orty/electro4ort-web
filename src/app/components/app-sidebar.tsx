@@ -12,14 +12,16 @@ import HubsDropdown from './hubs-dropdown';
 import UserDropdown from './user-dropdown';
 import { Button } from '@/components/ui/button';
 import { Plus, Search } from 'lucide-react';
-import CreateHubDialog from '@/features/hubs/components/create-hub-dialog';
+import CreateHub from '@/features/hubs/components/create-hub';
 import Participants from './participants';
 import { useState } from 'react';
 import HubsSearch from './hubs-search';
+import { Dialog } from '@/components/ui/dialog';
 
 export default function AppSidebar() {
   const { hubSlug } = useParams();
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [isCreateHubDialogOpen, setIsCreateHubDialogOpen] = useState(false);
 
   if (isSearchActive) {
     return <HubsSearch onClose={() => setIsSearchActive(false)} />;
@@ -34,17 +36,15 @@ export default function AppSidebar() {
               <div className="flex gap-1">
                 <HubsDropdown />
 
-                <CreateHubDialog
-                  trigger={
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="shrink-0 size-8"
-                    >
-                      <Plus className="size-4" />
-                    </Button>
-                  }
-                />
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="shrink-0 size-8"
+                  onClick={() => setIsCreateHubDialogOpen(true)}
+                >
+                  <Plus className="size-4" />
+                </Button>
+
                 <Button
                   type="button"
                   size="icon"
@@ -80,6 +80,13 @@ export default function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
+
+      <Dialog
+        open={isCreateHubDialogOpen}
+        onOpenChange={setIsCreateHubDialogOpen}
+      >
+        <CreateHub onClose={() => setIsCreateHubDialogOpen(false)} />
+      </Dialog>
     </Sidebar>
   );
 }

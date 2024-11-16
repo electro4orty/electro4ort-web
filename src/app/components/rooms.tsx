@@ -9,7 +9,7 @@ import {
   SidebarMenuItem,
   SidebarMenuSkeleton,
 } from '@/components/ui/sidebar';
-import { getHubRoomsService } from '@/features/hubs/services/get-hub-rooms-service';
+import { getHubRoomsService } from '@/features/hubs/services/get-hub-rooms.service';
 import { useQuery } from '@tanstack/react-query';
 import { roomTypeIcons } from '../constants/room-type-icons';
 import { Badge } from '@/components/ui/badge';

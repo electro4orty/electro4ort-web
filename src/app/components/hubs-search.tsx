@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { searchHubsService } from '@/features/hubs/services/search-hubs-service';
+import { searchHubsService } from '@/features/hubs/services/search-hubs.service';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, X } from 'lucide-react';
 import { useEffect } from 'react';

@@ -13,7 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { getHubParticipantsService } from '@/features/hubs/services/get-hub-participants-service';
+import { getHubParticipantsService } from '@/features/hubs/services/get-hub-participants.service';
 import { useQuery } from '@tanstack/react-query';
 import { NavLink } from 'react-router-dom';
 import { getHubPath } from '../constants/router-paths';

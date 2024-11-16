@@ -12,12 +12,12 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { SidebarMenuButton } from '@/components/ui/sidebar';
-import { getJoinedHubsService } from '@/features/hubs/services/get-joined-hubs-service';
+import { getJoinedHubsService } from '@/features/hubs/services/get-joined-hubs.service';
 import { useQuery } from '@tanstack/react-query';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { NavLink, useParams } from 'react-router-dom';
 import { getHubPath } from '../constants/router-paths';
-import { getHubService } from '@/features/hubs/services/get-hub-service';
+import { getHubService } from '@/features/hubs/services/get-hub.service';
 import { useEffect } from 'react';
 
 export default function HubsDropdown() {
