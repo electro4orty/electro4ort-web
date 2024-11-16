@@ -38,9 +38,10 @@ const validationSchema = z.object({
 
 interface ChatEditorProps {
   roomId: string;
+  onSend: () => void;
 }
 
-export default function ChatEditor({ roomId }: ChatEditorProps) {
+export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
   const { user } = useAuthStore();
   const formRef = useRef<HTMLFormElement>(null);
   const form = useForm<ChatEditorFormData>({
@@ -80,6 +81,7 @@ export default function ChatEditor({ roomId }: ChatEditorProps) {
     onSuccess: (message) => {
       appendMessage(queryClient, message);
       setIsGifDialogOpen(false);
+      onSend();
     },
   });
 

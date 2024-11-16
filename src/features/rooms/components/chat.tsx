@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import ChatEditor from './chat-editor';
 import ChatMessages from './chat-messages';
 
@@ -6,12 +7,26 @@ interface ChatProps {
 }
 
 export default function Chat({ roomId }: ChatProps) {
+  const chatMessagesScrollRef = useRef<HTMLDivElement>(null);
+
+  const handleMessageSend = () => {
+    setTimeout(() => {
+      chatMessagesScrollRef.current?.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }, 0);
+  };
+
   return (
     <div className="flex flex-col h-full">
-      <div className="grow overflow-y-auto flex flex-col-reverse">
+      <div
+        ref={chatMessagesScrollRef}
+        className="grow overflow-y-auto flex flex-col-reverse"
+      >
         <ChatMessages roomId={roomId} />
       </div>
-      <ChatEditor roomId={roomId} />
+      <ChatEditor roomId={roomId} onSend={handleMessageSend} />
     </div>
   );
 }
