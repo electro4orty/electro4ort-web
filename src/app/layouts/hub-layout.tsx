@@ -42,7 +42,7 @@ export default function HubLayout() {
           userId: user.id,
         });
       }
-    }, 30_000);
+    }, 3000);
 
     return () => {
       clearInterval(intervalId);
