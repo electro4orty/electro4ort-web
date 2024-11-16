@@ -16,7 +16,7 @@ import {
 import { getHubParticipantsService } from '@/features/hubs/services/get-hub-participants.service';
 import { useQuery } from '@tanstack/react-query';
 import { NavLink } from 'react-router-dom';
-import { getHubPath } from '../constants/router-paths';
+import { getHubPath, getInviteHubPath } from '../constants/router-paths';
 import { Button } from '@/components/ui/button';
 import { Check, ChevronDown, Link2, MoreHorizontal } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -45,7 +45,7 @@ export default function Participants({ hubSlug }: ParticipantsProps) {
 
   const handleInviteLinkCopyClick = async () => {
     await navigator.clipboard.writeText(
-      `${window.location.origin}${getHubPath(hubSlug)}`
+      `${window.location.origin}${getInviteHubPath(hubSlug)}`
     );
     toast('Invite link copied');
     setIsInviteCopied(true);

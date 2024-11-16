@@ -10,6 +10,7 @@ import HubScreen from '@/features/hubs/screens/hub-screen';
 import LoginScreen from '@/features/auth/screens/login-screen';
 import RegisterScreen from '@/features/auth/screens/register-screen';
 import AuthGuard from '@/features/auth/components/auth-guard';
+import InviteHubScreen from '@/features/hubs/screens/invite-hub-screen';
 
 export const router = createBrowserRouter([
   {
@@ -56,6 +57,7 @@ export const router = createBrowserRouter([
               </AuthGuard>
             ),
           },
+
           {
             path: RouterPath.ROOM,
             element: (
@@ -65,6 +67,14 @@ export const router = createBrowserRouter([
             ),
           },
         ],
+      },
+      {
+        path: RouterPath.INVITE_HUB,
+        element: (
+          <AuthGuard>
+            <InviteHubScreen />
+          </AuthGuard>
+        ),
       },
     ],
   },

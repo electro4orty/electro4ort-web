@@ -5,6 +5,7 @@ export enum RouterPath {
   REGISTER = '/auth/register',
   DASHBOARD = '/',
   HUB = '/:hubSlug',
+  INVITE_HUB = '/invite/:hubSlug',
   ROOM = '/:hubSlug/rooms/:roomId',
 }
 
@@ -19,4 +20,8 @@ export const getRoomPath = (hubSlug: string, roomId: string) =>
   generatePath(RouterPath.ROOM, {
     hubSlug,
     roomId,
+  });
+export const getInviteHubPath = (hubSlug: string) =>
+  generatePath(RouterPath.INVITE_HUB, {
+    hubSlug,
   });
