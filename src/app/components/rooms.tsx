@@ -22,7 +22,9 @@ import {
 } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 import { ChevronDown, Plus } from 'lucide-react';
-import CreateRoomDialog from '@/features/rooms/components/create-room-dialog';
+import CreateRoom from '@/features/rooms/components/create-room';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { useState } from 'react';
 
 const skeletons = Array.from({ length: 5 }).map((_, index) => (
   <SidebarMenuItem key={index}>
@@ -40,6 +42,8 @@ export default function Rooms({ hubSlug }: RoomsProps) {
     queryFn: () => getHubRoomsService(hubSlug),
   });
 
+  const [isCreateRoomDialogOpen, setIsCreateRoomDialogOpen] = useState(false);
+
   return (
     <Collapsible className="group/collapsible" defaultOpen>
       <SidebarGroup>
@@ -52,14 +56,25 @@ export default function Rooms({ hubSlug }: RoomsProps) {
               </Button>
             </CollapsibleTrigger>
 
-            <CreateRoomDialog
-              trigger={
-                <Button size="icon-sm" variant="ghost">
-                  <Plus />
-                </Button>
-              }
-              hubSlug={hubSlug}
-            />
+            <Button
+              size="icon-sm"
+              variant="ghost"
+              onClick={() => setIsCreateRoomDialogOpen(true)}
+            >
+              <Plus />
+            </Button>
+
+            <Dialog
+              open={isCreateRoomDialogOpen}
+              onOpenChange={setIsCreateRoomDialogOpen}
+            >
+              <DialogContent>
+                <CreateRoom
+                  hubSlug={hubSlug}
+                  onClose={() => setIsCreateRoomDialogOpen(false)}
+                />
+              </DialogContent>
+            </Dialog>
           </SidebarGroupAction>
         </SidebarGroupLabel>
         <CollapsibleContent>
