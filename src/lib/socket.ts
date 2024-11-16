@@ -51,3 +51,13 @@ export const roomsSocket = io(`${import.meta.env.VITE_API_URL}/rooms`, {
     }
   },
 }) as Socket<RoomsListenEvents, RoomsEmitEvents>;
+
+export function connectAll() {
+  if (!socket.connected) {
+    socket.connect();
+  }
+
+  if (!roomsSocket.connected) {
+    roomsSocket.connect();
+  }
+}
