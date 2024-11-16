@@ -1,14 +1,17 @@
 {
-  "name": "hyper-chat-web",
-  "private": true,
-  "version": "0.0.0",
+  "name": "electro4ort-web",
+  "version": "0.0.1",
+  "description": "Everything 4orts could ever need😈",
   "type": "module",
+  "private": true,
+  "license": "MIT",
+  "author": "Electro4orty (https://github.com/electro4orty)",
+  "homepage": "https://electro4ort.pro",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint . && tsc --noEmit",
-    "preview": "vite preview",
-    "mock": "json-server data/db.json"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -74,5 +77,5 @@
     "uuid": "^10.0.0",
     "vite": "^5.4.8"
   },
-  "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c"
+  "packageManager": "pnpm@9.13.2+sha512.88c9c3864450350e65a33587ab801acf946d7c814ed1134da4a924f6df5a2120fd36b46aab68f7cd1d413149112d53c7db3a4136624cfd00ff1846a0c6cef48a"
 }
