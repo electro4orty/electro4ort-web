@@ -11,4 +11,5 @@ export interface User {
   birthDate: string | null;
   avatar: string | null;
   status: UserStatus;
+  pushSubscription: object | null;
 }

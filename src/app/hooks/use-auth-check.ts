@@ -7,6 +7,7 @@ import { registerSW } from '../config/register-sw';
 export function useAuthCheck() {
   const { login, logout, token } = useAuthStore();
   const isCheckedRef = useRef(false);
+  const unsubscribeRef = useRef<(() => void) | null>(null);
 
   const { mutate } = useMutation({
     mutationFn: getMeService,
@@ -15,8 +16,11 @@ export function useAuthCheck() {
         return;
       }
       login(data);
+      if (unsubscribeRef.current) {
+        unsubscribeRef.current();
+      }
+      registerSW(data.user);
       isCheckedRef.current = true;
-      registerSW(data.user.id);
     },
     onError: () => {
       logout();
