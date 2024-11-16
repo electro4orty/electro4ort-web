@@ -1,5 +1,5 @@
 import { useAuthStore } from '@/store/auth-store';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import { debounce } from 'lodash';
 
@@ -18,9 +18,9 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
-const handleError = debounce((error: Error) => {
-  console.log(error);
-  toast.error(error.message);
+const handleError = debounce((error: AxiosError<{ message?: string }>) => {
+  const errorMessage = error.response?.data.message ?? error.message;
+  toast.error(errorMessage);
   throw error;
 }, 300);
 
