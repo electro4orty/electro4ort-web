@@ -22,6 +22,14 @@ export default function RoomScreen() {
         roomId,
       });
     }
+
+    return () => {
+      if (roomId) {
+        roomsSocket.emit('leave', {
+          roomId,
+        });
+      }
+    };
   }, [roomId]);
 
   if (!roomId) {
