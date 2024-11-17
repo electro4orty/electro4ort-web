@@ -2,7 +2,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { getRoomMessagesService } from '../services/get-room-messages.service';
 
 export function useMessages(roomId: string) {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
       queryKey: ['rooms', roomId, 'messages'],
       queryFn: ({ pageParam }) => getRoomMessagesService(roomId, pageParam),
@@ -21,5 +21,6 @@ export function useMessages(roomId: string) {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
+    isLoading,
   };
 }

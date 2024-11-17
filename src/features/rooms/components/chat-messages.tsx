@@ -6,13 +6,14 @@ import ChatMessage from './chat-message';
 import { Message } from '@/types/message';
 import { appendMessage } from '../utils/append-message';
 import { useQueryClient } from '@tanstack/react-query';
+import ChatMessagesSkeletons from './chat-messages-skeletons';
 
 interface ChatMessagesProps {
   roomId: string;
 }
 
 export default function ChatMessages({ roomId }: ChatMessagesProps) {
-  const { data, isFetchingNextPage, hasNextPage, fetchNextPage } =
+  const { data, isFetchingNextPage, isLoading, hasNextPage, fetchNextPage } =
     useMessages(roomId);
   const queryClient = useQueryClient();
 
@@ -28,19 +29,17 @@ export default function ChatMessages({ roomId }: ChatMessagesProps) {
     };
   }, [queryClient]);
 
-  if (!data || data.pages.length === 0) {
-    return <span className="px-3">Empty</span>;
-  }
-
   return (
     <div className="flex flex-col-reverse gap-1 px-3 pt-3">
-      {data.pages.map((page, i) => (
-        <Fragment key={i}>
-          {page.data.map((message) => (
-            <ChatMessage key={message.id} message={message} />
-          ))}
-        </Fragment>
-      ))}
+      {isLoading && <ChatMessagesSkeletons />}
+      {!isLoading &&
+        data?.pages.map((page, i) => (
+          <Fragment key={i}>
+            {page.data.map((message) => (
+              <ChatMessage key={message.id} message={message} />
+            ))}
+          </Fragment>
+        ))}
 
       {hasNextPage && (
         <div className="flex justify-center items-center p-2">
