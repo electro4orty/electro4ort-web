@@ -12,7 +12,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
-import { format } from 'date-fns';
+import { format, formatISO } from 'date-fns';
 import { Form, FormField as FormController } from '@/components/ui/form';
 import AvatarField from './avatar-field';
 import { EditUserFormData } from './edit-user-form.config';
@@ -49,7 +49,7 @@ export default function EditUserForm({
       userId: user.id,
       data: {
         ...data,
-        birthDate: data.birthDate?.toISOString() ?? '',
+        birthDate: data.birthDate ? formatISO(data.birthDate) : '',
       },
     });
   };
