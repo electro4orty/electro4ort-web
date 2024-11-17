@@ -22,5 +22,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4.0.0
       - run: pnpm i
       - run: pnpm lint
