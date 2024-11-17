@@ -50,13 +50,9 @@ export default function AvatarField() {
               ),
             })}
           >
-            <input
-              {...getInputProps({
-                accept: 'image/*',
-              })}
-            />
+            <input {...getInputProps()} />
             {acceptedFiles.length === 0 ? (
-              <p>Drop files here</p>
+              <p>Drop image here or click to select</p>
             ) : (
               <p className="text-sm">{acceptedFiles[0].name}</p>
             )}
