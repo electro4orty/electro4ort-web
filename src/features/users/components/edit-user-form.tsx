@@ -13,17 +13,9 @@ import {
 } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
 import { format } from 'date-fns';
-import { FormField as FormController } from '@/components/ui/form';
-import { uploadAvatarService } from '../services/upload-avatar.service';
-import { getFileUrl } from '@/utils/get-file-url';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
-
-interface EditUserFormData {
-  username: string;
-  displayName: string;
-  avatar: string;
-  birthDate: string;
-}
+import { Form, FormField as FormController } from '@/components/ui/form';
+import AvatarField from './avatar-field';
+import { EditUserFormData } from './edit-user-form.config';
 
 interface EditUserFormProps {
   user: User;
@@ -41,7 +33,7 @@ export default function EditUserForm({
       username: user.username,
       displayName: user.displayName,
       avatar: user.avatar ?? '',
-      birthDate: user.birthDate ?? '',
+      birthDate: user.birthDate ? new Date(user.birthDate) : undefined,
     },
   });
 
@@ -55,113 +47,82 @@ export default function EditUserForm({
   const handleSubmit = (data: EditUserFormData) => {
     mutate({
       userId: user.id,
-      data,
+      data: {
+        ...data,
+        birthDate: data.birthDate?.toLocaleDateString() ?? '',
+      },
     });
   };
 
-  const { mutate: uploadAvatarMutate } = useMutation({
-    mutationFn: uploadAvatarService,
-    onSuccess: (data) => {
-      form.setValue('avatar', data.fileName);
-    },
-  });
-
   return (
-    <form onSubmit={form.handleSubmit(handleSubmit)}>
-      <div className="flex flex-col gap-2 mb-4">
-        <FormField
-          label="Username"
-          inputProps={{
-            placeholder: 'Username',
-            ...form.register('username'),
-          }}
-        />
-        <FormField
-          label="Display name"
-          inputProps={{
-            placeholder: 'Display name',
-            ...form.register('displayName'),
-          }}
-        />
-        <FormField
-          label="Avatar"
-          render={() => (
-            <FormController
-              control={form.control}
-              name="avatar"
-              render={({ field }) => (
-                <div>
-                  <Input
-                    type="file"
-                    placeholder="Avatar"
-                    accept="image/*"
-                    onChange={(e) =>
-                      e.target.files?.[0] &&
-                      uploadAvatarMutate(e.target.files[0])
-                    }
-                  />
-                  {field.value && (
-                    <Avatar>
-                      <AvatarImage src={getFileUrl(field.value)} />
-                    </Avatar>
-                  )}
-                </div>
-              )}
-            />
-          )}
-        />
-        <FormField
-          label="Birth date"
-          render={() => (
-            <FormController
-              control={form.control}
-              name="birthDate"
-              render={({ field }) => (
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Input
-                      type="text"
-                      value={
-                        typeof field.value === 'string' && field.value
-                          ? format(field.value, 'dd.MM.yyyy')
-                          : undefined
-                      }
-                      readOnly
-                    />
-                  </PopoverTrigger>
-                  <PopoverContent className="p-0">
-                    <Calendar
-                      className="flex justify-center"
-                      mode="single"
-                      selected={
-                        typeof field.value === 'string'
-                          ? new Date(field.value)
-                          : new Date()
-                      }
-                      onSelect={(date) => {
-                        form.setValue('birthDate', date?.toISOString() ?? '');
-                      }}
-                    />
-                  </PopoverContent>
-                </Popover>
-              )}
-            />
-          )}
-          inputProps={{
-            placeholder: 'Birth date',
-            ...form.register('birthDate'),
-          }}
-        />
-      </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <div className="flex flex-col gap-2 mb-4">
+          <FormField
+            label="Username"
+            inputProps={{
+              placeholder: 'Username',
+              ...form.register('username'),
+            }}
+          />
+          <FormField
+            label="Display name"
+            inputProps={{
+              placeholder: 'Display name',
+              ...form.register('displayName'),
+            }}
+          />
+          <FormField label="Avatar" render={() => <AvatarField />} />
+          <FormField
+            label="Birth date"
+            render={() => (
+              <FormController
+                control={form.control}
+                name="birthDate"
+                render={({ field }) => (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Input
+                        type="text"
+                        value={
+                          field.value
+                            ? format(field.value, 'dd.MM.yyyy')
+                            : undefined
+                        }
+                        readOnly
+                      />
+                    </PopoverTrigger>
+                    <PopoverContent className="p-0">
+                      <Calendar
+                        className="flex justify-center"
+                        mode="single"
+                        pagedNavigation
+                        selected={field.value}
+                        onSelect={(date) => {
+                          form.setValue('birthDate', date);
+                        }}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                )}
+              />
+            )}
+            inputProps={{
+              placeholder: 'Birth date',
+              ...form.register('birthDate'),
+            }}
+          />
+        </div>
 
-      <DialogFooter>
-        <Button type="button" variant="outline" onClick={onCancel}>
-          Cancel
-        </Button>
-        <Button type="submit" disabled={isPending}>
-          Save
-        </Button>
-      </DialogFooter>
-    </form>
+        <DialogFooter>
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button type="submit" disabled={isPending}>
+            Save
+          </Button>
+        </DialogFooter>
+      </form>
+    </Form>
   );
 }
