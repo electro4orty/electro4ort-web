@@ -47,7 +47,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
               <img
                 key={attachment.fileName}
                 src={getFileUrl(attachment.fileName)}
-                className="block size-[120px] object-cover object-center overflow-hidden rounded-lg"
+                className="block max-h-[400px] object-cover object-center overflow-hidden rounded-lg"
               />
             ))}
         </div>
