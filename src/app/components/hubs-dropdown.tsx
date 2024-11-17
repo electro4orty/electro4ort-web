@@ -13,15 +13,18 @@ import {
 } from '@/components/ui/popover';
 import { SidebarMenuButton } from '@/components/ui/sidebar';
 import { getJoinedHubsService } from '@/features/hubs/services/get-joined-hubs.service';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { NavLink, useParams } from 'react-router-dom';
 import { getHubPath } from '../constants/router-paths';
 import { getHubService } from '@/features/hubs/services/get-hub.service';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function HubsDropdown() {
   const { hubSlug } = useParams();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const { data: hubs } = useQuery({
     queryKey: ['hubs'],
@@ -36,14 +39,14 @@ export default function HubsDropdown() {
 
   useEffect(() => {
     refetch();
-  }, [hubSlug, refetch]);
+  }, [hubSlug, queryClient, refetch]);
 
   if (!activeHub) {
     return null;
   }
 
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <SidebarMenuButton role="combobox">
           {activeHub.name}
@@ -59,7 +62,10 @@ export default function HubsDropdown() {
               <CommandGroup>
                 {hubs.map((hub) => (
                   <CommandItem key={hub.id} asChild>
-                    <NavLink to={getHubPath(hub.slug)}>
+                    <NavLink
+                      to={getHubPath(hub.slug)}
+                      onClick={() => setIsOpen(false)}
+                    >
                       {hub.id === activeHub.id && (
                         <Check className="size-4 mr-2" />
                       )}
