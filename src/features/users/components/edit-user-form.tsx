@@ -126,6 +126,7 @@ export default function EditUserForm({
                           ? format(field.value, 'dd.MM.yyyy')
                           : undefined
                       }
+                      readOnly
                     />
                   </PopoverTrigger>
                   <PopoverContent className="p-0">
