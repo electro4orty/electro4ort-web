@@ -1,16 +1,23 @@
+/* eslint-disable react-refresh/only-export-components */
+import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import { RouterPath } from '../constants/router-paths';
-import AppLayout from '../layouts/app-layout';
-import AuthLayout from '../layouts/auth-layout';
-import HubLayout from '../layouts/hub-layout';
-import ErrorBoundary from '../components/error-boundary';
-import DashboardScreen from '../screens/dashboard-screen';
-import RoomScreen from '@/features/rooms/screens/room-screen';
-import HubScreen from '@/features/hubs/screens/hub-screen';
-import LoginScreen from '@/features/auth/screens/login-screen';
-import RegisterScreen from '@/features/auth/screens/register-screen';
-import AuthGuard from '@/features/auth/components/auth-guard';
-import InviteHubScreen from '@/features/hubs/screens/invite-hub-screen';
+
+const AppLayout = lazy(() => import('../layouts/app-layout'));
+const AuthLayout = lazy(() => import('../layouts/auth-layout'));
+const HubLayout = lazy(() => import('../layouts/hub-layout'));
+const ErrorBoundary = lazy(() => import('../components/error-boundary'));
+const DashboardScreen = lazy(() => import('../screens/dashboard-screen'));
+const RoomScreen = lazy(() => import('@/features/rooms/screens/room-screen'));
+const HubScreen = lazy(() => import('@/features/hubs/screens/hub-screen'));
+const LoginScreen = lazy(() => import('@/features/auth/screens/login-screen'));
+const RegisterScreen = lazy(
+  () => import('@/features/auth/screens/register-screen')
+);
+const AuthGuard = lazy(() => import('@/features/auth/components/auth-guard'));
+const InviteHubScreen = lazy(
+  () => import('@/features/hubs/screens/invite-hub-screen')
+);
 
 export const router = createBrowserRouter(
   [
