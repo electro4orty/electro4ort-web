@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { getHubPath } from '../constants/router-paths';
+import { getHubPath } from '../../constants/router-paths';
 import { Button } from '@/components/ui/button';
 import { getJoinedHubsService } from '@/features/hubs/services/get-joined-hubs.service';
 import JoinHub from '@/features/hubs/components/join-hub';

@@ -12,7 +12,7 @@ import { useForm } from 'react-hook-form';
 import { createHubService } from '../services/create-hub.service';
 import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
-import { getHubPath } from '@/app/constants/router-paths';
+import { getHubPath } from '@/constants/router-paths';
 
 interface CreateHubFormData {
   name: string;

@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { joinHubService } from '../services/join-hub.service';
-import { getDashboardPath, getHubPath } from '@/app/constants/router-paths';
+import { getDashboardPath, getHubPath } from '@/constants/router-paths';
 import { getHubService } from '../services/get-hub.service';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { loginService } from '../services/login.service';
 import FormField from '@/components/ui/form-field';
 import { Link } from 'react-router-dom';
-import { getRegisterPath } from '@/app/constants/router-paths';
+import { getRegisterPath } from '@/constants/router-paths';
 
 const validationSchema = z.object({
   username: z.string().min(1).max(32),

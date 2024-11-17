@@ -14,7 +14,7 @@ import { useQuery } from '@tanstack/react-query';
 import { roomTypeIcons } from '../constants/room-type-icons';
 import { Badge } from '@/components/ui/badge';
 import { NavLink } from 'react-router-dom';
-import { getRoomPath } from '../constants/router-paths';
+import { getRoomPath } from '../../constants/router-paths';
 import {
   Collapsible,
   CollapsibleContent,

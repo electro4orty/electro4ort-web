@@ -16,7 +16,7 @@ import { getJoinedHubsService } from '@/features/hubs/services/get-joined-hubs.s
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { NavLink, useParams } from 'react-router-dom';
-import { getHubPath } from '../constants/router-paths';
+import { getHubPath } from '../../constants/router-paths';
 import { getHubService } from '@/features/hubs/services/get-hub.service';
 import { useEffect, useState } from 'react';
 

@@ -7,7 +7,7 @@ import { useAuthStore } from '@/store/auth-store';
 import { Button } from '@/components/ui/button';
 import FormField from '@/components/ui/form-field';
 import { Link } from 'react-router-dom';
-import { getLoginPath } from '@/app/constants/router-paths';
+import { getLoginPath } from '@/constants/router-paths';
 
 const validationSchema = z
   .object({

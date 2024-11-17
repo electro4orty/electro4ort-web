@@ -2,7 +2,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import Chat from '../components/chat';
 import { useQuery } from '@tanstack/react-query';
 import { getRoomService } from '../services/get-room.service';
-import { getDashboardPath } from '@/app/constants/router-paths';
+import { getDashboardPath } from '@/constants/router-paths';
 import { useEffect } from 'react';
 import { roomsSocket } from '@/lib/socket';
 

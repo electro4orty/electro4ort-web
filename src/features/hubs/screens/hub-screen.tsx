@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getHubRoomsService } from '../services/get-hub-rooms.service';
 import { Navigate, useParams } from 'react-router-dom';
-import { getRoomPath } from '@/app/constants/router-paths';
+import { getRoomPath } from '@/constants/router-paths';
 import { useEffect } from 'react';
 
 export default function HubScreen() {

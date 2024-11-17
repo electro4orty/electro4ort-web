@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import { RouterPath } from '../constants/router-paths';
+import { RouterPath } from '../../constants/router-paths';
 
 const AppLayout = lazy(() => import('../layouts/app-layout'));
 const AuthLayout = lazy(() => import('../layouts/auth-layout'));

@@ -1,4 +1,4 @@
-import { getHubPath } from '@/app/constants/router-paths';
+import { getHubPath } from '@/constants/router-paths';
 import { Button } from '@/components/ui/button';
 import {
   DialogClose,

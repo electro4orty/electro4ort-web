@@ -16,7 +16,7 @@ import {
 import { getHubParticipantsService } from '@/features/hubs/services/get-hub-participants.service';
 import { useQuery } from '@tanstack/react-query';
 import { NavLink } from 'react-router-dom';
-import { getHubPath, getInviteHubPath } from '../constants/router-paths';
+import { getHubPath, getInviteHubPath } from '../../constants/router-paths';
 import { Button } from '@/components/ui/button';
 import { Check, ChevronDown, Link2, MoreHorizontal } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';

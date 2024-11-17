@@ -63,7 +63,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
             dangerouslySetInnerHTML={{
               __html: tikTok.html,
             }}
-          ></div>
+           />
         </div>
       ) : (
         <p className="mb-1 break-dance">{message.body}</p>
