@@ -19,7 +19,12 @@ export default function AppProvider() {
       <TooltipProvider>
         <SidebarProvider>
           <Toaster />
-          <RouterProvider router={router} />
+          <RouterProvider
+            router={router}
+            future={{
+              v7_startTransition: true,
+            }}
+          />
         </SidebarProvider>
       </TooltipProvider>
     </QueryClientProvider>
