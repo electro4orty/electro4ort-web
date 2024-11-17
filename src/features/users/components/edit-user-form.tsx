@@ -49,7 +49,7 @@ export default function EditUserForm({
       userId: user.id,
       data: {
         ...data,
-        birthDate: data.birthDate?.toLocaleDateString() ?? '',
+        birthDate: data.birthDate?.toISOString() ?? '',
       },
     });
   };
