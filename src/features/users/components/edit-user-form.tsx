@@ -138,7 +138,7 @@ export default function EditUserForm({
                           : new Date()
                       }
                       onSelect={(date) => {
-                        form.setValue('birthDate', date?.toString() ?? '');
+                        form.setValue('birthDate', date?.toISOString() ?? '');
                       }}
                     />
                   </PopoverContent>
