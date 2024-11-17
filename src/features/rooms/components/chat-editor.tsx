@@ -27,6 +27,7 @@ import { z } from 'zod';
 import { useDebounce } from 'use-debounce';
 import GifSelector from './gif-selector';
 import { MessageType } from '@/types/message';
+import { FormField } from '@/components/ui/form';
 
 interface ChatEditorFormData {
   message: string;
@@ -57,6 +58,9 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
   const queryClient = useQueryClient();
   const [typingUser, setTypingUser] = useState<User | null>(null);
   const [debouncedTypingUser] = useDebounce(typingUser, 100);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const message = form.watch('message');
 
   useEffect(() => {
     const handleTyping = (user: User) => {
@@ -112,23 +116,19 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
     }
   };
 
-  const handleTextareaKeyUp = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const elem = e.currentTarget;
-
-    elem.style.height = '0';
-    elem.style.height = `${elem.scrollHeight + 2}px`;
-  };
-
-  const { onChange, ...messageProps } = form.register('message');
-
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    handleTextareaKeyUp(e);
-    onChange(e);
-
+  useEffect(() => {
     if (user) {
       roomsSocket.emit('type', { userId: user.id, roomId });
     }
-  };
+
+    const elem = textareaRef.current;
+    if (!elem) {
+      return;
+    }
+
+    elem.style.height = '0';
+    elem.style.height = `${elem.scrollHeight + 2}px`;
+  }, [message, roomId, user]);
 
   return (
     <div className="px-2 py-3">
@@ -182,15 +182,20 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
           onSubmit={form.handleSubmit(handleSubmit)}
           className="flex items-center gap-2 mb-1.5 grow"
         >
-          <Textarea
-            placeholder="Write a message"
-            className="resize-none max-h-40 focus-visible:ring-offset-0"
-            rows={1}
-            min={1}
-            max={10000}
-            onKeyDown={handleTextareaKeyDown}
-            onChange={handleChange}
-            {...messageProps}
+          <FormField
+            control={form.control}
+            name="message"
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            render={({ field: { ref, ...field } }) => (
+              <Textarea
+                ref={textareaRef}
+                placeholder="Write a message"
+                className="resize-none max-h-40 focus-visible:ring-offset-0"
+                rows={1}
+                onKeyDown={handleTextareaKeyDown}
+                {...field}
+              />
+            )}
           />
           <Button type="submit" className="h-full" size="sm">
             Send
