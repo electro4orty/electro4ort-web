@@ -17,12 +17,13 @@ function Calendar({
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn('p-3', className)}
+      captionLayout="dropdown-years"
       classNames={{
         months: 'relative',
         month: 'space-y-4',
         month_caption: 'flex justify-center pt-1 relative items-center',
-        caption_label: 'text-sm font-medium',
         table: 'w-full border-collapse space-y-1',
+        caption_label: 'hidden',
         head_row: 'flex',
         head_cell:
           'text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]',
