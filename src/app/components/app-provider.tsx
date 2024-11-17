@@ -1,5 +1,7 @@
 import { RouterProvider } from 'react-router-dom';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { router } from '../config/router';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -9,13 +11,21 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: false,
+      gcTime: 1000 * 60 * 60 * 24, // 24 hours
     },
   },
 });
 
+const persister = createSyncStoragePersister({
+  storage: window.localStorage,
+});
+
 export default function AppProvider() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{ persister }}
+    >
       <TooltipProvider>
         <SidebarProvider>
           <Toaster />
@@ -27,6 +37,6 @@ export default function AppProvider() {
           />
         </SidebarProvider>
       </TooltipProvider>
-    </QueryClientProvider>
+    </PersistQueryClientProvider>
   );
 }
