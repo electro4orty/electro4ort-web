@@ -83,7 +83,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
       className={cn(
         'flex self-start gap-2 md:max-w-[80%] bg-neutral-900 rounded-lg pl-2 pr-3 py-1',
         isMine &&
-          '2xl:self-end flex-row 2xl:flex-row-reverse pl-3 pr-2 bg-neutral-800'
+          'self-end xl:self-start flex-row-reverse xl:flex-row pl-3 pr-2 bg-neutral-800'
       )}
     >
       <div className="py-1.5">
