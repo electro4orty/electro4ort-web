@@ -1,7 +1,7 @@
 import {
   Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger,
+  CollapsibleDropdownTrigger,
 } from '@/components/ui/collapsible';
 import {
   SidebarGroup,
@@ -57,17 +57,11 @@ export default function Participants({ hubSlug }: ParticipantsProps) {
   return (
     <Collapsible defaultOpen className="group/collapsible">
       <SidebarGroup>
-        <SidebarGroupLabel className="p-0">
+        <SidebarGroupLabel>
           <SidebarGroupAction className="w-full">
-            <CollapsibleTrigger asChild>
-              <button
-                type="button"
-                className="w-full flex items-center justify-between gap-2 p-2 mr-1 lg:hover:text-white transition-colors"
-              >
-                <span>Participants</span>
-                <ChevronDown className="transition-transform group-data-[state=open]/collapsible:rotate-180" />
-              </button>
-            </CollapsibleTrigger>
+            <CollapsibleDropdownTrigger>
+              Participants
+            </CollapsibleDropdownTrigger>
 
             <Button
               size="icon-sm"

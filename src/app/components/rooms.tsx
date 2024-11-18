@@ -18,6 +18,7 @@ import { getRoomPath } from '../../constants/router-paths';
 import {
   Collapsible,
   CollapsibleContent,
+  CollapsibleDropdownTrigger,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
@@ -47,17 +48,9 @@ export default function Rooms({ hubSlug }: RoomsProps) {
   return (
     <Collapsible className="group/collapsible" defaultOpen>
       <SidebarGroup>
-        <SidebarGroupLabel className="p-0">
+        <SidebarGroupLabel>
           <SidebarGroupAction className="w-full">
-            <CollapsibleTrigger asChild>
-              <button
-                type="button"
-                className="w-full flex items-center justify-between gap-2 p-2 mr-1 lg:hover:text-white transition-colors"
-              >
-                <span>Rooms</span>
-                <ChevronDown className="transition-transform group-data-[state=open]/collapsible:rotate-180" />
-              </button>
-            </CollapsibleTrigger>
+            <CollapsibleDropdownTrigger>Rooms</CollapsibleDropdownTrigger>
 
             <Button
               size="icon-sm"

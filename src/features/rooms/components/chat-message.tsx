@@ -80,7 +80,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
       className={cn(
         'flex flex-col sm:flex-row self-start gap-2 max-w-[90%] bg-neutral-900 rounded-lg pl-2 pr-3 py-1',
         isMine &&
-          'sm:flex-row-reverse lg:self-start self-end flex-col pl-3 pr-2 bg-gray-800'
+          'sm:flex-row-reverse 2xl:self-start self-end flex-col pl-3 pr-2 bg-neutral-800 2xl:flex-row'
       )}
     >
       <div className={cn('flex gap-2', isMine && 'ml-auto flex-row-reverse')}>
