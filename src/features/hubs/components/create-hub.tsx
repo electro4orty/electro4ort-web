@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
 import {
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
@@ -54,7 +53,7 @@ export default function CreateHub({ onClose }: CreateHubProps) {
   };
 
   return (
-    <DialogContent>
+    <>
       <DialogHeader>
         <DialogTitle>Create hub</DialogTitle>
         <DialogDescription>Configure new hub</DialogDescription>
@@ -100,6 +99,6 @@ export default function CreateHub({ onClose }: CreateHubProps) {
           Create
         </Button>
       </DialogFooter>
-    </DialogContent>
+    </>
   );
 }
