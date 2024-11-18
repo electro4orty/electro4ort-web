@@ -23,6 +23,7 @@ export default function Chat({ roomId }: ChatProps) {
       <div
         ref={chatMessagesScrollRef}
         className="grow overflow-y-auto flex flex-col-reverse"
+        id="scrollable"
       >
         <ChatMessages roomId={roomId} />
       </div>

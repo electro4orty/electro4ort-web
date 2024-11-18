@@ -1,20 +1,20 @@
 import { Fragment, useEffect } from 'react';
 import { socket } from '@/lib/socket';
-import { Button } from '@/components/ui/button';
 import { useMessages } from '../hooks/use-messages';
 import ChatMessage from './chat-message';
 import { Message } from '@/types/message';
 import { appendMessage } from '../utils/append-message';
 import { useQueryClient } from '@tanstack/react-query';
 import ChatMessagesSkeletons from './chat-messages-skeletons';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import ChatMessagesInfo from './chat-messages-info';
 
 interface ChatMessagesProps {
   roomId: string;
 }
 
 export default function ChatMessages({ roomId }: ChatMessagesProps) {
-  const { data, isFetchingNextPage, isLoading, hasNextPage, fetchNextPage } =
-    useMessages(roomId);
+  const { data, isLoading, hasNextPage, fetchNextPage } = useMessages(roomId);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -29,8 +29,20 @@ export default function ChatMessages({ roomId }: ChatMessagesProps) {
     };
   }, [queryClient]);
 
+  const dataLength =
+    data?.pages.reduce((prev, page) => prev + page.data.length, 0) ?? 0;
+
   return (
-    <div className="flex flex-col-reverse gap-1 px-3 pt-3">
+    <InfiniteScroll
+      dataLength={dataLength}
+      hasMore={hasNextPage}
+      loader={<ChatMessagesInfo>Loading...</ChatMessagesInfo>}
+      next={fetchNextPage}
+      inverse
+      scrollableTarget="scrollable"
+      className="flex flex-col-reverse gap-1 px-2 pt-2"
+      endMessage={<ChatMessagesInfo>No messages left</ChatMessagesInfo>}
+    >
       {isLoading && <ChatMessagesSkeletons />}
       {!isLoading &&
         data?.pages.map((page, i) => (
@@ -40,20 +52,6 @@ export default function ChatMessages({ roomId }: ChatMessagesProps) {
             ))}
           </Fragment>
         ))}
-
-      {hasNextPage && (
-        <div className="flex justify-center items-center p-2">
-          <Button
-            type="button"
-            onClick={() => fetchNextPage()}
-            size="sm"
-            variant="secondary"
-            disabled={isFetchingNextPage}
-          >
-            {isFetchingNextPage ? 'Loading...' : 'Load more'}
-          </Button>
-        </div>
-      )}
-    </div>
+    </InfiniteScroll>
   );
 }
