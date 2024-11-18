@@ -12,5 +12,10 @@ export default function UserStatusIndicator({
     return null;
   }
 
-  return <Badge size="dot" className="absolute bottom-0.5 right-0.5" />;
+  return (
+    <Badge
+      size="dot"
+      className="absolute bottom-0.5 right-0.5 border border-secondary"
+    />
+  );
 }
