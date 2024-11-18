@@ -65,7 +65,7 @@ export default function LoginScreen() {
         />
       </div>
 
-      <Button type="submit" disabled={isPending}>
+      <Button type="submit" disabled={isPending} data-testid="login-btn">
         Login
       </Button>
       <Button asChild variant="link">

@@ -6,7 +6,7 @@ const apiUrl = 'https://tenor.googleapis.com/v2';
 export const tenorClient = axios.create({
   baseURL: apiUrl,
   params: {
-    key: import.meta.env.VITE_TENOR_API_KEY,
+    key: process.env.VITE_TENOR_API_KEY,
   },
 });
 

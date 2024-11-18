@@ -34,7 +34,7 @@ export async function registerSW(user: User) {
     window.addEventListener('blur', handleBlur);
 
     const subscription = await sw.pushManager.subscribe({
-      applicationServerKey: import.meta.env.VITE_WEB_PUSH_PUBLIC_KEY,
+      applicationServerKey: process.env.VITE_WEB_PUSH_PUBLIC_KEY,
       userVisibleOnly: true,
     });
 
