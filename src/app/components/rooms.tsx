@@ -15,17 +15,13 @@ import { roomTypeIcons } from '../constants/room-type-icons';
 import { Badge } from '@/components/ui/badge';
 import { NavLink } from 'react-router-dom';
 import { getRoomPath } from '../../constants/router-paths';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleDropdownTrigger,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
+import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import CreateRoom from '@/features/rooms/components/create-room';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { useState } from 'react';
+import { AppSidebarDropdownTrigger } from './app-sidebar-dropdown-trigger';
 
 const skeletons = Array.from({ length: 5 }).map((_, index) => (
   <SidebarMenuItem key={index}>
@@ -50,7 +46,7 @@ export default function Rooms({ hubSlug }: RoomsProps) {
       <SidebarGroup>
         <SidebarGroupLabel>
           <SidebarGroupAction className="w-full">
-            <CollapsibleDropdownTrigger>Rooms</CollapsibleDropdownTrigger>
+            <AppSidebarDropdownTrigger>Rooms</AppSidebarDropdownTrigger>
 
             <Button
               size="icon-sm"

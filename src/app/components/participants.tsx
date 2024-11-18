@@ -1,8 +1,4 @@
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleDropdownTrigger,
-} from '@/components/ui/collapsible';
+import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible';
 import {
   SidebarGroup,
   SidebarGroupAction,
@@ -18,7 +14,7 @@ import { useQuery } from '@tanstack/react-query';
 import { NavLink } from 'react-router-dom';
 import { getHubPath, getInviteHubPath } from '../../constants/router-paths';
 import { Button } from '@/components/ui/button';
-import { Check, ChevronDown, Link2, MoreHorizontal } from 'lucide-react';
+import { Check, Link2, MoreHorizontal } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -30,6 +26,7 @@ import { toast } from 'sonner';
 import { useState } from 'react';
 import UserStatusIndicator from '@/components/user-status-indicator';
 import { getFileUrl } from '@/utils/get-file-url';
+import { AppSidebarDropdownTrigger } from './app-sidebar-dropdown-trigger';
 
 interface ParticipantsProps {
   hubSlug: string;
@@ -59,9 +56,7 @@ export default function Participants({ hubSlug }: ParticipantsProps) {
       <SidebarGroup>
         <SidebarGroupLabel>
           <SidebarGroupAction className="w-full">
-            <CollapsibleDropdownTrigger>
-              Participants
-            </CollapsibleDropdownTrigger>
+            <AppSidebarDropdownTrigger>Participants</AppSidebarDropdownTrigger>
 
             <Button
               size="icon-sm"
