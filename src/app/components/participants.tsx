@@ -55,15 +55,18 @@ export default function Participants({ hubSlug }: ParticipantsProps) {
   };
 
   return (
-    <Collapsible defaultOpen>
+    <Collapsible defaultOpen className="group/collapsible">
       <SidebarGroup>
-        <SidebarGroupLabel>
-          Participants
-          <SidebarGroupAction>
+        <SidebarGroupLabel className="p-0">
+          <SidebarGroupAction className="w-full">
             <CollapsibleTrigger asChild>
-              <Button size="icon-sm" variant="ghost">
+              <button
+                type="button"
+                className="w-full flex items-center justify-between gap-2 p-2 mr-1 lg:hover:text-white transition-colors"
+              >
+                <span>Participants</span>
                 <ChevronDown className="transition-transform group-data-[state=open]/collapsible:rotate-180" />
-              </Button>
+              </button>
             </CollapsibleTrigger>
 
             <Button
@@ -75,7 +78,7 @@ export default function Participants({ hubSlug }: ParticipantsProps) {
             </Button>
           </SidebarGroupAction>
         </SidebarGroupLabel>
-        <CollapsibleContent>
+        <CollapsibleContent className="mt-2">
           <SidebarGroupContent>
             <SidebarMenu>
               {isLoading && <span className="px-2">Loading...</span>}
