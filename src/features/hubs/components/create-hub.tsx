@@ -86,7 +86,7 @@ export default function CreateHub({ onClose }: CreateHubProps) {
             />
           </div>
 
-          {avatar && (
+          {avatar?.[0] && (
             <img
               src={URL.createObjectURL(avatar[0])}
               className="size-24 rounded-full object-cover object-center"
