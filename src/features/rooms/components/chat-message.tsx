@@ -56,14 +56,14 @@ export default function ChatMessage({ message }: ChatMessageProps) {
         <div className="mb-1 break-dance max-w-[400px]">
           <iframe
             src={`https://www.tiktok.com/player/v1/${tikTok.embed_product_id}`}
-            width={300}
+            width="100%"
             height={550}
           />
           <div
             dangerouslySetInnerHTML={{
               __html: tikTok.html,
             }}
-           />
+          />
         </div>
       ) : (
         <p className="mb-1 break-dance">{message.body}</p>
@@ -78,31 +78,37 @@ export default function ChatMessage({ message }: ChatMessageProps) {
   return (
     <div
       className={cn(
-        'flex self-start gap-2 max-w-[80%] bg-neutral-900 rounded-lg pl-2 pr-3 py-1',
-        isMine && 'self-end flex-row-reverse pl-3 pr-2'
+        'flex flex-col sm:flex-row self-start gap-2 max-w-[90%] bg-neutral-900 rounded-lg pl-2 pr-3 py-1',
+        isMine &&
+          'sm:flex-row-reverse 2xl:self-start self-end flex-col pl-3 pr-2 bg-neutral-800 2xl:flex-row'
       )}
     >
-      <div className="py-1.5">
-        <div className="relative">
-          <Avatar>
-            <AvatarImage
-              src={
-                message.author.avatar
-                  ? getFileUrl(message.author.avatar)
-                  : undefined
-              }
-              alt={message.author.displayName}
-              className="size-10"
-            />
-            <AvatarFallback>
-              {message.author.displayName[0].toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <UserStatusIndicator status={message.author.status} />
+      <div className={cn('flex gap-2', isMine && 'ml-auto flex-row-reverse')}>
+        <div className="py-1.5">
+          <div className="relative">
+            <Avatar>
+              <AvatarImage
+                src={
+                  message.author.avatar
+                    ? getFileUrl(message.author.avatar)
+                    : undefined
+                }
+                alt={message.author.displayName}
+                className="size-10"
+              />
+              <AvatarFallback>
+                {message.author.displayName[0].toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <UserStatusIndicator status={message.author.status} />
+          </div>
         </div>
+        <h5 className="sm:hidden self-center font-semibold text-sm mb-1 text-muted-foreground">
+          {message.author.displayName}
+        </h5>
       </div>
       <div className="flex flex-col max-w-full">
-        <h5 className="font-semibold text-sm text-muted-foreground">
+        <h5 className="hidden sm:block font-semibold text-sm mb-1 text-muted-foreground">
           {message.author.displayName}
         </h5>
         {content}

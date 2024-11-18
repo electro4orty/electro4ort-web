@@ -15,16 +15,13 @@ import { roomTypeIcons } from '../constants/room-type-icons';
 import { Badge } from '@/components/ui/badge';
 import { NavLink } from 'react-router-dom';
 import { getRoomPath } from '../../constants/router-paths';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
+import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import CreateRoom from '@/features/rooms/components/create-room';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { useState } from 'react';
+import { AppSidebarDropdownTrigger } from './app-sidebar-dropdown-trigger';
 
 const skeletons = Array.from({ length: 5 }).map((_, index) => (
   <SidebarMenuItem key={index}>
@@ -48,13 +45,8 @@ export default function Rooms({ hubSlug }: RoomsProps) {
     <Collapsible className="group/collapsible" defaultOpen>
       <SidebarGroup>
         <SidebarGroupLabel>
-          Rooms
-          <SidebarGroupAction>
-            <CollapsibleTrigger asChild>
-              <Button size="icon-sm" variant="ghost">
-                <ChevronDown className="transition-transform group-data-[state=open]/collapsible:rotate-180" />
-              </Button>
-            </CollapsibleTrigger>
+          <SidebarGroupAction className="w-full">
+            <AppSidebarDropdownTrigger>Rooms</AppSidebarDropdownTrigger>
 
             <Button
               size="icon-sm"
@@ -77,7 +69,7 @@ export default function Rooms({ hubSlug }: RoomsProps) {
             </Dialog>
           </SidebarGroupAction>
         </SidebarGroupLabel>
-        <CollapsibleContent>
+        <CollapsibleContent className="mt-2">
           <SidebarGroupContent>
             <SidebarMenu>
               {isLoading && skeletons}

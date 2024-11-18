@@ -82,9 +82,11 @@
   }
   :root {
     color-scheme: light dark;
+    @apply text-lg md:text-base;
   }
   body {
     @apply bg-background text-foreground;
+    @apply pb-6 md:pb-0;
   }
 }
 

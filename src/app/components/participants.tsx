@@ -1,8 +1,4 @@
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
+import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible';
 import {
   SidebarGroup,
   SidebarGroupAction,
@@ -18,7 +14,7 @@ import { useQuery } from '@tanstack/react-query';
 import { NavLink } from 'react-router-dom';
 import { getHubPath, getInviteHubPath } from '../../constants/router-paths';
 import { Button } from '@/components/ui/button';
-import { Check, ChevronDown, Link2, MoreHorizontal } from 'lucide-react';
+import { Check, Link2, MoreHorizontal } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -30,6 +26,7 @@ import { toast } from 'sonner';
 import { useState } from 'react';
 import UserStatusIndicator from '@/components/user-status-indicator';
 import { getFileUrl } from '@/utils/get-file-url';
+import { AppSidebarDropdownTrigger } from './app-sidebar-dropdown-trigger';
 
 interface ParticipantsProps {
   hubSlug: string;
@@ -55,16 +52,11 @@ export default function Participants({ hubSlug }: ParticipantsProps) {
   };
 
   return (
-    <Collapsible defaultOpen>
+    <Collapsible defaultOpen className="group/collapsible">
       <SidebarGroup>
         <SidebarGroupLabel>
-          Participants
-          <SidebarGroupAction>
-            <CollapsibleTrigger asChild>
-              <Button size="icon-sm" variant="ghost">
-                <ChevronDown className="transition-transform group-data-[state=open]/collapsible:rotate-180" />
-              </Button>
-            </CollapsibleTrigger>
+          <SidebarGroupAction className="w-full">
+            <AppSidebarDropdownTrigger>Participants</AppSidebarDropdownTrigger>
 
             <Button
               size="icon-sm"
@@ -75,7 +67,7 @@ export default function Participants({ hubSlug }: ParticipantsProps) {
             </Button>
           </SidebarGroupAction>
         </SidebarGroupLabel>
-        <CollapsibleContent>
+        <CollapsibleContent className="mt-2">
           <SidebarGroupContent>
             <SidebarMenu>
               {isLoading && <span className="px-2">Loading...</span>}
