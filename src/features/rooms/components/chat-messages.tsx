@@ -7,6 +7,7 @@ import { appendMessage } from '../utils/append-message';
 import { useQueryClient } from '@tanstack/react-query';
 import ChatMessagesSkeletons from './chat-messages-skeletons';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import ChatMessagesInfo from './chat-messages-info';
 
 interface ChatMessagesProps {
   roomId: string;
@@ -35,20 +36,12 @@ export default function ChatMessages({ roomId }: ChatMessagesProps) {
     <InfiniteScroll
       dataLength={dataLength}
       hasMore={hasNextPage}
-      loader={
-        <p className="text-center text-muted-foreground text-sm py-2">
-          Loading...
-        </p>
-      }
+      loader={<ChatMessagesInfo>Loading...</ChatMessagesInfo>}
       next={fetchNextPage}
       inverse
       scrollableTarget="scrollable"
       className="flex flex-col-reverse gap-1 px-2 pt-2"
-      endMessage={
-        <p className="text-center text-muted-foreground text-sm py-2">
-          No messages left
-        </p>
-      }
+      endMessage={<ChatMessagesInfo>No messages left</ChatMessagesInfo>}
     >
       {isLoading && <ChatMessagesSkeletons />}
       {!isLoading &&
