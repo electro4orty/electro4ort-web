@@ -21,7 +21,7 @@ export default function DashboardScreen() {
       <div className="h-dvh flex flex-col items-center justify-center">
         <h1 className="text-2xl font-semibold mb-3">Welcome!</h1>
         <div className="flex items-center justify-center gap-2">
-          <Button type="button" onClick={() => setIsCreateHubDialogOpen(true)}>
+          <Button type="button" onClick={() => setIsJoinHubDialogOpen(true)}>
             Join hub
           </Button>
 
