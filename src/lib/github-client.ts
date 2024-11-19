@@ -5,6 +5,9 @@ const apiUrl = 'https://api.github.com';
 
 export const githubClient = axios.create({
   baseURL: apiUrl,
+  headers: {
+    Authorization: `Bearer ${process.env.VITE_GITHUB_ACCESS_TOKEN}`,
+  },
 });
 
 githubClient.interceptors.response.use(

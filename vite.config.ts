@@ -11,6 +11,7 @@ export default defineConfig({
       'VITE_API_URL',
       'VITE_TENOR_API_KEY',
       'VITE_WEB_PUSH_PUBLIC_KEY',
+      'VITE_GITHUB_ACCESS_TOKEN',
     ]),
   ],
   resolve: {

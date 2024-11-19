@@ -69,7 +69,12 @@ export default function ChatMessage({ message }: ChatMessageProps) {
           />
         </div>
       ) : (
-        <p className="mb-1 break-dance text-lg md:text-base">{message.body}</p>
+        <p className="mb-1 break-dance text-lg md:text-base">
+          <div
+            dangerouslySetInnerHTML={{ __html: message.body }}
+            className="[&_a]:underline"
+          />
+        </p>
       )}
     </>
   );
