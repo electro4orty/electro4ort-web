@@ -10,7 +10,7 @@ on:
 
 jobs:
   build-production:
-    if: ${{ github.event.inputs.environment }} === 'production'
+    if: github.event.inputs.environment == 'production'
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -28,7 +28,7 @@ jobs:
             pnpm i
             pnpm build
   build-development:
-    if: ${{ github.event.inputs.environment }} === 'development'
+    if: github.event.inputs.environment == 'development'
     runs-on: ubuntu-latest
     environment: development
     steps:
