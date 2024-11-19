@@ -17,7 +17,7 @@ import Participants from './participants';
 import { useState } from 'react';
 import HubsSearch from './hubs-search';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import packageJson from '../../../package.json';
+import Version from './version';
 
 export default function AppSidebar() {
   const { hubSlug } = useParams();
@@ -78,9 +78,7 @@ export default function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <UserDropdown />
-            <p className="px-2 text-center text-sm text-muted-foreground">
-              v{packageJson.version}
-            </p>
+            <Version />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
