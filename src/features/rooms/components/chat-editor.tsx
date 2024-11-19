@@ -39,7 +39,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
   const queryClient = useQueryClient();
   const [typingUser, setTypingUser] = useState<User | null>(null);
   const [debouncedTypingUser] = useDebounce(typingUser, 100);
-  const editorRef = useRef<{ getHtml: () => string }>(null);
+  const editorRef = useRef<{ getHtml: () => string; clear: () => void }>(null);
 
   useEffect(() => {
     const handleTyping = (user: User) => {
@@ -86,6 +86,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
       type: MessageType.TEXT,
     });
     setAttachments(null);
+    editorRef.current?.clear();
   };
 
   const handleType = () => {

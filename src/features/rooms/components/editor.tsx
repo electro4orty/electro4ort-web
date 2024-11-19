@@ -53,7 +53,7 @@ const decorator = new CompositeDecorator([
 ]);
 
 interface EditorProps {
-  editorRef: React.Ref<{ getHtml: () => string }>;
+  editorRef: React.Ref<{ getHtml: () => string; clear: () => void }>;
   onChange: () => void;
 }
 
@@ -118,6 +118,9 @@ export default function Editor({ editorRef, onChange }: EditorProps) {
 
   useImperativeHandle(editorRef, () => ({
     getHtml: () => draftToHtml(convertToRaw(editorState.getCurrentContent())),
+    clear: () => {
+      setEditorState(EditorState.createEmpty());
+    },
   }));
 
   useEffect(() => {
