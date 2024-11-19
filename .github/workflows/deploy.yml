@@ -27,7 +27,7 @@ jobs:
             git pull
             pnpm i
             pnpm build
-  buildDevelopment:
+  build-development:
     if: ${{ github.event.inputs.environment }} === 'development'
     runs-on: ubuntu-latest
     environment: development
