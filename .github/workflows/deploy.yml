@@ -24,6 +24,9 @@ jobs:
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
             cd /var/www/electro4ort.pro
+            git fetch -ap
+            git checkout ${{ github.ref_name }}
+            git reset --hard origin/${{ github.ref_name }}
             git pull
             pnpm i
             pnpm build
@@ -39,7 +42,6 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            echo 
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
             cd /var/www/dev.electro4ort.pro
