@@ -55,9 +55,10 @@ const decorator = new CompositeDecorator([
 interface EditorProps {
   editorRef: React.Ref<{ getHtml: () => string; clear: () => void }>;
   onChange: () => void;
+  onEnter: () => void;
 }
 
-export default function Editor({ editorRef, onChange }: EditorProps) {
+export default function Editor({ editorRef, onChange, onEnter }: EditorProps) {
   const [editorState, setEditorState] = useState(
     EditorState.createEmpty(decorator)
   );
@@ -157,7 +158,16 @@ export default function Editor({ editorRef, onChange }: EditorProps) {
         </Toggle>
       </div>
 
-      <div className="[&>.DraftEditor-root]:border [&>.DraftEditor-root]:p-2 [&>.DraftEditor-root]:rounded-lg">
+      <div
+        className="[&>.DraftEditor-root]:border [&>.DraftEditor-root]:p-2 [&>.DraftEditor-root]:rounded-lg"
+        onKeyDownCapture={(e) => {
+          if (!e.shiftKey && e.code === 'Enter') {
+            e.preventDefault();
+            e.stopPropagation();
+            onEnter();
+          }
+        }}
+      >
         <DraftEditor editorState={editorState} onChange={setEditorState} />
       </div>
     </div>

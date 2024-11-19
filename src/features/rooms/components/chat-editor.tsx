@@ -143,7 +143,11 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
           </Button>
         </div>
         <div className="grow">
-          <Editor editorRef={editorRef} onChange={handleType} />
+          <Editor
+            editorRef={editorRef}
+            onChange={handleType}
+            onEnter={handleSubmit}
+          />
         </div>
         <div className="flex h-[42px]">
           <Button
