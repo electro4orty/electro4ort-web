@@ -53,7 +53,7 @@ export default function HubLayout() {
     <SidebarRoot>
       <AppSidebar />
       <div className="grow h-full">
-        <div className="flex items-center gap-2 md:hidden border-b px-2 py-2 fixed left-0 right-0">
+        <div className="flex items-center gap-2 md:hidden border-b p-2 h-[60px] fixed left-0 top-0 right-0 z-50">
           <SidebarTrigger />
 
           <button type="button" onClick={() => window.location.reload()}>
