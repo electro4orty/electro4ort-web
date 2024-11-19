@@ -30,24 +30,3 @@ jobs:
             git pull
             pnpm i
             pnpm build
-  build-development:
-    if: github.event.inputs.environment == 'development'
-    runs-on: ubuntu-latest
-    environment: development
-    steps:
-      - name: executing remote ssh commands
-        uses: appleboy/ssh-action@v1.1.0
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            export NVM_DIR=~/.nvm
-            source ~/.nvm/nvm.sh
-            cd /var/www/dev.electro4ort.pro
-            git fetch -ap
-            git checkout ${{ github.ref_name }}
-            git reset --hard origin/${{ github.ref_name }}
-            git pull
-            pnpm i
-            pnpm build
