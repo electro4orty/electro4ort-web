@@ -56,7 +56,7 @@ export default function HubLayout() {
         <div className="h-full pt-[60px] md:pt-0">
           <Outlet />
         </div>
-        <div className="flex items-center gap-2 md:hidden border-b p-2 h-[60px] fixed left-0 top-0 right-0 z-50">
+        <div className="flex items-center gap-2 md:hidden border-b p-2 h-[60px] fixed left-0 top-0 right-0 z-50 bg-black">
           <SidebarTrigger />
 
           <button type="button" onClick={() => window.location.reload()}>
