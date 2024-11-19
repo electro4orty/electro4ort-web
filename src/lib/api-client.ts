@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import { debounce } from 'lodash';
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = process.env.VITE_API_URL;
 
 export const apiClient = axios.create({
   baseURL: `${apiUrl}/api`,

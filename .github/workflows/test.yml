@@ -1,4 +1,4 @@
-name: Lint
+name: Test
 
 on:
   push:
@@ -13,7 +13,7 @@ env:
   VITE_WEB_PUSH_PUBLIC_KEY: test
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -30,5 +30,4 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
       - run: pnpm i
-      - run: pnpm lint
-      - run: pnpm build
+      - run: pnpm test

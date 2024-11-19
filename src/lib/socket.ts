@@ -23,7 +23,7 @@ interface EmitEvents {
   ping: (data: { userId: string }) => void;
 }
 
-export const socket = io(import.meta.env.VITE_API_URL, {
+export const socket = io(process.env.VITE_API_URL, {
   auth: (cb) => {
     const token = useAuthStore.getState().token;
     if (token) {
@@ -43,7 +43,7 @@ interface RoomsEmitEvents {
   leave: (data: { roomId: string }) => void;
 }
 
-export const roomsSocket = io(`${import.meta.env.VITE_API_URL}/rooms`, {
+export const roomsSocket = io(`${process.env.VITE_API_URL}/rooms`, {
   auth: (cb) => {
     const token = useAuthStore.getState().token;
     if (token) {

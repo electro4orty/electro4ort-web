@@ -137,9 +137,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
           {attachments.map((attachment) => (
             <div key={attachment.fileName} className="relative group">
               <img
-                src={`${import.meta.env.VITE_API_URL}/api/attachments/${
-                  attachment.fileName
-                }`}
+                src={`${process.env.VITE_API_URL}/api/attachments/${attachment.fileName}`}
                 className="block size-[80px] object-cover object-center overflow-hidden rounded-lg"
               />
               <button
