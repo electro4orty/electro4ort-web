@@ -9,7 +9,8 @@ on:
         required: true
 
 jobs:
-  buildProduction:
+  build-production:
+    if: ${{ github.event.inputs.environment }} === 'production'
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -27,6 +28,7 @@ jobs:
             pnpm i
             pnpm build
   buildDevelopment:
+    if: ${{ github.event.inputs.environment }} === 'development'
     runs-on: ubuntu-latest
     environment: development
     steps:
@@ -37,8 +39,13 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            echo ${{ github.ref_name }}
+            echo 
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
             cd /var/www/dev.electro4ort.pro
             git fetch -ap
+            git checkout ${{ github.ref_name }}
+            git reset --hard origin/${{ github.ref_name }}
+            git pull
+            pnpm i
+            pnpm build
