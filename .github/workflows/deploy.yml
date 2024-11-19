@@ -1,9 +1,15 @@
 name: Deploy
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy on
+        type: environment
+        required: true
 
 jobs:
-  build:
+  buildProduction:
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -20,3 +26,19 @@ jobs:
             git pull
             pnpm i
             pnpm build
+  buildDevelopment:
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - name: executing remote ssh commands
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo ${{ github.ref_name }}
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            cd /var/www/dev.electro4ort.pro
+            git fetch -ap
