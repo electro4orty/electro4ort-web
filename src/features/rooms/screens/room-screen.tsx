@@ -3,11 +3,12 @@ import Chat from '../components/chat';
 import { useQuery } from '@tanstack/react-query';
 import { getRoomService } from '../services/get-room.service';
 import { getDashboardPath } from '@/constants/router-paths';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { roomsSocket } from '@/lib/socket';
 
 export default function RoomScreen() {
   const { roomId } = useParams();
+  const prevRoomId = useRef<string | null>(null);
 
   const { isError } = useQuery({
     queryKey: ['rooms', roomId],
@@ -17,6 +18,12 @@ export default function RoomScreen() {
   });
 
   useEffect(() => {
+    if (roomId && prevRoomId.current && roomId !== prevRoomId.current) {
+      roomsSocket.emit('leave', {
+        roomId: prevRoomId.current,
+      });
+    }
+
     if (roomId) {
       roomsSocket.emit('join', {
         roomId,
@@ -25,9 +32,7 @@ export default function RoomScreen() {
 
     return () => {
       if (roomId) {
-        roomsSocket.emit('leave', {
-          roomId,
-        });
+        prevRoomId.current = roomId;
       }
     };
   }, [roomId]);
