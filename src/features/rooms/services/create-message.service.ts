@@ -5,6 +5,7 @@ export interface CreateMessageDTO {
   roomId: string;
   userId: string;
   body: string;
+  text: string;
   attachments:
     | {
         fileName: string;
