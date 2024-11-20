@@ -6,6 +6,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import UserStatusIndicator from '@/components/user-status-indicator';
 import { getFileUrl } from '@/utils/get-file-url';
 import { useEffect, useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 interface ChatMessageProps {
   message: Message;
@@ -44,11 +51,26 @@ export default function ChatMessage({ message }: ChatMessageProps) {
           {message.attachments
             .filter((attachment) => !!attachment)
             .map((attachment) => (
-              <img
-                key={attachment.fileName}
-                src={getFileUrl(attachment.fileName)}
-                className="block max-h-[400px] object-cover object-center overflow-hidden rounded-lg"
-              />
+              <Dialog key={attachment.fileName}>
+                <DialogTrigger>
+                  <img
+                    src={getFileUrl(attachment.fileName)}
+                    alt={attachment.fileName}
+                    className="block max-h-[400px] object-cover object-center overflow-hidden rounded-lg"
+                  />
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogTitle>Preview</DialogTitle>
+                  <DialogDescription className="sr-only">
+                    Preview
+                  </DialogDescription>
+                  <img
+                    src={getFileUrl(attachment.fileName)}
+                    alt={attachment.fileName}
+                    className="rounded"
+                  />
+                </DialogContent>
+              </Dialog>
             ))}
         </div>
       )}
@@ -69,12 +91,10 @@ export default function ChatMessage({ message }: ChatMessageProps) {
           />
         </div>
       ) : (
-        <p className="mb-1 break-dance text-lg md:text-base">
-          <div
-            dangerouslySetInnerHTML={{ __html: message.body }}
-            className="[&_a]:underline"
-          />
-        </p>
+        <div
+          dangerouslySetInnerHTML={{ __html: message.body }}
+          className="mb-1 break-dance text-lg md:text-base [&_a]:underline"
+        />
       )}
     </>
   );
