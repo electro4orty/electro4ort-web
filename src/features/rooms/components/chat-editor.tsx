@@ -224,18 +224,20 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
             Send
           </Button>
 
-          <Button
-            type="button"
-            className="size-[42px] rounded-full p-0"
-            variant={isRecordingAudio ? 'destructive' : 'secondary'}
-            onClick={isRecordingAudio ? stopRecording : startRecording}
-          >
-            {isRecordingAudio ? (
-              <Square className="size-4" fill="currentColor" />
-            ) : (
-              <Mic className="size-4" />
-            )}
-          </Button>
+          {(!attachments || attachments.length === 0) && (
+            <Button
+              type="button"
+              className="size-[42px] rounded-full p-0"
+              variant={isRecordingAudio ? 'destructive' : 'secondary'}
+              onClick={isRecordingAudio ? stopRecording : startRecording}
+            >
+              {isRecordingAudio ? (
+                <Square className="size-4" fill="currentColor" />
+              ) : (
+                <Mic className="size-4" />
+              )}
+            </Button>
+          )}
         </div>
       </div>
 
