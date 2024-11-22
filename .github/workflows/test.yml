@@ -11,6 +11,7 @@ env:
   VITE_API_URL: http://127.0.0.1:3000
   VITE_TENOR_API_KEY: test
   VITE_WEB_PUSH_PUBLIC_KEY: test
+  VITE_GITHUB_ACCESS_TOKEN: test
 
 jobs:
   test:
