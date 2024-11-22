@@ -57,11 +57,17 @@ interface EditorProps {
     getHtml: () => { html: string; text: string };
     clear: () => void;
   }>;
+  disabled?: boolean;
   onChange: () => void;
   onEnter: () => void;
 }
 
-export default function Editor({ editorRef, onChange, onEnter }: EditorProps) {
+export default function Editor({
+  editorRef,
+  disabled,
+  onChange,
+  onEnter,
+}: EditorProps) {
   const [editorState, setEditorState] = useState(
     EditorState.createEmpty(decorator)
   );
@@ -141,24 +147,28 @@ export default function Editor({ editorRef, onChange, onEnter }: EditorProps) {
         <Toggle
           onClick={() => handleInlineClick('BOLD')}
           pressed={editorState.getCurrentInlineStyle().contains('BOLD')}
+          disabled={disabled}
         >
           <Bold className="size-4" />
         </Toggle>
         <Toggle
           onClick={() => handleInlineClick('ITALIC')}
           pressed={editorState.getCurrentInlineStyle().contains('ITALIC')}
+          disabled={disabled}
         >
           <Italic className="size-4" />
         </Toggle>
         <Toggle
           onClick={() => handleInlineClick('UNDERLINE')}
           pressed={editorState.getCurrentInlineStyle().contains('UNDERLINE')}
+          disabled={disabled}
         >
           <Underline className="size-4" />
         </Toggle>
         <Toggle
           onClick={() => (isOnLink() ? removeLink() : createLink())}
           pressed={isOnLink()}
+          disabled={disabled}
         >
           <Link className="size-4" />
         </Toggle>
@@ -174,7 +184,16 @@ export default function Editor({ editorRef, onChange, onEnter }: EditorProps) {
           }
         }}
       >
-        <DraftEditor editorState={editorState} onChange={setEditorState} />
+        <DraftEditor
+          editorState={editorState}
+          onChange={
+            disabled
+              ? () => {
+                  console.log('disabled');
+                }
+              : setEditorState
+          }
+        />
       </div>
     </div>
   );
