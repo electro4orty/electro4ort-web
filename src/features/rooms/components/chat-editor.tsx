@@ -100,7 +100,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
     }
 
     const message = editorRef.current?.getHtml();
-    if (!message?.html) {
+    if (!message?.text.trim()) {
       return;
     }
 
@@ -122,10 +122,10 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
     }
   };
 
-  const startRecording = () => {
+  const startRecording = async () => {
+    await recorderRef.current.start();
     setRecordedAudio(null);
     setIsRecordingAudio(true);
-    recorderRef.current.start();
   };
 
   const stopRecording = async () => {
@@ -187,11 +187,22 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
         <div className="grow">
           {isRecordingAudio && <p>Recording...</p>}
           {!isRecordingAudio && recordedAudio && (
-            <audio
-              src={URL.createObjectURL(recordedAudio)}
-              controls
-              className="size-full"
-            />
+            <div className="flex gap-1">
+              <audio
+                src={URL.createObjectURL(recordedAudio)}
+                controls
+                className="w-full h-[42px]"
+              />
+              <Button
+                variant="destructive"
+                className="h-[42px]"
+                onClick={() => {
+                  setRecordedAudio(null);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
           )}
           {!isRecordingAudio && !recordedAudio && (
             <Editor
