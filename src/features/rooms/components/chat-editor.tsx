@@ -100,7 +100,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
     }
 
     const message = editorRef.current?.getHtml();
-    if (!message?.text.trim()) {
+    if (!message || (!message.text.trim() && !attachments?.length)) {
       return;
     }
 
