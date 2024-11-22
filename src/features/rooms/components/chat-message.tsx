@@ -103,6 +103,10 @@ export default function ChatMessage({ message }: ChatMessageProps) {
     content = <video src={message.body} autoPlay loop muted playsInline />;
   }
 
+  if (message.type === MessageType.AUDIO) {
+    content = <audio src={getFileUrl(message.body)} controls />;
+  }
+
   return (
     <div
       className={cn(

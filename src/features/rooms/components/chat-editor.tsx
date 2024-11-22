@@ -7,7 +7,7 @@ import {
   createMessageService,
 } from '../services/create-message.service';
 import { useAuthStore } from '@/store/auth-store';
-import { ImagePlay, Upload, X } from 'lucide-react';
+import { ImagePlay, Mic, Square, Upload, X } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -24,6 +24,8 @@ import { useDebounce } from 'use-debounce';
 import GifSelector from './gif-selector';
 import { MessageType } from '@/types/message';
 import Editor from './editor';
+import { Recorder } from '@/utils/recorder';
+import { uploadAudioService } from '../services/upload-audio.service';
 
 interface ChatEditorProps {
   roomId: string;
@@ -43,6 +45,13 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
     getHtml: () => { html: string; text: string };
     clear: () => void;
   }>(null);
+  const [isRecordingAudio, setIsRecordingAudio] = useState(false);
+  const recorderRef = useRef(
+    new Recorder({
+      audio: true,
+    })
+  );
+  const [recordedAudio, setRecordedAudio] = useState<Blob | null>(null);
 
   useEffect(() => {
     const handleTyping = (user: User) => {
@@ -76,8 +85,22 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
       return;
     }
 
+    if (recordedAudio) {
+      uploadAudioService(recordedAudio).then((res) => {
+        mutate({
+          body: res.fileName,
+          text: res.fileName,
+          roomId,
+          userId: user.id,
+          attachments: [],
+          type: MessageType.AUDIO,
+        });
+      });
+      return;
+    }
+
     const message = editorRef.current?.getHtml();
-    if (!message?.html) {
+    if (!message || (!message.text.trim() && !attachments?.length)) {
       return;
     }
 
@@ -97,6 +120,19 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
     if (user) {
       roomsSocket.emit('type', { userId: user.id, roomId });
     }
+  };
+
+  const startRecording = async () => {
+    await recorderRef.current.start();
+    setRecordedAudio(null);
+    setIsRecordingAudio(true);
+  };
+
+  const stopRecording = async () => {
+    setIsRecordingAudio(false);
+
+    const file = await recorderRef.current.stop();
+    setRecordedAudio(file);
   };
 
   return (
@@ -135,6 +171,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
             size="icon"
             variant="ghost"
             onClick={() => setIsUploadDialogOpen(true)}
+            disabled={isRecordingAudio}
           >
             <Upload className="size-4" />
           </Button>
@@ -142,26 +179,65 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
             size="icon"
             variant="ghost"
             onClick={() => setIsGifDialogOpen(true)}
+            disabled={isRecordingAudio}
           >
             <ImagePlay className="size-4" />
           </Button>
         </div>
         <div className="grow">
-          <Editor
-            editorRef={editorRef}
-            onChange={handleType}
-            onEnter={handleSubmit}
-          />
+          {isRecordingAudio && <p>Recording...</p>}
+          {!isRecordingAudio && recordedAudio && (
+            <div className="flex gap-1">
+              <audio
+                src={URL.createObjectURL(recordedAudio)}
+                controls
+                className="w-full h-[42px]"
+              />
+              <Button
+                variant="destructive"
+                className="h-[42px]"
+                onClick={() => {
+                  setRecordedAudio(null);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          )}
+          {!isRecordingAudio && !recordedAudio && (
+            <Editor
+              editorRef={editorRef}
+              onChange={handleType}
+              onEnter={handleSubmit}
+              disabled={isRecordingAudio}
+            />
+          )}
         </div>
-        <div className="flex h-[42px]">
+        <div className="flex gap-2 h-[42px]">
           <Button
             type="button"
             className="h-full"
             size="sm"
             onClick={handleSubmit}
+            disabled={isRecordingAudio}
           >
             Send
           </Button>
+
+          {(!attachments || attachments.length === 0) && (
+            <Button
+              type="button"
+              className="size-[42px] rounded-full p-0"
+              variant={isRecordingAudio ? 'destructive' : 'secondary'}
+              onClick={isRecordingAudio ? stopRecording : startRecording}
+            >
+              {isRecordingAudio ? (
+                <Square className="size-4" fill="currentColor" />
+              ) : (
+                <Mic className="size-4" />
+              )}
+            </Button>
+          )}
         </div>
       </div>
 
