@@ -15,6 +15,6 @@ export interface Message {
   authorId: string;
   author: User;
   body: string;
-  attachments: (Attachment | null)[] | null;
+  attachments: Attachment[] | null;
   type: MessageType;
 }

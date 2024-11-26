@@ -1,7 +1,7 @@
 import { Fragment, useEffect } from 'react';
 import { socket } from '@/lib/socket';
 import { useMessages } from '../hooks/use-messages';
-import ChatMessage from './chat-message';
+import ChatMessage from './message/chat-message';
 import { Message } from '@/types/message';
 import { appendMessage } from '../utils/append-message';
 import { useQueryClient } from '@tanstack/react-query';
