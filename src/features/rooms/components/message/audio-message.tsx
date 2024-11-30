@@ -21,7 +21,7 @@ export default function AudioMessage({ fileName }: AudioMessageProps) {
   const [isPaused, setIsPaused] = useState(true);
 
   return (
-    <div className="w-[70vw] flex items-center gap-2">
+    <div className="w-[250px] flex items-center gap-2">
       <audio
         ref={audioRef}
         src={getFileUrl(fileName)}
@@ -38,7 +38,7 @@ export default function AudioMessage({ fileName }: AudioMessageProps) {
       <Button
         type="button"
         size="icon"
-        className="rounded-full"
+        className="rounded-full shrink-0"
         onClick={() =>
           audioRef.current?.paused
             ? audioRef.current.play()
