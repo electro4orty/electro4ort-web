@@ -148,29 +148,33 @@ export default function Editor({
           onClick={() => handleInlineClick('BOLD')}
           pressed={editorState.getCurrentInlineStyle().contains('BOLD')}
           disabled={disabled}
+          size="sm"
         >
-          <Bold className="size-4" />
+          <Bold />
         </Toggle>
         <Toggle
           onClick={() => handleInlineClick('ITALIC')}
           pressed={editorState.getCurrentInlineStyle().contains('ITALIC')}
           disabled={disabled}
+          size="sm"
         >
-          <Italic className="size-4" />
+          <Italic />
         </Toggle>
         <Toggle
           onClick={() => handleInlineClick('UNDERLINE')}
           pressed={editorState.getCurrentInlineStyle().contains('UNDERLINE')}
           disabled={disabled}
+          size="sm"
         >
-          <Underline className="size-4" />
+          <Underline />
         </Toggle>
         <Toggle
           onClick={() => (isOnLink() ? removeLink() : createLink())}
           pressed={isOnLink()}
           disabled={disabled}
+          size="sm"
         >
-          <Link className="size-4" />
+          <Link />
         </Toggle>
       </div>
 
@@ -185,14 +189,9 @@ export default function Editor({
         }}
       >
         <DraftEditor
+          placeholder="Write a message"
           editorState={editorState}
-          onChange={
-            disabled
-              ? () => {
-                  console.log('disabled');
-                }
-              : setEditorState
-          }
+          onChange={disabled ? () => undefined : setEditorState}
         />
       </div>
     </div>
