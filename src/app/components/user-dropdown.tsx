@@ -15,7 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import UserInfo from '@/features/users/components/user-info';
+import UserInfo from '@/components/user-info';
 import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getFileUrl } from '@/utils/get-file-url';

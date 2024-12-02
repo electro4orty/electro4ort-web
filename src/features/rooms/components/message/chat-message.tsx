@@ -9,6 +9,15 @@ import TiktokMessage from './tiktok-message';
 import GifMessage from './gif-message';
 import AudioMessage from './audio-message';
 import Attachments from './attachments';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import UserInfo from '@/components/user-info';
 
 interface ChatMessageProps {
   message: Message;
@@ -54,23 +63,32 @@ export default function ChatMessage({ message }: ChatMessageProps) {
       )}
     >
       <div className="py-1.5">
-        <div className="relative">
-          <Avatar>
-            <AvatarImage
-              src={
-                message.author.avatar
-                  ? getFileUrl(message.author.avatar)
-                  : undefined
-              }
-              alt={message.author.displayName}
-              className="size-10"
-            />
-            <AvatarFallback>
-              {message.author.displayName[0].toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <UserStatusIndicator status={message.author.status} />
-        </div>
+        <Dialog>
+          <DialogTrigger className="relative">
+            <Avatar>
+              <AvatarImage
+                src={
+                  message.author.avatar
+                    ? getFileUrl(message.author.avatar)
+                    : undefined
+                }
+                alt={message.author.displayName}
+                className="size-10"
+              />
+              <AvatarFallback>
+                {message.author.displayName[0].toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <UserStatusIndicator status={message.author.status} />
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Profile</DialogTitle>
+              <DialogDescription className="sr-only">Profile</DialogDescription>
+            </DialogHeader>
+            <UserInfo userId={message.authorId} />
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="flex flex-col max-w-full">
         <h5 className="font-semibold text-sm text-muted-foreground">
