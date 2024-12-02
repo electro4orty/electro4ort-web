@@ -1,47 +1,52 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 interface TiktokMessageProps {
   url: string;
 }
 
 export default function TiktokMessage({ url }: TiktokMessageProps) {
-  const [tikTok, setTikTok] = useState<{
-    embed_product_id: string;
-    html: string;
-  } | null>(null);
+  const { data, isError } = useQuery({
+    queryKey: ['tiktok', url],
+    queryFn: async () => {
+      const res = await fetch(`https://www.tiktok.com/oembed?url=${url}`);
+      if (!res.ok) {
+        throw new Error(await res.text());
+      }
 
-  useEffect(() => {
-    fetch(`https://www.tiktok.com/oembed?url=${url}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setTikTok(
-          data as {
-            embed_product_id: string;
-            html: string;
-          }
-        );
-      });
-  }, [url]);
+      const data = (await res.json()) as {
+        embed_product_id: string;
+        html: string;
+      };
+      return data;
+    },
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
+
+  if (isError) {
+    return <span>TikTok failed to load</span>;
+  }
+
+  if (!data) {
+    return null;
+  }
 
   return (
     <div className="mb-1 break-dance">
       <div className="rounded-md overflow-hidden">
-        {tikTok && (
-          <iframe
-            src={`https://www.tiktok.com/player/v1/${tikTok.embed_product_id}`}
-            width="100%"
-            className="w-full lg:min-w-[400px] h-[400px] lg:h-[600px]"
-          />
-        )}
-      </div>
-      {tikTok && (
-        <div
-          dangerouslySetInnerHTML={{
-            __html: tikTok.html,
-          }}
-          className="[&>.tiktok-embed]:!min-w-0"
+        <iframe
+          src={`https://www.tiktok.com/player/v1/${data.embed_product_id}`}
+          width="100%"
+          className="w-full lg:min-w-[400px] h-[400px] lg:h-[600px]"
         />
-      )}
+      </div>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: data.html,
+        }}
+        className="[&>.tiktok-embed]:!min-w-0"
+      />
     </div>
   );
 }

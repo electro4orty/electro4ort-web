@@ -21,28 +21,28 @@ export default function ChatMessage({ message }: ChatMessageProps) {
 
   const isTiktok = message.body.includes('tiktok.com');
 
+  let content;
+
   if (isTiktok) {
-    return <TiktokMessage url={message.body} />;
-  }
-
-  let content = (
-    <>
-      {message.attachments && message.attachments.length !== 0 && (
-        <Attachments attachments={message.attachments} />
-      )}
-      <div
-        dangerouslySetInnerHTML={{ __html: message.body }}
-        className="mb-1 break-dance text-lg md:text-base [&_a]:underline"
-      />
-    </>
-  );
-
-  if (message.type === MessageType.GIF) {
-    content = <GifMessage url={message.body} />;
-  }
-
-  if (message.type === MessageType.AUDIO) {
-    content = <AudioMessage fileName={message.body} />;
+    content = <TiktokMessage url={message.body} />;
+  } else {
+    if (message.type === MessageType.GIF) {
+      content = <GifMessage url={message.body} />;
+    } else if (message.type === MessageType.AUDIO) {
+      content = <AudioMessage fileName={message.body} />;
+    } else {
+      content = (
+        <>
+          {message.attachments && message.attachments.length !== 0 && (
+            <Attachments attachments={message.attachments} />
+          )}
+          <div
+            dangerouslySetInnerHTML={{ __html: message.body }}
+            className="mb-1 break-dance text-lg md:text-base [&_a]:underline"
+          />
+        </>
+      );
+    }
   }
 
   return (
