@@ -7,6 +7,7 @@ import { Pencil } from 'lucide-react';
 import { useState } from 'react';
 import EditUserForm from './edit-user-form';
 import { getFileUrl } from '@/utils/get-file-url';
+import { differenceInYears } from 'date-fns';
 
 interface UserInfoProps {
   userId: string;
@@ -41,7 +42,7 @@ export default function UserInfo({ userId }: UserInfoProps) {
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <div className="flex justify-between">
         <div className="flex gap-2">
           <Avatar className="size-12">
@@ -72,6 +73,9 @@ export default function UserInfo({ userId }: UserInfoProps) {
           )}
         </div>
       </div>
+      {data.birthDate && (
+        <span>{differenceInYears(new Date(), data.birthDate)} year(s)</span>
+      )}
     </div>
   );
 }
