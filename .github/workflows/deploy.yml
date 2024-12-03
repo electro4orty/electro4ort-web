@@ -28,5 +28,5 @@ jobs:
             git checkout ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
             git pull
-            pnpm i
-            pnpm build
+            npm i
+            npm run build
