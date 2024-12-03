@@ -103,7 +103,7 @@ export default function Participants({ hubSlug }: ParticipantsProps) {
                                   {user.displayName[0].toUpperCase()}
                                 </AvatarFallback>
                               </Avatar>
-                              <UserStatusIndicator status={user.status} />
+                              <UserStatusIndicator userId={user.id} />
                             </div>
                             <span>{user.displayName}</span>
                           </div>
