@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getUserService } from '../services/get-user-service';
+import { getUserService } from '../services/get-user.service';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuthStore } from '@/store/auth-store';
 import { Button } from '@/components/ui/button';
