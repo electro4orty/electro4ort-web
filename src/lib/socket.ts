@@ -11,6 +11,7 @@ export interface WsException {
 interface ListenEvents {
   message: (message: Message) => void;
   exception: (exception: WsException) => void;
+  userStatusUpdate: (user: User) => void;
 }
 
 interface EmitEvents {
@@ -21,6 +22,8 @@ interface EmitEvents {
   join: (data: { hubSlug: string }) => void;
   leave: (data: { hubSlug: string }) => void;
   ping: (data: { userId: string }) => void;
+  subscribeUserStatusUpdate: (data: { userId: string }) => void;
+  unsubscribeUserStatusUpdate: (data: { userId: string }) => void;
 }
 
 export const socket = io(process.env.VITE_API_URL, {

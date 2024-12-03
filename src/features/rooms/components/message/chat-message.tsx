@@ -79,7 +79,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
                 {message.author.displayName[0].toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <UserStatusIndicator status={message.author.status} />
+            <UserStatusIndicator userId={message.authorId} />
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
