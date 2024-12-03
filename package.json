@@ -1,6 +1,6 @@
 {
   "name": "electro4ort-web",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Everything 4orts could ever need😈",
   "type": "module",
   "private": true,
@@ -8,6 +8,7 @@
   "author": "Electro4orty (https://github.com/electro4orty)",
   "homepage": "https://electro4ort.pro",
   "scripts": {
+    "preinstall": "npx only-allow npm",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint . && tsc --noEmit",
@@ -32,6 +33,8 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.1",
     "@radix-ui/react-tabs": "^1.1.1",
+    "@radix-ui/react-toggle": "^1.1.0",
+    "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
     "@tanstack/react-query": "^5.60.5",
     "axios": "^1.7.7",
@@ -39,6 +42,8 @@
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
     "date-fns": "^4.1.0",
+    "draft-js": "^0.11.7",
+    "draftjs-to-html": "^0.9.1",
     "embla-carousel-react": "^8.3.1",
     "input-otp": "^1.4.1",
     "lodash": "^4.17.21",
@@ -65,6 +70,8 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.5.2",
+    "@types/draft-js": "^0.11.18",
+    "@types/draftjs-to-html": "^0.8.4",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.13",
     "@types/node": "^22.9.0",
@@ -91,6 +98,5 @@
     "uuid": "^11.0.3",
     "vite": "^5.4.11",
     "vite-plugin-environment": "^1.1.3"
-  },
-  "packageManager": "pnpm@9.13.2+sha512.88c9c3864450350e65a33587ab801acf946d7c814ed1134da4a924f6df5a2120fd36b46aab68f7cd1d413149112d53c7db3a4136624cfd00ff1846a0c6cef48a"
+  }
 }

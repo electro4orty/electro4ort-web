@@ -4,7 +4,7 @@ import FormField from '@/components/ui/form-field';
 import { Button } from '@/components/ui/button';
 import { DialogFooter } from '@/components/ui/dialog';
 import { useMutation } from '@tanstack/react-query';
-import { updateUserService } from '../services/update-user.service';
+import { updateUserService } from '@/services/update-user.service';
 import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,

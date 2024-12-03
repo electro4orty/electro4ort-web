@@ -53,15 +53,15 @@ export default function HubLayout() {
     <SidebarRoot>
       <AppSidebar />
       <div className="grow h-full">
-        <div className="flex items-center gap-2 md:hidden border-b p-2 h-[60px] fixed left-0 top-0 right-0 z-50">
+        <div className="h-full pt-[60px] md:pt-0">
+          <Outlet />
+        </div>
+        <div className="flex items-center gap-2 md:hidden border-b p-2 h-[60px] fixed left-0 top-0 right-0 z-50 bg-black">
           <SidebarTrigger />
 
           <button type="button" onClick={() => window.location.reload()}>
             <img src="/logo-wide.png" width="180px" alt="Electro4ort" />
           </button>
-        </div>
-        <div className="h-full pt-[60px] md:pt-0">
-          <Outlet />
         </div>
       </div>
     </SidebarRoot>

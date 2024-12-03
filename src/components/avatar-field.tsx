@@ -3,7 +3,7 @@ import { FormField } from '@/components/ui/form';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { getFileUrl } from '@/utils/get-file-url';
 import { useMutation } from '@tanstack/react-query';
-import { uploadAvatarService } from '../services/upload-avatar.service';
+import { uploadAvatarService } from '@/services/upload-avatar.service';
 import { EditUserFormData } from './edit-user-form.config';
 import { useDropzone } from 'react-dropzone';
 import { cn } from '@/lib/utils';

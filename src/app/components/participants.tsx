@@ -11,8 +11,7 @@ import {
 } from '@/components/ui/sidebar';
 import { getHubParticipantsService } from '@/features/hubs/services/get-hub-participants.service';
 import { useQuery } from '@tanstack/react-query';
-import { NavLink } from 'react-router-dom';
-import { getHubPath, getInviteHubPath } from '../../constants/router-paths';
+import { getInviteHubPath } from '../../constants/router-paths';
 import { Button } from '@/components/ui/button';
 import { Check, Link2, MoreHorizontal } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -27,6 +26,15 @@ import { useState } from 'react';
 import UserStatusIndicator from '@/components/user-status-indicator';
 import { getFileUrl } from '@/utils/get-file-url';
 import { AppSidebarDropdownTrigger } from './app-sidebar-dropdown-trigger';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import UserInfo from '@/components/user-info';
 
 interface ParticipantsProps {
   hubSlug: string;
@@ -77,27 +85,40 @@ export default function Participants({ hubSlug }: ParticipantsProps) {
               {!isLoading &&
                 data?.map((user) => (
                   <SidebarMenuItem key={user.id}>
-                    <SidebarMenuButton asChild>
-                      <NavLink to={getHubPath('')}>
-                        <div className="relative">
-                          <Avatar className="size-7">
-                            <AvatarImage
-                              src={
-                                user.avatar
-                                  ? getFileUrl(user.avatar)
-                                  : undefined
-                              }
-                              alt={user.displayName}
-                            />
-                            <AvatarFallback>
-                              {user.displayName[0].toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
-                          <UserStatusIndicator status={user.status} />
-                        </div>
-                        <span>{user.displayName}</span>
-                      </NavLink>
-                    </SidebarMenuButton>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <SidebarMenuButton>
+                          <div className="flex items-center gap-2">
+                            <div className="relative">
+                              <Avatar className="size-7">
+                                <AvatarImage
+                                  src={
+                                    user.avatar
+                                      ? getFileUrl(user.avatar)
+                                      : undefined
+                                  }
+                                  alt={user.displayName}
+                                />
+                                <AvatarFallback>
+                                  {user.displayName[0].toUpperCase()}
+                                </AvatarFallback>
+                              </Avatar>
+                              <UserStatusIndicator status={user.status} />
+                            </div>
+                            <span>{user.displayName}</span>
+                          </div>
+                        </SidebarMenuButton>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Profile</DialogTitle>
+                          <DialogDescription className="sr-only">
+                            Profile
+                          </DialogDescription>
+                        </DialogHeader>
+                        <UserInfo userId={user.id} />
+                      </DialogContent>
+                    </Dialog>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <SidebarMenuAction showOnHover>

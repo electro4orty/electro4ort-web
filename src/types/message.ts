@@ -4,6 +4,7 @@ import { User } from './user';
 export enum MessageType {
   TEXT = 'text',
   GIF = 'gif',
+  AUDIO = 'audio',
 }
 
 export interface Message {
@@ -14,6 +15,6 @@ export interface Message {
   authorId: string;
   author: User;
   body: string;
-  attachments: (Attachment | null)[] | null;
+  attachments: Attachment[] | null;
   type: MessageType;
 }
