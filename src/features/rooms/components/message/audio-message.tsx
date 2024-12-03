@@ -3,7 +3,7 @@ import { Progress } from '@/components/ui/progress';
 import { getFileUrl } from '@/utils/get-file-url';
 import { secondsInMinute } from 'date-fns/constants';
 import { Pause, Play } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const timeFormat = new Intl.NumberFormat('en', {
   minimumIntegerDigits: 2,
@@ -20,6 +20,25 @@ export default function AudioMessage({ fileName }: AudioMessageProps) {
   const [duration, setDuration] = useState(0);
   const [isPaused, setIsPaused] = useState(true);
 
+  useEffect(() => {
+    if (!audioRef.current) {
+      return;
+    }
+
+    const handleTimeUpdate = () => {
+      if (!audioRef.current) {
+        return;
+      }
+
+      audioRef.current.currentTime = 0;
+      audioRef.current.removeEventListener('timeupdate', handleTimeUpdate);
+      setDuration(audioRef.current.duration);
+    };
+
+    audioRef.current.currentTime = 1e101;
+    audioRef.current.addEventListener('timeupdate', handleTimeUpdate);
+  }, []);
+
   return (
     <div className="w-[250px] flex items-center gap-2">
       <audio
@@ -27,13 +46,9 @@ export default function AudioMessage({ fileName }: AudioMessageProps) {
         src={getFileUrl(fileName)}
         controls
         className="sr-only"
-        onTimeUpdate={(e) => {
-          setTime(e.currentTarget.currentTime);
-        }}
+        onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)}
         onPlay={(e) => setIsPaused(e.currentTarget.paused)}
         onPause={(e) => setIsPaused(e.currentTarget.paused)}
-        onDurationChange={(e) => setDuration(e.currentTarget.duration)}
-        onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
       />
       <Button
         type="button"
