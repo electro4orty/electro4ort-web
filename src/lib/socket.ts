@@ -2,6 +2,7 @@ import { useAuthStore } from '@/store/auth-store';
 import { Message } from '@/types/message';
 import { User } from '@/types/user';
 import { io, Socket } from 'socket.io-client';
+import { toast } from 'sonner';
 
 export interface WsException {
   status: string;
@@ -64,3 +65,23 @@ export function connectAll() {
     roomsSocket.connect();
   }
 }
+
+socket.on('connect_error', (err) => {
+  toast.error(err.message);
+  console.log('socket', err);
+});
+
+socket.on('disconnect', (reason) => {
+  toast.error(reason);
+  console.log('socket', reason);
+});
+
+roomsSocket.on('connect_error', (err) => {
+  toast.error(err.message);
+  console.log('roomsSocket', err);
+});
+
+roomsSocket.on('disconnect', (reason) => {
+  toast.error(reason);
+  console.log('roomsSocket', reason);
+});
