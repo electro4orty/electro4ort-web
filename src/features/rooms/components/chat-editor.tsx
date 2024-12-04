@@ -7,7 +7,7 @@ import {
   createMessageService,
 } from '../services/create-message.service';
 import { useAuthStore } from '@/store/auth-store';
-import { ImagePlay, Mic, Square, Upload, X } from 'lucide-react';
+import { ImagePlay, Mic, Send, Square, Upload, X } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -174,7 +174,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
         </div>
       )}
 
-      <div className="flex items-end gap-1 mb-1.5">
+      <div className="flex items-end gap-2 mb-1.5">
         <div className="flex items-center">
           <Button
             size="icon"
@@ -193,18 +193,17 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
             <ImagePlay className="size-4" />
           </Button>
         </div>
-        <div className="grow">
+        <div className="grow self-center">
           {isRecordingAudio && <p>Recording...</p>}
           {!isRecordingAudio && recordedAudio && (
-            <div className="flex gap-1">
+            <div className="flex gap-1 items-end">
               <audio
                 src={URL.createObjectURL(recordedAudio)}
                 controls
-                className="w-full h-[42px]"
+                className="w-full h-[40px]"
               />
               <Button
                 variant="destructive"
-                className="h-[42px]"
                 onClick={() => {
                   setRecordedAudio(null);
                 }}
@@ -222,20 +221,19 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
             />
           )}
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-1 items-end">
           <Button
             type="button"
-            size="sm"
+            size="icon"
             onClick={handleSubmit}
             disabled={isRecordingAudio}
           >
-            Send
+            <Send className="size-4" />
           </Button>
 
           {(!attachments || attachments.length === 0) && (
             <Button
               type="button"
-              className="rounded-full p-0"
               size="icon"
               variant={isRecordingAudio ? 'destructive' : 'secondary'}
               onClick={isRecordingAudio ? stopRecording : startRecording}
