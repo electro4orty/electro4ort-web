@@ -18,6 +18,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import UserInfo from '@/components/user-info';
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
 
 interface ChatMessageProps {
   message: Message;
@@ -46,8 +48,14 @@ export default function ChatMessage({ message }: ChatMessageProps) {
             <Attachments attachments={message.attachments} />
           )}
           <div
-            dangerouslySetInnerHTML={{ __html: message.body }}
-            className="mb-1 break-dance text-lg md:text-base [&_a]:underline"
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(
+                marked.parse(message.body, {
+                  async: false,
+                })
+              ),
+            }}
+            className="mb-1 break-dance text-lg md:text-base [&_a]:underline markdown"
           />
         </>
       );

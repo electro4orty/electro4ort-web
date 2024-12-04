@@ -93,4 +93,42 @@
   .break-dance {
     word-break: break-word;
   }
+
+  .markdown h1 {
+    @apply text-2xl font-bold;
+  }
+
+  .markdown h2 {
+    @apply text-xl font-bold;
+  }
+
+  .markdown h3 {
+    @apply text-lg font-bold;
+  }
+
+  .markdown h4 {
+    @apply text-base font-bold;
+  }
+
+  .markdown h5 {
+    @apply text-sm font-bold;
+  }
+
+  .markdown h6 {
+    @apply text-xs font-bold;
+  }
+
+  .markdown b,
+  .markdown strong {
+    @apply font-bold;
+  }
+
+  .markdown i,
+  .markdown em {
+    @apply italic;
+  }
+
+  .markdown a {
+    @apply underline;
+  }
 }
