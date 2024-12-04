@@ -41,10 +41,6 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
   const queryClient = useQueryClient();
   const [typingUser, setTypingUser] = useState<User | null>(null);
   const [debouncedTypingUser] = useDebounce(typingUser, 100);
-  const editorRef = useRef<{
-    getHtml: () => { html: string; text: string };
-    clear: () => void;
-  }>(null);
   const [isRecordingAudio, setIsRecordingAudio] = useState(false);
   const recorderRef = useRef(
     new Recorder({
@@ -52,6 +48,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
     })
   );
   const [recordedAudio, setRecordedAudio] = useState<Blob | null>(null);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const handleTyping = (user: User) => {
@@ -99,28 +96,27 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
       return;
     }
 
-    const message = editorRef.current?.getHtml();
-    if (!message || (!message.text.trim() && !attachments?.length)) {
+    if (!message.trim() || (!message.trim() && !attachments?.length)) {
       return;
     }
 
     mutate({
-      body: message.html,
-      text: message.text,
+      body: message,
+      text: message,
       roomId,
       userId: user.id,
       attachments,
       type: MessageType.TEXT,
     });
     setAttachments(null);
-    editorRef.current?.clear();
+    setMessage('');
   };
 
-  const handleType = () => {
+  useEffect(() => {
     if (user) {
       roomsSocket.emit('type', { userId: user.id, roomId });
     }
-  };
+  }, [message, roomId, user]);
 
   const startRecording = async () => {
     await recorderRef.current.start();
@@ -166,7 +162,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
       )}
 
       <div className="flex items-end gap-1 mb-1.5">
-        <div className="h-[42px] flex items-center">
+        <div className="flex items-center">
           <Button
             size="icon"
             variant="ghost"
@@ -206,17 +202,16 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
           )}
           {!isRecordingAudio && !recordedAudio && (
             <Editor
-              editorRef={editorRef}
-              onChange={handleType}
+              value={message}
+              onChange={setMessage}
               onEnter={handleSubmit}
               disabled={isRecordingAudio}
             />
           )}
         </div>
-        <div className="flex gap-2 h-[42px]">
+        <div className="flex gap-2 items-center">
           <Button
             type="button"
-            className="h-full"
             size="sm"
             onClick={handleSubmit}
             disabled={isRecordingAudio}
@@ -227,7 +222,8 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
           {(!attachments || attachments.length === 0) && (
             <Button
               type="button"
-              className="size-[42px] rounded-full p-0"
+              className="rounded-full p-0"
+              size="icon"
               variant={isRecordingAudio ? 'destructive' : 'secondary'}
               onClick={isRecordingAudio ? stopRecording : startRecording}
             >
