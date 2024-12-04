@@ -52,7 +52,10 @@ export default function ChatMessage({ message }: ChatMessageProps) {
               __html: DOMPurify.sanitize(
                 marked.parse(message.body, {
                   async: false,
-                })
+                }),
+                {
+                  ADD_ATTR: ['target'],
+                }
               ),
             }}
             className="mb-1 break-dance text-lg md:text-base [&_a]:underline markdown"
