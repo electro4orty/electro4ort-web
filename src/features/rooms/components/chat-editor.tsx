@@ -26,6 +26,8 @@ import { MessageType } from '@/types/message';
 import Editor from './editor';
 import { Recorder } from '@/utils/recorder';
 import { uploadAudioService } from '../services/upload-audio.service';
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
 
 interface ChatEditorProps {
   roomId: string;
@@ -100,9 +102,20 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
       return;
     }
 
+    const parser = new DOMParser();
+    const document = parser.parseFromString(
+      DOMPurify.sanitize(
+        marked.parse(message, {
+          async: false,
+        })
+      ),
+      'text/html'
+    );
+    const text = document.body.textContent ?? 'New message';
+
     mutate({
-      body: message,
-      text: message,
+      body: message.trim(),
+      text,
       roomId,
       userId: user.id,
       attachments,
