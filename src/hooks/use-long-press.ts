@@ -15,6 +15,12 @@ export function useLongTouch(onLongTouch: () => void) {
     }, 500);
   }, [onLongTouch]);
 
+  const onMouseUp = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+  }, []);
+
   const onContextMenu = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
   }, []);
@@ -22,5 +28,6 @@ export function useLongTouch(onLongTouch: () => void) {
   return {
     onMouseDown,
     onContextMenu,
+    onMouseUp,
   };
 }

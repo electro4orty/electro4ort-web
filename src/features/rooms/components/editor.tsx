@@ -61,7 +61,7 @@ export default function Editor({
           value={value}
           onChange={(e) => onChange(e.currentTarget.value)}
           onKeyDown={handleKeyDown}
-          className="max-h-[200px] resize-none py-[7px] md:text-base"
+          className="max-h-[200px] resize-none py-[7px] text-base md:text-base"
         />
       )}
     </div>
