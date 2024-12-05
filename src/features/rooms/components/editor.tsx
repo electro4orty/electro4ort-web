@@ -1,15 +1,14 @@
-import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
-import { Edit2, Eye } from 'lucide-react';
 
 interface EditorProps {
   value: string;
   disabled?: boolean;
   onChange: (value: string) => void;
   onEnter: () => void;
+  isPreview: boolean;
 }
 
 export default function Editor({
@@ -17,9 +16,9 @@ export default function Editor({
   disabled,
   onChange,
   onEnter,
+  isPreview,
 }: EditorProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [isPreviewVisible, setIsPreviewVisible] = useState(false);
 
   useEffect(() => {
     const input = inputRef.current;
@@ -28,8 +27,8 @@ export default function Editor({
     }
 
     input.style.height = '0px';
-    input.style.height = `${input.scrollHeight + 3}px`;
-  }, [value, isPreviewVisible]);
+    input.style.height = `${input.scrollHeight + 2}px`;
+  }, [value, isPreview]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (!e.shiftKey && e.code === 'Enter') {
@@ -39,10 +38,10 @@ export default function Editor({
   };
 
   return (
-    <div className="flex gap-1 items-end grow">
-      {isPreviewVisible ? (
+    <div className="h-full">
+      {isPreview ? (
         <div
-          className="bg-secondary w-full px-3 py-[7px] border rounded-md markdown max-h-[200px] overflow-y-auto"
+          className="bg-secondary w-full h-full px-3 py-[7px] border rounded-md markdown max-h-[200px] overflow-y-auto"
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(
               marked.parse(value, {
@@ -62,22 +61,9 @@ export default function Editor({
           value={value}
           onChange={(e) => onChange(e.currentTarget.value)}
           onKeyDown={handleKeyDown}
-          className="max-h-[200px] resize-none"
+          className="max-h-[200px] resize-none py-[7px] md:text-base"
         />
       )}
-      <Button
-        type="button"
-        size="icon"
-        variant="secondary"
-        onClick={() => setIsPreviewVisible((prev) => !prev)}
-        className="shrink-0"
-      >
-        {isPreviewVisible ? (
-          <Edit2 className="size-4" />
-        ) : (
-          <Eye className="size-4" />
-        )}
-      </Button>
     </div>
   );
 }
