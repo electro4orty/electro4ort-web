@@ -1,10 +1,10 @@
 import { useCallback, useRef } from 'react';
 
-export function useLongTouch(onLongTouch: () => void) {
+export function useLongPress(onLongTouch: () => void) {
   const timeStartRef = useRef(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const onMouseDown = useCallback(() => {
+  const onDown = useCallback(() => {
     timeStartRef.current = Date.now();
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -15,7 +15,7 @@ export function useLongTouch(onLongTouch: () => void) {
     }, 500);
   }, [onLongTouch]);
 
-  const onMouseUp = useCallback(() => {
+  const onUp = useCallback(() => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
@@ -26,8 +26,10 @@ export function useLongTouch(onLongTouch: () => void) {
   }, []);
 
   return {
-    onMouseDown,
+    onMouseDown: onDown,
+    onMouseUp: onUp,
+    onTouchStart: onDown,
+    onTouchEnd: onUp,
     onContextMenu,
-    onMouseUp,
   };
 }

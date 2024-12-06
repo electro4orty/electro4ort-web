@@ -20,6 +20,7 @@ import {
 import UserInfo from '@/components/user-info';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
+import VideoMessage from './video-message';
 
 interface ChatMessageProps {
   message: Message;
@@ -41,6 +42,8 @@ export default function ChatMessage({ message }: ChatMessageProps) {
       content = <GifMessage url={message.body} />;
     } else if (message.type === MessageType.AUDIO) {
       content = <AudioMessage fileName={message.body} />;
+    } else if (message.type === MessageType.VIDEO) {
+      content = <VideoMessage fileName={message.body} />;
     } else {
       content = (
         <>
