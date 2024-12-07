@@ -330,13 +330,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
                   type="button"
                   size="icon"
                   onClick={handleSubmit}
-                  disabled={
-                    isRecordingAudio ||
-                    isRecordingVideo ||
-                    (message.trim().length === 0 &&
-                      !recordedAudio &&
-                      !recordedVideo)
-                  }
+                  disabled={isRecordingAudio || message.trim().length === 0}
                   {...longPressSendProps}
                 >
                   <Send className="size-4" />
