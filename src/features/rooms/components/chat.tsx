@@ -24,6 +24,11 @@ export default function Chat({ roomId }: ChatProps) {
     setTimeout(scrollToBottom, 0);
   };
 
+  const scrollbarWidth = chatMessagesScrollRef.current
+    ? chatMessagesScrollRef.current.offsetWidth -
+      chatMessagesScrollRef.current.clientWidth
+    : 0;
+
   return (
     <div className="flex flex-col h-full">
       <div
@@ -40,7 +45,10 @@ export default function Chat({ roomId }: ChatProps) {
             <Button
               size="icon"
               type="button"
-              className="fixed bottom-36 right-2 rounded-full"
+              className="fixed bottom-24 rounded-full"
+              style={{
+                right: `calc(${scrollbarWidth}px + 0.5rem)`,
+              }}
               onClick={scrollToBottom}
               asChild
             >
