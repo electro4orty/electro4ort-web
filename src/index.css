@@ -78,13 +78,12 @@
 @layer base {
   * {
     @apply border-border;
-    scrollbar-width: thin;
   }
   :root {
     color-scheme: light dark;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-hidden;
   }
 }
 
@@ -137,5 +136,21 @@
 
   .markdown pre {
     @apply overflow-auto;
+  }
+
+  .electro4ort-scrollbar::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  .electro4ort-scrollbar::-webkit-scrollbar-track {
+    @apply bg-neutral-700 rounded-md;
+  }
+
+  .electro4ort-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-neutral-500 rounded-md;
+  }
+
+  .electro4ort-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-400;
   }
 }

@@ -33,7 +33,7 @@ export default function Chat({ roomId }: ChatProps) {
     <div className="flex flex-col h-full">
       <div
         ref={chatMessagesScrollRef}
-        className="grow overflow-y-auto flex flex-col-reverse"
+        className="grow overflow-y-auto flex flex-col-reverse electro4ort-scrollbar"
         id="scrollable"
         onScroll={(e) =>
           setIsScrollToBottomVisible(e.currentTarget.scrollTop < -300)
