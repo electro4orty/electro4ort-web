@@ -5,6 +5,7 @@ export enum MessageType {
   TEXT = 'text',
   GIF = 'gif',
   AUDIO = 'audio',
+  VIDEO = 'video',
 }
 
 export interface Message {

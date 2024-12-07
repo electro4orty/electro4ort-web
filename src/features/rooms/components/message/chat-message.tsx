@@ -18,6 +18,9 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import UserInfo from '@/components/user-info';
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
+import VideoMessage from './video-message';
 
 interface ChatMessageProps {
   message: Message;
@@ -39,6 +42,8 @@ export default function ChatMessage({ message }: ChatMessageProps) {
       content = <GifMessage url={message.body} />;
     } else if (message.type === MessageType.AUDIO) {
       content = <AudioMessage fileName={message.body} />;
+    } else if (message.type === MessageType.VIDEO) {
+      content = <VideoMessage fileName={message.body} />;
     } else {
       content = (
         <>
@@ -46,8 +51,17 @@ export default function ChatMessage({ message }: ChatMessageProps) {
             <Attachments attachments={message.attachments} />
           )}
           <div
-            dangerouslySetInnerHTML={{ __html: message.body }}
-            className="mb-1 break-dance text-lg md:text-base [&_a]:underline"
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(
+                marked.parse(message.body, {
+                  async: false,
+                }),
+                {
+                  ADD_ATTR: ['target'],
+                }
+              ),
+            }}
+            className="mb-1 markdown"
           />
         </>
       );
@@ -57,7 +71,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
   return (
     <div
       className={cn(
-        'flex self-start gap-2 md:max-w-[80%] bg-neutral-900 rounded-lg pl-2 pr-3 py-1',
+        'self-start flex gap-2 md:max-w-[80%] bg-neutral-900 rounded-lg pl-2 pr-3 py-1 max-w-full',
         isMine &&
           'self-end xl:self-start flex-row-reverse xl:flex-row pl-3 pr-2 bg-neutral-800'
       )}
@@ -79,7 +93,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
                 {message.author.displayName[0].toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <UserStatusIndicator status={message.author.status} />
+            <UserStatusIndicator userId={message.authorId} />
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -90,7 +104,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="flex flex-col max-w-full">
+      <div className="flex flex-col max-w-[calc(100%-40px-0.5rem)]">
         <h5 className="font-semibold text-sm text-muted-foreground">
           {message.author.displayName}
         </h5>

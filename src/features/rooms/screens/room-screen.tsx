@@ -5,10 +5,12 @@ import { getRoomService } from '../services/get-room.service';
 import { getDashboardPath } from '@/constants/router-paths';
 import { useEffect, useRef } from 'react';
 import { roomsSocket } from '@/lib/socket';
+import { useSidebar } from '@/components/ui/sidebar';
 
 export default function RoomScreen() {
   const { roomId } = useParams();
   const prevRoomId = useRef<string | null>(null);
+  const { isMobile, setOpenMobile } = useSidebar();
 
   const { isError } = useQuery({
     queryKey: ['rooms', roomId],
@@ -36,6 +38,12 @@ export default function RoomScreen() {
       }
     };
   }, [roomId]);
+
+  useEffect(() => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  }, [roomId, setOpenMobile, isMobile]);
 
   if (!roomId) {
     return null;
