@@ -138,6 +138,18 @@
     @apply overflow-auto;
   }
 
+  .markdown ul {
+    @apply list-disc pl-4;
+  }
+
+  .markdown ol {
+    @apply list-decimal pl-4;
+  }
+
+  .markdown code {
+    @apply bg-neutral-900 text-sm text-muted-foreground rounded-sm px-1;
+  }
+
   .electro4ort-scrollbar::-webkit-scrollbar {
     @apply w-2;
   }
