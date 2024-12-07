@@ -52,7 +52,7 @@ export default function HubLayout() {
   return (
     <SidebarRoot>
       <AppSidebar />
-      <div className="grow h-full">
+      <div className="grow h-full max-w-full">
         <div className="h-full pt-[60px] md:pt-0">
           <Outlet />
         </div>

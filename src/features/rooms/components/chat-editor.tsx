@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -7,7 +7,7 @@ import {
   createMessageService,
 } from '../services/create-message.service';
 import { useAuthStore } from '@/store/auth-store';
-import { ImagePlay, Mic, Square, Upload, X } from 'lucide-react';
+import { ImagePlay, Mic, Plus, Send, Square, Upload, X } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -26,6 +26,20 @@ import { MessageType } from '@/types/message';
 import Editor from './editor';
 import { Recorder } from '@/utils/recorder';
 import { uploadAudioService } from '../services/upload-audio.service';
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useLongTouch } from '@/hooks/use-long-press';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 interface ChatEditorProps {
   roomId: string;
@@ -41,10 +55,6 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
   const queryClient = useQueryClient();
   const [typingUser, setTypingUser] = useState<User | null>(null);
   const [debouncedTypingUser] = useDebounce(typingUser, 100);
-  const editorRef = useRef<{
-    getHtml: () => { html: string; text: string };
-    clear: () => void;
-  }>(null);
   const [isRecordingAudio, setIsRecordingAudio] = useState(false);
   const recorderRef = useRef(
     new Recorder({
@@ -52,6 +62,14 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
     })
   );
   const [recordedAudio, setRecordedAudio] = useState<Blob | null>(null);
+  const [message, setMessage] = useState('');
+  const [isPreview, setIsPreview] = useState(false);
+
+  const onLongTouchSend = useCallback(() => {
+    setIsPreview(true);
+  }, []);
+
+  const longTouchProps = useLongTouch(onLongTouchSend);
 
   useEffect(() => {
     const handleTyping = (user: User) => {
@@ -99,28 +117,38 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
       return;
     }
 
-    const message = editorRef.current?.getHtml();
-    if (!message || (!message.text.trim() && !attachments?.length)) {
+    if (!message.trim() || (!message.trim() && !attachments?.length)) {
       return;
     }
 
+    const parser = new DOMParser();
+    const document = parser.parseFromString(
+      DOMPurify.sanitize(
+        marked.parse(message, {
+          async: false,
+        })
+      ),
+      'text/html'
+    );
+    const text = document.body.textContent ?? 'New message';
+
     mutate({
-      body: message.html,
-      text: message.text,
+      body: message.trim(),
+      text,
       roomId,
       userId: user.id,
       attachments,
       type: MessageType.TEXT,
     });
     setAttachments(null);
-    editorRef.current?.clear();
+    setMessage('');
   };
 
-  const handleType = () => {
+  useEffect(() => {
     if (user) {
       roomsSocket.emit('type', { userId: user.id, roomId });
     }
-  };
+  }, [message, roomId, user]);
 
   const startRecording = async () => {
     await recorderRef.current.start();
@@ -166,36 +194,40 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
       )}
 
       <div className="flex items-end gap-1 mb-1.5">
-        <div className="h-[42px] flex items-center">
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => setIsUploadDialogOpen(true)}
-            disabled={isRecordingAudio}
-          >
-            <Upload className="size-4" />
-          </Button>
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => setIsGifDialogOpen(true)}
-            disabled={isRecordingAudio}
-          >
-            <ImagePlay className="size-4" />
-          </Button>
-        </div>
-        <div className="grow">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild disabled={isRecordingAudio}>
+            <Button type="button" size="icon" variant="ghost">
+              <Plus className="size-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem
+              onClick={() => setIsUploadDialogOpen(true)}
+              disabled={isRecordingAudio}
+            >
+              <Upload className="size-4 mr-2" />
+              Upload attachments
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setIsGifDialogOpen(true)}
+              disabled={isRecordingAudio}
+            >
+              <ImagePlay className="size-4 mr-2" />
+              Send GIFs
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <div className="grow self-stretch">
           {isRecordingAudio && <p>Recording...</p>}
           {!isRecordingAudio && recordedAudio && (
             <div className="flex gap-1">
               <audio
                 src={URL.createObjectURL(recordedAudio)}
                 controls
-                className="w-full h-[42px]"
+                className="w-full h-[40px]"
               />
               <Button
                 variant="destructive"
-                className="h-[42px]"
                 onClick={() => {
                   setRecordedAudio(null);
                 }}
@@ -206,28 +238,45 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
           )}
           {!isRecordingAudio && !recordedAudio && (
             <Editor
-              editorRef={editorRef}
-              onChange={handleType}
+              value={message}
+              onChange={setMessage}
               onEnter={handleSubmit}
               disabled={isRecordingAudio}
+              isPreview={isPreview}
             />
           )}
         </div>
-        <div className="flex gap-2 h-[42px]">
-          <Button
-            type="button"
-            className="h-full"
-            size="sm"
-            onClick={handleSubmit}
-            disabled={isRecordingAudio}
-          >
-            Send
-          </Button>
+        <div className="flex gap-1 items-end">
+          {isPreview ? (
+            <Button
+              type="button"
+              size="icon"
+              onClick={() => setIsPreview(false)}
+              onContextMenu={(e) => e.preventDefault()}
+            >
+              <X className="size-4" />
+            </Button>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  type="button"
+                  size="icon"
+                  onClick={handleSubmit}
+                  disabled={isRecordingAudio || message.trim().length === 0}
+                  {...longTouchProps}
+                >
+                  <Send className="size-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Long press to show preview</TooltipContent>
+            </Tooltip>
+          )}
 
           {(!attachments || attachments.length === 0) && (
             <Button
               type="button"
-              className="size-[42px] rounded-full p-0"
+              size="icon"
               variant={isRecordingAudio ? 'destructive' : 'secondary'}
               onClick={isRecordingAudio ? stopRecording : startRecording}
             >
