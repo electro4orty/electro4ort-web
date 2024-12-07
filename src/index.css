@@ -85,13 +85,16 @@
   }
   body {
     @apply bg-background text-foreground;
-    @apply pb-6 md:pb-0;
   }
 }
 
 @layer components {
   .break-dance {
     word-break: break-word;
+  }
+
+  .markdown {
+    @apply text-lg md:text-base break-dance;
   }
 
   .markdown h1 {
@@ -130,5 +133,9 @@
 
   .markdown a {
     @apply underline;
+  }
+
+  .markdown pre {
+    @apply overflow-auto;
   }
 }
