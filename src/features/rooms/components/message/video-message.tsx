@@ -9,8 +9,17 @@ export default function VideoMessage({ fileName }: AudioMessageProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   return (
-    <div className="w-[250px] flex items-center gap-2">
-      <video ref={videoRef} src={getFileUrl(fileName)} controls />
+    <div className="flex items-center gap-2">
+      <video
+        ref={videoRef}
+        src={getFileUrl(fileName)}
+        className="rounded-full size-[200px] block object-cover object-center"
+        onClick={() =>
+          videoRef.current?.paused
+            ? videoRef.current.play()
+            : videoRef.current?.pause()
+        }
+      />
     </div>
   );
 }
