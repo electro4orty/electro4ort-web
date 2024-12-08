@@ -67,21 +67,21 @@ export function connectAll() {
 }
 
 socket.on('connect_error', (err) => {
-  toast.error(err.message);
+  toast.error(`socket connect_error ${err.message}`);
   console.log('socket', err);
 });
 
 socket.on('disconnect', (reason) => {
-  toast.error(reason);
+  toast.error(`socket disconnect ${reason}`);
   console.log('socket', reason);
 });
 
 roomsSocket.on('connect_error', (err) => {
-  toast.error(err.message);
+  toast.error(`roomsSocket connect_error ${err.message}`);
   console.log('roomsSocket', err);
 });
 
 roomsSocket.on('disconnect', (reason) => {
-  toast.error(reason);
+  toast.error(`roomsSocket disconnect ${reason}`);
   console.log('roomsSocket', reason);
 });
