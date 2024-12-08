@@ -72,8 +72,8 @@ socket.on('connect_error', (err) => {
 });
 
 socket.on('disconnect', (reason) => {
-  toast.error(`socket disconnect ${reason}`);
-  console.log('socket', reason);
+  toast.error(`socket disconnect ${reason}, reconnecting...`);
+  socket.connect();
 });
 
 roomsSocket.on('connect_error', (err) => {
@@ -82,6 +82,6 @@ roomsSocket.on('connect_error', (err) => {
 });
 
 roomsSocket.on('disconnect', (reason) => {
-  toast.error(`roomsSocket disconnect ${reason}`);
-  console.log('roomsSocket', reason);
+  toast.error(`roomsSocket disconnect ${reason}, reconnecting...`);
+  roomsSocket.connect();
 });
