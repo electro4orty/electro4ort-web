@@ -138,6 +138,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
           type: MessageType.AUDIO,
         });
       });
+      setRecordedAudio(null);
       return;
     }
 
@@ -152,6 +153,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
           type: MessageType.VIDEO,
         });
       });
+      setRecordedVideo(null);
       return;
     }
 
