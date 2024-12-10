@@ -9,7 +9,8 @@ interface AttachmentsProps {
 }
 
 export default function Attachments({ attachments }: AttachmentsProps) {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="flex flex-wrap gap-1">
@@ -17,7 +18,10 @@ export default function Attachments({ attachments }: AttachmentsProps) {
         <button
           key={attachment.fileName}
           type="button"
-          onClick={() => setSelectedIndex(i)}
+          onClick={() => {
+            setSelectedIndex(i);
+            setIsOpen(true);
+          }}
         >
           <img
             src={getFileUrl(attachment.fileName)}
@@ -26,17 +30,12 @@ export default function Attachments({ attachments }: AttachmentsProps) {
           />
         </button>
       ))}
-      <Dialog
-        open={selectedIndex !== null}
-        onOpenChange={(value) => setSelectedIndex(value ? 0 : null)}
-      >
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent>
-          {selectedIndex !== null && (
-            <AttachmentPreviewDialog
-              attachments={attachments}
-              selectedIndex={selectedIndex}
-            />
-          )}
+          <AttachmentPreviewDialog
+            attachments={attachments}
+            selectedIndex={selectedIndex}
+          />
         </DialogContent>
       </Dialog>
     </div>
