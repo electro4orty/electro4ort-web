@@ -29,7 +29,7 @@ export default function AttachmentPreviewDialog({
       >
         <CarouselContent>
           {attachments.map((attachment) => (
-            <CarouselItem key={attachment.id}>
+            <CarouselItem key={attachment.id} className="flex">
               <img
                 src={getFileUrl(attachment.fileName)}
                 alt={attachment.fileName}
