@@ -29,11 +29,11 @@ export default function AttachmentPreviewDialog({
       >
         <CarouselContent>
           {attachments.map((attachment) => (
-            <CarouselItem key={attachment.id} className="flex items-center">
+            <CarouselItem key={attachment.id}>
               <img
                 src={getFileUrl(attachment.fileName)}
                 alt={attachment.fileName}
-                className="rounded"
+                className="rounded object-contain object-center w-full max-h-[70vh]"
               />
             </CarouselItem>
           ))}
