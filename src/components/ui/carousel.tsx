@@ -124,9 +124,7 @@ const Carousel = React.forwardRef<
           carouselRef,
           api: api,
           opts,
-          orientation:
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            orientation || (opts?.axis === 'y' ? 'vertical' : 'horizontal'),
+          orientation,
           scrollPrev,
           scrollNext,
           canScrollPrev,
