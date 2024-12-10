@@ -21,7 +21,7 @@ export default function Attachments({ attachments }: AttachmentsProps) {
             <img
               src={getFileUrl(attachment.fileName)}
               alt={attachment.fileName}
-              className="block max-h-[400px] object-cover object-center overflow-hidden rounded-lg"
+              className="block size-40 object-cover object-center overflow-hidden rounded-lg"
             />
           </DialogTrigger>
           <DialogContent>
