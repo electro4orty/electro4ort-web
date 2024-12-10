@@ -157,10 +157,6 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
       return;
     }
 
-    if (!message.trim() || (!message.trim() && !attachments?.length)) {
-      return;
-    }
-
     const parser = new DOMParser();
     const document = parser.parseFromString(
       DOMPurify.sanitize(
@@ -337,7 +333,8 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
                     isRecordingVideo ||
                     (message.trim().length === 0 &&
                       !recordedAudio &&
-                      !recordedVideo)
+                      !recordedVideo &&
+                      (!attachments || attachments.length === 0))
                   }
                   {...longPressSendProps}
                 >
