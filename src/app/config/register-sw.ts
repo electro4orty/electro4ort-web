@@ -1,54 +1,54 @@
 import { User } from '@/types/user';
 import { savePushSubscriptionService } from '../services/save-push-subscription.service';
 
+let isRegistering = false;
+
 export async function registerSW(user: User) {
-  if (!('serviceWorker' in navigator)) {
+  if (!('serviceWorker' in navigator) || isRegistering) {
     return;
   }
 
-  try {
-    const sw = await navigator.serviceWorker.register('/sw.js');
-    await sw.update();
+  isRegistering = true;
 
-    let isActive = true;
+  const sw = await navigator.serviceWorker.register('/sw.js');
+  await sw.update();
 
-    const handleMessage = (e: MessageEvent<{ type: string }>) => {
-      if (e.data.type === 'check-user-activity') {
-        sw.active?.postMessage({
-          type: 'user-activity',
-          isActive: isActive && document.visibilityState === 'visible',
-        });
-      }
-    };
+  let isActive = true;
 
-    const handleFocus = () => {
-      isActive = true;
-    };
+  const handleMessage = (e: MessageEvent<{ type: string }>) => {
+    if (e.data.type === 'check-user-activity') {
+      sw.active?.postMessage({
+        type: 'user-activity',
+        isActive: isActive && document.visibilityState === 'visible',
+      });
+    }
+  };
 
-    const handleBlur = () => {
-      isActive = false;
-    };
+  const handleFocus = () => {
+    isActive = true;
+  };
 
-    navigator.serviceWorker.addEventListener('message', handleMessage);
-    window.addEventListener('focus', handleFocus);
-    window.addEventListener('blur', handleBlur);
+  const handleBlur = () => {
+    isActive = false;
+  };
 
-    const subscription = await sw.pushManager.subscribe({
-      applicationServerKey: process.env.VITE_WEB_PUSH_PUBLIC_KEY,
-      userVisibleOnly: true,
-    });
+  navigator.serviceWorker.addEventListener('message', handleMessage);
+  window.addEventListener('focus', handleFocus);
+  window.addEventListener('blur', handleBlur);
 
-    await savePushSubscriptionService({
-      userId: user.id,
-      data: subscription,
-    });
+  const subscription = await sw.pushManager.subscribe({
+    applicationServerKey: process.env.VITE_WEB_PUSH_PUBLIC_KEY,
+    userVisibleOnly: true,
+  });
 
-    return () => {
-      navigator.serviceWorker.removeEventListener('message', handleMessage);
-      window.removeEventListener('focus', handleFocus);
-      window.removeEventListener('blur', handleBlur);
-    };
-  } catch (error) {
-    console.log(error);
-  }
+  await savePushSubscriptionService({
+    userId: user.id,
+    data: subscription,
+  });
+
+  return () => {
+    navigator.serviceWorker.removeEventListener('message', handleMessage);
+    window.removeEventListener('focus', handleFocus);
+    window.removeEventListener('blur', handleBlur);
+  };
 }
