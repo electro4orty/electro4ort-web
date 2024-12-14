@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { socket, WsException } from '@/lib/socket';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/store/auth-store';
+import WsStatus from '../components/ws-status';
 
 export default function HubLayout() {
   useAuthCheck();
@@ -58,10 +59,10 @@ export default function HubLayout() {
         </div>
         <div className="flex items-center gap-2 md:hidden border-b p-2 h-[60px] fixed left-0 top-0 right-0 z-50 bg-black">
           <SidebarTrigger />
-
           <button type="button" onClick={() => window.location.reload()}>
             <img src="/logo-wide.png" width="180px" alt="Electro4ort" />
           </button>
+          <WsStatus />
         </div>
       </div>
     </SidebarRoot>
