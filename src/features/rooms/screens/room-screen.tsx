@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getRoomService } from '../services/get-room.service';
 import { getDashboardPath } from '@/constants/router-paths';
 import { useEffect, useRef } from 'react';
-import { roomsSocket } from '@/lib/socket';
+import { socket } from '@/lib/socket';
 import { useSidebar } from '@/components/ui/sidebar';
 
 export default function RoomScreen() {
@@ -20,23 +20,18 @@ export default function RoomScreen() {
   });
 
   useEffect(() => {
-    if (roomId && prevRoomId.current && roomId !== prevRoomId.current) {
-      roomsSocket.emit('leave', {
-        roomId: prevRoomId.current,
-      });
-    }
-
     if (roomId) {
-      roomsSocket.emit('join', {
+      if (prevRoomId.current && roomId !== prevRoomId.current) {
+        socket.emit('roomLeave', {
+          roomId: prevRoomId.current,
+        });
+      }
+      socket.emit('roomJoin', {
         roomId,
       });
-    }
 
-    return () => {
-      if (roomId) {
-        prevRoomId.current = roomId;
-      }
-    };
+      prevRoomId.current = roomId;
+    }
   }, [roomId]);
 
   useEffect(() => {

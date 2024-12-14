@@ -12,6 +12,8 @@ interface ListenEvents {
   message: (message: Message) => void;
   exception: (exception: WsException) => void;
   userStatusUpdate: (user: User) => void;
+  typing: (user: User) => void;
+  typingStopped: (user: User) => void;
 }
 
 interface EmitEvents {
@@ -24,6 +26,10 @@ interface EmitEvents {
   ping: (data: { userId: string }) => void;
   subscribeUserStatusUpdate: (data: { userId: string }) => void;
   unsubscribeUserStatusUpdate: (data: { userId: string }) => void;
+
+  type: (data: { userId: string; roomId: string }) => void;
+  roomJoin: (data: { roomId: string }) => void;
+  roomLeave: (data: { roomId: string }) => void;
 }
 
 export const socket = io(process.env.VITE_API_URL, {
@@ -35,32 +41,8 @@ export const socket = io(process.env.VITE_API_URL, {
   },
 }) as Socket<ListenEvents, EmitEvents>;
 
-interface RoomsListenEvents {
-  typing: (user: User) => void;
-  typingStopped: (user: User) => void;
-}
-
-interface RoomsEmitEvents {
-  type: (data: { userId: string; roomId: string }) => void;
-  join: (data: { roomId: string }) => void;
-  leave: (data: { roomId: string }) => void;
-}
-
-export const roomsSocket = io(`${process.env.VITE_API_URL}/rooms`, {
-  auth: (cb) => {
-    const token = useAuthStore.getState().token;
-    if (token) {
-      cb({ token: `Bearer ${token}` });
-    }
-  },
-}) as Socket<RoomsListenEvents, RoomsEmitEvents>;
-
 export function connectAll() {
   if (!socket.connected) {
     socket.connect();
-  }
-
-  if (!roomsSocket.connected) {
-    roomsSocket.connect();
   }
 }

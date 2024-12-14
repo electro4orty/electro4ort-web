@@ -19,7 +19,7 @@ import { Input } from '@/components/ui/input';
 import { uploadFilesService } from '../services/upload-file.service';
 import { appendMessage } from '../utils/append-message';
 import { User } from '@/types/user';
-import { roomsSocket } from '@/lib/socket';
+import { socket } from '@/lib/socket';
 import { useDebounce } from 'use-debounce';
 import GifSelector from './gif-selector';
 import { MessageType } from '@/types/message';
@@ -75,12 +75,12 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
       setTypingUser(null);
     };
 
-    roomsSocket.on('typing', handleTyping);
-    roomsSocket.on('typingStopped', handleTypingStopped);
+    socket.on('typing', handleTyping);
+    socket.on('typingStopped', handleTypingStopped);
 
     return () => {
-      roomsSocket.off('typing', handleTyping);
-      roomsSocket.off('typingStopped', handleTypingStopped);
+      socket.off('typing', handleTyping);
+      socket.off('typingStopped', handleTypingStopped);
     };
   });
 
@@ -125,7 +125,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
 
   useEffect(() => {
     if (user) {
-      roomsSocket.emit('type', { userId: user.id, roomId });
+      socket.emit('type', { userId: user.id, roomId });
     }
   }, [message, roomId, user]);
 
