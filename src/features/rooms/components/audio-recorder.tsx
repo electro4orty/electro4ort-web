@@ -4,6 +4,7 @@ import { uploadAudioService } from '../services/upload-audio.service';
 import { CreateMessageDTO } from '../services/create-message.service';
 import { MessageType } from '@/types/message';
 import { Button } from '@/components/ui/button';
+import { DialogDescription, DialogTitle } from '@/components/ui/dialog';
 
 interface AudioRecorderProps {
   roomId: string;
@@ -58,20 +59,24 @@ export default function AudioRecorder({
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <audio
-        src={recordedAudio ? URL.createObjectURL(recordedAudio) : undefined}
-        controls
-      />
-      <Button
-        type="button"
-        onClick={isRecording ? stopRecordingAudio : startRecordingAudio}
-      >
-        {isRecording ? 'Stop' : 'Start'}
-      </Button>
-      <Button type="button" onClick={handleSubmit} disabled={isSending}>
-        Send
-      </Button>
-    </div>
+    <>
+      <DialogTitle>Record audio</DialogTitle>
+      <DialogDescription className="sr-only">Record audio</DialogDescription>
+      <div className="flex items-center gap-2">
+        <audio
+          src={recordedAudio ? URL.createObjectURL(recordedAudio) : undefined}
+          controls
+        />
+        <Button
+          type="button"
+          onClick={isRecording ? stopRecordingAudio : startRecordingAudio}
+        >
+          {isRecording ? 'Stop' : 'Start'}
+        </Button>
+        <Button type="button" onClick={handleSubmit} disabled={isSending}>
+          Send
+        </Button>
+      </div>
+    </>
   );
 }

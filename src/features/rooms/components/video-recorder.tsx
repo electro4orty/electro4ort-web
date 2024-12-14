@@ -4,6 +4,7 @@ import { uploadAudioService } from '../services/upload-audio.service';
 import { CreateMessageDTO } from '../services/create-message.service';
 import { MessageType } from '@/types/message';
 import { Button } from '@/components/ui/button';
+import { DialogDescription, DialogTitle } from '@/components/ui/dialog';
 
 interface VideoRecorderProps {
   roomId: string;
@@ -59,22 +60,26 @@ export default function VideoRecorder({
   };
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <video
-        src={recordedVideo ? URL.createObjectURL(recordedVideo) : undefined}
-        controls
-      />
-      <div className="flex gap-2">
-        <Button
-          type="button"
-          onClick={isRecording ? stopRecordingVideo : startRecordingVideo}
-        >
-          {isRecording ? 'Stop' : 'Start'}
-        </Button>
-        <Button type="button" onClick={handleSubmit} disabled={isSending}>
-          Send
-        </Button>
+    <>
+      <DialogTitle>Record video</DialogTitle>
+      <DialogDescription className="sr-only">Record video</DialogDescription>
+      <div className="flex flex-col items-center gap-2">
+        <video
+          src={recordedVideo ? URL.createObjectURL(recordedVideo) : undefined}
+          controls
+        />
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            onClick={isRecording ? stopRecordingVideo : startRecordingVideo}
+          >
+            {isRecording ? 'Stop' : 'Start'}
+          </Button>
+          <Button type="button" onClick={handleSubmit} disabled={isSending}>
+            Send
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
