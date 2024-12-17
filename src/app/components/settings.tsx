@@ -1,10 +1,21 @@
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useSettingsStore } from '@/store/settings-store';
 
 export default function Settings() {
-  const { isSendMessageUsingModifier, setIsSendMessageUsingModifier } =
-    useSettingsStore();
+  const {
+    isSendMessageUsingModifier,
+    setIsSendMessageUsingModifier,
+    theme,
+    setTheme,
+  } = useSettingsStore();
 
   return (
     <div className="space-y-3">
@@ -41,6 +52,23 @@ export default function Settings() {
           </Label>
         </div>
       </RadioGroup>
+
+      <Select value={theme} onValueChange={setTheme}>
+        <SelectTrigger>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="default">Default</SelectItem>
+          <SelectItem value="zinc">Zinc</SelectItem>
+          <SelectItem value="red">Red</SelectItem>
+          <SelectItem value="rose">Rose</SelectItem>
+          <SelectItem value="orange">Orange</SelectItem>
+          <SelectItem value="green">Green</SelectItem>
+          <SelectItem value="blue">Blue</SelectItem>
+          <SelectItem value="yellow">Yellow</SelectItem>
+          <SelectItem value="violet">Violet</SelectItem>
+        </SelectContent>
+      </Select>
     </div>
   );
 }
