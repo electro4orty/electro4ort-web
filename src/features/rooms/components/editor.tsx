@@ -10,6 +10,7 @@ interface EditorProps {
   onChange: (value: string) => void;
   onEnter: () => void;
   isPreview: boolean;
+  onMediaPaste: (files: FileList) => void;
 }
 
 export default function Editor({
@@ -18,6 +19,7 @@ export default function Editor({
   onChange,
   onEnter,
   isPreview,
+  onMediaPaste,
 }: EditorProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const { isSendMessageUsingModifier } = useSettingsStore();
@@ -81,6 +83,7 @@ export default function Editor({
           onChange={(e) => onChange(e.currentTarget.value)}
           onKeyDown={handleKeyDown}
           className="max-h-[200px] resize-none py-[7px] text-base md:text-base"
+          onPaste={(e) => onMediaPaste(e.clipboardData.files)}
         />
       )}
     </div>

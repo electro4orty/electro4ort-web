@@ -196,6 +196,16 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
             onChange={setMessage}
             onEnter={handleSubmit}
             isPreview={isPreview}
+            onMediaPaste={(files) => {
+              const formData = new FormData();
+              Array.from(files).forEach((file) => {
+                formData.append('files', file);
+              });
+              uploadFilesService(roomId, formData).then((res) => {
+                setAttachments((prev) => (prev ? [...prev, ...res] : res));
+                setIsUploadDialogOpen(false);
+              });
+            }}
           />
         </div>
         <div className="flex gap-1 items-end">
