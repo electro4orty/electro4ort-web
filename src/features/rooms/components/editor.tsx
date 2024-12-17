@@ -2,6 +2,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useEffect, useRef } from 'react';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
+import { useSettingsStore } from '@/store/settings-store';
 
 interface EditorProps {
   value: string;
@@ -19,6 +20,7 @@ export default function Editor({
   isPreview,
 }: EditorProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const { isSendMessageUsingModifier } = useSettingsStore();
 
   useEffect(() => {
     const input = inputRef.current;
@@ -31,9 +33,26 @@ export default function Editor({
   }, [value, isPreview]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (!e.shiftKey && e.code === 'Enter') {
-      e.preventDefault();
-      onEnter();
+    if (e.code === 'Enter') {
+      if (isSendMessageUsingModifier && e.ctrlKey) {
+        e.preventDefault();
+        onEnter();
+      }
+
+      if (!isSendMessageUsingModifier && !e.ctrlKey) {
+        e.preventDefault();
+        onEnter();
+      }
+
+      if (isSendMessageUsingModifier && !e.ctrlKey) {
+        e.preventDefault();
+        onChange(value + '\n');
+      }
+
+      if (!isSendMessageUsingModifier && e.ctrlKey) {
+        e.preventDefault();
+        onChange(value + '\n');
+      }
     }
   };
 
