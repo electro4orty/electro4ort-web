@@ -19,10 +19,12 @@ import UserInfo from '@/components/user-info';
 import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getFileUrl } from '@/utils/get-file-url';
+import Settings from './settings';
 
 export default function UserDropdown() {
   const { user, logout } = useAuthStore();
   const [isUserDialogOpen, setIsUserDialogOpen] = useState(false);
+  const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
 
   if (!user) {
     return null;
@@ -55,7 +57,7 @@ export default function UserDropdown() {
             <User2 className="size-4 mr-2" />
             Account
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setIsSettingsDialogOpen(true)}>
             <Settings2 className="size-4 mr-2" />
             Settings
           </DropdownMenuItem>
@@ -74,6 +76,19 @@ export default function UserDropdown() {
             <DialogDescription className="sr-only">Profile</DialogDescription>
           </DialogHeader>
           <UserInfo userId={user.id} />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={isSettingsDialogOpen}
+        onOpenChange={setIsSettingsDialogOpen}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Settings</DialogTitle>
+            <DialogDescription className="sr-only">Settings</DialogDescription>
+          </DialogHeader>
+          <Settings />
         </DialogContent>
       </Dialog>
     </>

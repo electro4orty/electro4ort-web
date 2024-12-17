@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   CreateMessageDTO,
@@ -40,6 +39,7 @@ import {
 } from '@/components/ui/tooltip';
 import AudioRecorder from './audio-recorder';
 import VideoRecorder from './video-recorder';
+import ShortcutsHelper from './shortcuts-helper';
 
 interface ChatEditorProps {
   roomId: string;
@@ -227,16 +227,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
       </div>
 
       <div className="flex justify-between items-end min-h-3.5">
-        <div className="text-sm hidden md:block">
-          <Badge variant="secondary" className="rounded-xl px-1 py-0.5">
-            Enter
-          </Badge>{' '}
-          - Send,{' '}
-          <Badge variant="secondary" className="rounded-xl px-1 py-0.5">
-            Shift + Enter
-          </Badge>{' '}
-          - New line
-        </div>
+        <ShortcutsHelper />
         {debouncedTypingUser && (
           <p className="text-sm text-muted-foreground leading-none">
             {debouncedTypingUser.displayName} is typing
