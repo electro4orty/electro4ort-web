@@ -59,7 +59,6 @@ export default function Settings() {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="default">Default</SelectItem>
-          <SelectItem value="zinc">Zinc</SelectItem>
           <SelectItem value="red">Red</SelectItem>
           <SelectItem value="rose">Rose</SelectItem>
           <SelectItem value="orange">Orange</SelectItem>
