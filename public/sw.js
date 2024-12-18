@@ -1,35 +1,38 @@
-let timeoutId;
-
 self.addEventListener('push', (e) => {
   const message = e.data.json();
 
   e.waitUntil(
-    (() => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-      timeoutId = self.setTimeout(() => {
-        self.registration.showNotification(message.title, {
-          body: message.body,
-          icon: './favicon.svg',
-        });
-      }, 1000);
-
-      self.clients.matchAll().then((clients) => {
-        clients.forEach((client) => {
-          client.postMessage({
-            type: 'check-user-activity',
-          });
-        });
-      });
-    })()
+    self.registration.showNotification(message.title, {
+      body: message.body,
+      icon: './favicon.svg',
+      data: message.data,
+    })
   );
 });
 
-self.addEventListener('message', (e) => {
-  if (e.data?.type === 'user-activity') {
-    if (timeoutId && e.data.isActive) {
-      e.waitUntil(self.clearTimeout(timeoutId));
-    }
-  }
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+
+  e.waitUntil(
+    clients
+      .matchAll({
+        type: 'window',
+      })
+      .then((clientList) => {
+        for (const client of clientList) {
+          if (
+            client.url.includes(self.registration.scope) &&
+            'focus' in client
+          ) {
+            return client.focus();
+          }
+        }
+
+        if (clients.openWindow) {
+          return clients.openWindow(
+            `/${e.notification.data.hubSlug}/rooms/${e.notification.data.roomId}`
+          );
+        }
+      })
+  );
 });

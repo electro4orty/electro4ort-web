@@ -4,13 +4,16 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getUserService } from '@/services/get-user.service';
 import { useEffect } from 'react';
 import { socket } from '@/lib/socket';
+import { cn } from '@/lib/utils';
 
 interface UserStatusIndicatorProps {
   userId: string;
+  className?: string;
 }
 
 export default function UserStatusIndicator({
   userId,
+  className,
 }: UserStatusIndicatorProps) {
   const queryClient = useQueryClient();
 
@@ -46,7 +49,10 @@ export default function UserStatusIndicator({
   return (
     <Badge
       size="dot"
-      className="absolute bottom-0.5 right-0.5 border border-secondary"
+      className={cn(
+        'absolute bottom-0.5 right-0.5 border border-secondary',
+        className
+      )}
     />
   );
 }
