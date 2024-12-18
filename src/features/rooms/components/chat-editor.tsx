@@ -96,7 +96,12 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
   });
 
   const handleSubmit = () => {
-    if (!user) {
+    if (
+      !user ||
+      (message.trim().length === 0 &&
+        (!attachments || attachments.length === 0)) ||
+      isPending
+    ) {
       return;
     }
 
