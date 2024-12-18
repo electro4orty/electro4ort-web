@@ -241,6 +241,9 @@
   body {
     @apply bg-background text-foreground overflow-hidden;
   }
+  details {
+    cursor: pointer;
+  }
 }
 
 @layer components {
