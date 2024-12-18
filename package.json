@@ -57,6 +57,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-resizable-panels": "^2.1.6",
     "react-router-dom": "^6.28.0",
+    "react-swipeable": "^7.0.2",
     "socket.io-client": "^4.8.1",
     "sonner": "^1.7.0",
     "tailwind-merge": "^2.5.4",
