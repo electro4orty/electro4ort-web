@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -14,7 +14,6 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
 } from '@/components/ui/responsive-dialog';
-import { Input } from '@/components/ui/input';
 import { uploadFilesService } from '../services/upload-files.service';
 import { appendMessage } from '../utils/append-message';
 import { User } from '@/types/user';
@@ -37,6 +36,7 @@ import ShortcutsHelper from './shortcuts-helper';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import AddDropdown from './add-dropdown';
 import AttachmentsPreview from './attachments-preview';
+import UploadFilesForm from './upload-files-form';
 
 interface ChatEditorProps {
   roomId: string;
@@ -139,22 +139,6 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
     },
   });
 
-  const handleMediaPaste = (files: FileList) => {
-    uploadFilesMutate(files);
-  };
-
-  const handleUploadFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const inputElem = e.currentTarget.elements.namedItem(
-      'files'
-    ) as HTMLInputElement;
-    const { files } = inputElem;
-    if (files) {
-      uploadFilesMutate(files);
-    }
-  };
-
   const handleGifSubmit = (url: string) => {
     if (user) {
       mutate({
@@ -196,7 +180,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
             onChange={setMessage}
             onEnter={handleSubmit}
             isPreview={isPreview}
-            onMediaPaste={handleMediaPaste}
+            onMediaPaste={uploadFilesMutate}
           />
         </div>
         <div className="flex gap-1 items-end">
@@ -257,13 +241,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
               File upload
             </ResponsiveDialogDescription>
           </ResponsiveDialogHeader>
-          <form onSubmit={handleUploadFormSubmit}>
-            <div className="mb-3">
-              <Input type="file" name="files" accept="image/*" multiple />
-              <p className="text-muted-foreground text-sm mt-1">Max: 5mb</p>
-            </div>
-            <Button type="submit">Upload</Button>
-          </form>
+          <UploadFilesForm onSubmit={uploadFilesMutate} />
         </ResponsiveDialogContent>
       </ResponsiveDialog>
 
