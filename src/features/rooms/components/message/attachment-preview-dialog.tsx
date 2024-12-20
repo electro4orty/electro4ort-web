@@ -1,8 +1,8 @@
 import {
-  ResponsiveDialogDescription,
-  ResponsiveDialogHeader,
-  ResponsiveDialogTitle,
-} from '@/components/ui/responsive-dialog';
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import {
   Carousel,
   CarouselContent,
@@ -24,12 +24,10 @@ export default function AttachmentPreviewDialog({
 }: AttachmentPreviewDialogProps) {
   return (
     <>
-      <ResponsiveDialogHeader>
-        <ResponsiveDialogTitle>Preview</ResponsiveDialogTitle>
-        <ResponsiveDialogDescription className="sr-only">
-          Preview
-        </ResponsiveDialogDescription>
-      </ResponsiveDialogHeader>
+      <DialogHeader>
+        <DialogTitle>Preview</DialogTitle>
+        <DialogDescription className="sr-only">Preview</DialogDescription>
+      </DialogHeader>
       <Carousel
         opts={{
           startIndex: selectedIndex,
