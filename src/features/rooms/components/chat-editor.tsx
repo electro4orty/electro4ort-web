@@ -40,6 +40,7 @@ import {
 import AudioRecorder from './audio-recorder';
 import VideoRecorder from './video-recorder';
 import ShortcutsHelper from './shortcuts-helper';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 interface ChatEditorProps {
   roomId: string;
@@ -282,11 +283,8 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
         </ResponsiveDialogContent>
       </ResponsiveDialog>
 
-      <ResponsiveDialog
-        open={isGifDialogOpen}
-        onOpenChange={setIsGifDialogOpen}
-      >
-        <ResponsiveDialogContent className="!h-[70vh]">
+      <Dialog open={isGifDialogOpen} onOpenChange={setIsGifDialogOpen}>
+        <DialogContent className="!h-[70vh]">
           <GifSelector
             onSelect={(url) =>
               user &&
@@ -300,8 +298,8 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
               })
             }
           />
-        </ResponsiveDialogContent>
-      </ResponsiveDialog>
+        </DialogContent>
+      </Dialog>
 
       <ResponsiveDialog
         open={isAudioDialogOpen}

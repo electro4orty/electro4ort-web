@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button';
 import {
-  ResponsiveDialogTitle,
-  ResponsiveDialogDescription,
-  ResponsiveDialogHeader,
-} from '@/components/ui/responsive-dialog';
+  DialogTitle,
+  DialogDescription,
+  DialogHeader,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { searchGifsService } from '@/services/search-gifs.service';
 import { useMutation } from '@tanstack/react-query';
@@ -43,12 +43,10 @@ export default function GifSelector({ onSelect }: GifSelectorProps) {
 
   return (
     <>
-      <ResponsiveDialogHeader>
-        <ResponsiveDialogTitle>Search GIFs</ResponsiveDialogTitle>
-        <ResponsiveDialogDescription className="sr-only">
-          Search GIFs
-        </ResponsiveDialogDescription>
-      </ResponsiveDialogHeader>
+      <DialogHeader>
+        <DialogTitle>Search GIFs</DialogTitle>
+        <DialogDescription className="sr-only">Search GIFs</DialogDescription>
+      </DialogHeader>
 
       {data && (
         <div className="overflow-auto pr-1 grid grid-cols-3">
