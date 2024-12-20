@@ -1,8 +1,11 @@
 import { Button } from '@/components/ui/button';
-import { DialogDescription, DialogHeader } from '@/components/ui/dialog';
+import {
+  ResponsiveDialogTitle,
+  ResponsiveDialogDescription,
+  ResponsiveDialogHeader,
+} from '@/components/ui/responsive-dialog';
 import { Input } from '@/components/ui/input';
 import { searchGifsService } from '@/services/search-gifs.service';
-import { DialogTitle } from '@radix-ui/react-dialog';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
@@ -40,15 +43,17 @@ export default function GifSelector({ onSelect }: GifSelectorProps) {
 
   return (
     <>
-      <DialogHeader>
-        <DialogTitle>Search GIFs</DialogTitle>
-        <DialogDescription className="sr-only">Search GIFs</DialogDescription>
+      <ResponsiveDialogHeader>
+        <ResponsiveDialogTitle>Search GIFs</ResponsiveDialogTitle>
+        <ResponsiveDialogDescription className="sr-only">
+          Search GIFs
+        </ResponsiveDialogDescription>
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search GIFs"
         />
-      </DialogHeader>
+      </ResponsiveDialogHeader>
 
       <div className="overflow-auto pr-1 grid grid-cols-3">
         {data?.results.map((gif) => (

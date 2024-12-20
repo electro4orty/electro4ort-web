@@ -5,8 +5,11 @@ import { Button } from '@/components/ui/button';
 import { getJoinedHubsService } from '@/features/hubs/services/get-joined-hubs.service';
 import JoinHub from '@/features/hubs/components/join-hub';
 import CreateHub from '@/features/hubs/components/create-hub';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { useState } from 'react';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+} from '@/components/ui/responsive-dialog';
 
 export default function DashboardScreen() {
   const { data } = useQuery({
@@ -34,22 +37,22 @@ export default function DashboardScreen() {
           </Button>
         </div>
 
-        <Dialog
+        <ResponsiveDialog
           open={isJoinHubDialogOpen}
           onOpenChange={setIsJoinHubDialogOpen}
         >
-          <DialogContent>
+          <ResponsiveDialogContent>
             <JoinHub onClose={() => setIsJoinHubDialogOpen(false)} />
-          </DialogContent>
-        </Dialog>
-        <Dialog
+          </ResponsiveDialogContent>
+        </ResponsiveDialog>
+        <ResponsiveDialog
           open={isCreateHubDialogOpen}
           onOpenChange={setIsCreateHubDialogOpen}
         >
-          <DialogContent>
+          <ResponsiveDialogContent>
             <CreateHub onClose={() => setIsCreateHubDialogOpen(false)} />
-          </DialogContent>
-        </Dialog>
+          </ResponsiveDialogContent>
+        </ResponsiveDialog>
       </div>
     );
   }

@@ -10,13 +10,13 @@ import GifMessage from './gif-message';
 import AudioMessage from './audio-message';
 import Attachments from './attachments';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogTrigger,
+} from '@/components/ui/responsive-dialog';
 import UserInfo from '@/components/user-info';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
@@ -77,8 +77,8 @@ export default function ChatMessage({ message }: ChatMessageProps) {
       )}
     >
       <div className="py-1.5">
-        <Dialog>
-          <DialogTrigger className="relative">
+        <ResponsiveDialog>
+          <ResponsiveDialogTrigger className="relative">
             <Avatar>
               <AvatarImage
                 src={
@@ -94,15 +94,17 @@ export default function ChatMessage({ message }: ChatMessageProps) {
               </AvatarFallback>
             </Avatar>
             <UserStatusIndicator userId={message.authorId} />
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Profile</DialogTitle>
-              <DialogDescription className="sr-only">Profile</DialogDescription>
-            </DialogHeader>
+          </ResponsiveDialogTrigger>
+          <ResponsiveDialogContent>
+            <ResponsiveDialogHeader>
+              <ResponsiveDialogTitle>Profile</ResponsiveDialogTitle>
+              <ResponsiveDialogDescription className="sr-only">
+                Profile
+              </ResponsiveDialogDescription>
+            </ResponsiveDialogHeader>
             <UserInfo userId={message.authorId} />
-          </DialogContent>
-        </Dialog>
+          </ResponsiveDialogContent>
+        </ResponsiveDialog>
       </div>
       <div className="flex flex-col max-w-[calc(100%-40px-0.5rem)]">
         <h5 className="font-semibold text-sm text-muted-foreground">

@@ -1,4 +1,7 @@
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+} from '@/components/ui/responsive-dialog';
 import { Attachment } from '@/types/attachment';
 import { getFileUrl } from '@/utils/get-file-url';
 import AttachmentPreviewDialog from './attachment-preview-dialog';
@@ -30,14 +33,14 @@ export default function Attachments({ attachments }: AttachmentsProps) {
           />
         </button>
       ))}
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent>
+      <ResponsiveDialog open={isOpen} onOpenChange={setIsOpen}>
+        <ResponsiveDialogContent>
           <AttachmentPreviewDialog
             attachments={attachments}
             selectedIndex={selectedIndex}
           />
-        </DialogContent>
-      </Dialog>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
     </div>
   );
 }

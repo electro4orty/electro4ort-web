@@ -8,12 +8,12 @@ import {
 import { useAuthStore } from '@/store/auth-store';
 import { ImagePlay, Mic, Plus, Send, Upload, Video, X } from 'lucide-react';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from '@/components/ui/responsive-dialog';
 import { Input } from '@/components/ui/input';
 import { uploadFilesService } from '../services/upload-file.service';
 import { appendMessage } from '../utils/append-message';
@@ -250,14 +250,17 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
         )}
       </div>
 
-      <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>File upload</DialogTitle>
-            <DialogDescription className="sr-only">
+      <ResponsiveDialog
+        open={isUploadDialogOpen}
+        onOpenChange={setIsUploadDialogOpen}
+      >
+        <ResponsiveDialogContent>
+          <ResponsiveDialogHeader>
+            <ResponsiveDialogTitle>File upload</ResponsiveDialogTitle>
+            <ResponsiveDialogDescription className="sr-only">
               File upload
-            </DialogDescription>
-          </DialogHeader>
+            </ResponsiveDialogDescription>
+          </ResponsiveDialogHeader>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -276,11 +279,14 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
             </div>
             <Button type="submit">Upload</Button>
           </form>
-        </DialogContent>
-      </Dialog>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
 
-      <Dialog open={isGifDialogOpen} onOpenChange={setIsGifDialogOpen}>
-        <DialogContent>
+      <ResponsiveDialog
+        open={isGifDialogOpen}
+        onOpenChange={setIsGifDialogOpen}
+      >
+        <ResponsiveDialogContent>
           <GifSelector
             onSelect={(url) =>
               user &&
@@ -294,11 +300,14 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
               })
             }
           />
-        </DialogContent>
-      </Dialog>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
 
-      <Dialog open={isAudioDialogOpen} onOpenChange={setIsAudioDialogOpen}>
-        <DialogContent>
+      <ResponsiveDialog
+        open={isAudioDialogOpen}
+        onOpenChange={setIsAudioDialogOpen}
+      >
+        <ResponsiveDialogContent>
           {user && (
             <AudioRecorder
               roomId={roomId}
@@ -307,11 +316,14 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
               isSending={isPending}
             />
           )}
-        </DialogContent>
-      </Dialog>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
 
-      <Dialog open={isVideoDialogOpen} onOpenChange={setIsVideoDialogOpen}>
-        <DialogContent>
+      <ResponsiveDialog
+        open={isVideoDialogOpen}
+        onOpenChange={setIsVideoDialogOpen}
+      >
+        <ResponsiveDialogContent>
           {user && (
             <VideoRecorder
               roomId={roomId}
@@ -320,8 +332,8 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
               isSending={isPending}
             />
           )}
-        </DialogContent>
-      </Dialog>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
     </div>
   );
 }

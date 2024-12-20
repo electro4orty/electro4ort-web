@@ -8,18 +8,18 @@ import {
 import { SidebarMenuButton } from '@/components/ui/sidebar';
 import { useAuthStore } from '@/store/auth-store';
 import { ChevronUp, LogOut, Settings2, User2 } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import UserInfo from '@/components/user-info';
 import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getFileUrl } from '@/utils/get-file-url';
 import Settings from './settings';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from '@/components/ui/responsive-dialog';
 
 export default function UserDropdown() {
   const { user, logout } = useAuthStore();
@@ -69,28 +69,35 @@ export default function UserDropdown() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Dialog open={isUserDialogOpen} onOpenChange={setIsUserDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Profile</DialogTitle>
-            <DialogDescription className="sr-only">Profile</DialogDescription>
-          </DialogHeader>
+      <ResponsiveDialog
+        open={isUserDialogOpen}
+        onOpenChange={setIsUserDialogOpen}
+      >
+        <ResponsiveDialogContent>
+          <ResponsiveDialogHeader>
+            <ResponsiveDialogTitle>Profile</ResponsiveDialogTitle>
+            <ResponsiveDialogDescription className="sr-only">
+              Profile
+            </ResponsiveDialogDescription>
+          </ResponsiveDialogHeader>
           <UserInfo userId={user.id} />
-        </DialogContent>
-      </Dialog>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
 
-      <Dialog
+      <ResponsiveDialog
         open={isSettingsDialogOpen}
         onOpenChange={setIsSettingsDialogOpen}
       >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Settings</DialogTitle>
-            <DialogDescription className="sr-only">Settings</DialogDescription>
-          </DialogHeader>
+        <ResponsiveDialogContent>
+          <ResponsiveDialogHeader>
+            <ResponsiveDialogTitle>Settings</ResponsiveDialogTitle>
+            <ResponsiveDialogDescription className="sr-only">
+              Settings
+            </ResponsiveDialogDescription>
+          </ResponsiveDialogHeader>
           <Settings />
-        </DialogContent>
-      </Dialog>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
     </>
   );
 }

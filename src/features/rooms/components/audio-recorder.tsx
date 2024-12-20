@@ -4,7 +4,10 @@ import { uploadAudioService } from '../services/upload-audio.service';
 import { CreateMessageDTO } from '../services/create-message.service';
 import { MessageType } from '@/types/message';
 import { Button } from '@/components/ui/button';
-import { DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import {
+  ResponsiveDialogDescription,
+  ResponsiveDialogTitle,
+} from '@/components/ui/responsive-dialog';
 
 interface AudioRecorderProps {
   roomId: string;
@@ -60,8 +63,10 @@ export default function AudioRecorder({
 
   return (
     <>
-      <DialogTitle>Record audio</DialogTitle>
-      <DialogDescription className="sr-only">Record audio</DialogDescription>
+      <ResponsiveDialogTitle>Record audio</ResponsiveDialogTitle>
+      <ResponsiveDialogDescription className="sr-only">
+        Record audio
+      </ResponsiveDialogDescription>
       <div className="flex items-center gap-2">
         <audio
           src={recordedAudio ? URL.createObjectURL(recordedAudio) : undefined}

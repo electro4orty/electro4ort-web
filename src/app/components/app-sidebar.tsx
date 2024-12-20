@@ -16,7 +16,10 @@ import CreateHub from '@/features/hubs/components/create-hub';
 import Participants from './participants';
 import { useState } from 'react';
 import HubsSearch from './hubs-search';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+} from '@/components/ui/responsive-dialog';
 
 export default function AppSidebar() {
   const { hubSlug } = useParams();
@@ -81,14 +84,14 @@ export default function AppSidebar() {
         </SidebarMenu>
       </SidebarFooter>
 
-      <Dialog
+      <ResponsiveDialog
         open={isCreateHubDialogOpen}
         onOpenChange={setIsCreateHubDialogOpen}
       >
-        <DialogContent>
+        <ResponsiveDialogContent>
           <CreateHub onClose={() => setIsCreateHubDialogOpen(false)} />
-        </DialogContent>
-      </Dialog>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
     </Sidebar>
   );
 }

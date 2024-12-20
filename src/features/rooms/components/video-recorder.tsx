@@ -4,7 +4,10 @@ import { uploadAudioService } from '../services/upload-audio.service';
 import { CreateMessageDTO } from '../services/create-message.service';
 import { MessageType } from '@/types/message';
 import { Button } from '@/components/ui/button';
-import { DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import {
+  ResponsiveDialogDescription,
+  ResponsiveDialogTitle,
+} from '@/components/ui/responsive-dialog';
 
 interface VideoRecorderProps {
   roomId: string;
@@ -61,8 +64,10 @@ export default function VideoRecorder({
 
   return (
     <>
-      <DialogTitle>Record video</DialogTitle>
-      <DialogDescription className="sr-only">Record video</DialogDescription>
+      <ResponsiveDialogTitle>Record video</ResponsiveDialogTitle>
+      <ResponsiveDialogDescription className="sr-only">
+        Record video
+      </ResponsiveDialogDescription>
       <div className="flex flex-col items-center gap-2">
         <video
           src={recordedVideo ? URL.createObjectURL(recordedVideo) : undefined}

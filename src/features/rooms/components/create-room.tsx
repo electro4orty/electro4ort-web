@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import {
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from '@/components/ui/responsive-dialog';
 import { Input } from '@/components/ui/input';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -68,10 +68,12 @@ export default function CreateRoom({ hubSlug, onClose }: CreateRoomProps) {
 
   return (
     <>
-      <DialogHeader>
-        <DialogTitle>Create room</DialogTitle>
-        <DialogDescription>Configure new room</DialogDescription>
-      </DialogHeader>
+      <ResponsiveDialogHeader>
+        <ResponsiveDialogTitle>Create room</ResponsiveDialogTitle>
+        <ResponsiveDialogDescription>
+          Configure new room
+        </ResponsiveDialogDescription>
+      </ResponsiveDialogHeader>
 
       <form
         id="createRoomForm"
@@ -114,11 +116,11 @@ export default function CreateRoom({ hubSlug, onClose }: CreateRoomProps) {
         </div>
       </form>
 
-      <DialogFooter>
+      <ResponsiveDialogFooter>
         <Button type="submit" form="createRoomForm" disabled={isPending}>
           Create
         </Button>
-      </DialogFooter>
+      </ResponsiveDialogFooter>
     </>
   );
 }
