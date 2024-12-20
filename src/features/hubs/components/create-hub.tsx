@@ -15,7 +15,6 @@ import { getHubPath } from '@/constants/router-paths';
 
 interface CreateHubFormData {
   name: string;
-  avatar: FileList | undefined;
 }
 
 interface CreateHubProps {
@@ -28,8 +27,6 @@ export default function CreateHub({ onClose }: CreateHubProps) {
       name: '',
     },
   });
-
-  const avatar = form.watch('avatar');
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -73,24 +70,6 @@ export default function CreateHub({ onClose }: CreateHubProps) {
             autoComplete="off"
             {...form.register('name')}
           />
-        </div>
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="createHubAvatar">Avatar</Label>
-          <div>
-            <Input
-              type="file"
-              id="createHubAvatar"
-              required
-              {...form.register('avatar')}
-            />
-          </div>
-
-          {avatar?.[0] && (
-            <img
-              src={URL.createObjectURL(avatar[0])}
-              className="size-24 rounded-full object-cover object-center"
-            />
-          )}
         </div>
       </form>
 
