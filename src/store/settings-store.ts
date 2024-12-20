@@ -6,6 +6,8 @@ interface SettingsStore {
   setIsSendMessageUsingModifier: (value: boolean) => void;
   theme: string;
   setTheme: (value: string) => void;
+  useMobileDialog: boolean;
+  setUseMobileDialog: (value: boolean) => void;
 }
 
 export const useSettingsStore = create<SettingsStore>()(
@@ -19,6 +21,8 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ theme: value });
         document.documentElement.className = value === 'default' ? '' : value;
       },
+      useMobileDialog: true,
+      setUseMobileDialog: (value) => set({ useMobileDialog: value }),
     }),
     {
       name: 'settings-store',

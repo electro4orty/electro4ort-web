@@ -33,29 +33,42 @@ import {
   DrawerTrigger,
 } from './drawer';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useSettingsStore } from '@/store/settings-store';
 
 function ResponsiveDialog(props: DialogProps) {
   const isMobile = useIsMobile();
+  const { useMobileDialog } = useSettingsStore();
 
-  return isMobile ? <Drawer {...props} /> : <Dialog {...props} />;
+  const isDrawer = isMobile && useMobileDialog;
+
+  return isDrawer ? <Drawer {...props} /> : <Dialog {...props} />;
 }
 
 function ResponsiveDialogClose(props: DialogCloseProps) {
   const isMobile = useIsMobile();
+  const { useMobileDialog } = useSettingsStore();
 
-  return isMobile ? <DrawerClose {...props} /> : <DialogClose {...props} />;
+  const isDrawer = isMobile && useMobileDialog;
+
+  return isDrawer ? <DrawerClose {...props} /> : <DialogClose {...props} />;
 }
 
 function ResponsiveDialogContent(props: DialogContentProps) {
   const isMobile = useIsMobile();
+  const { useMobileDialog } = useSettingsStore();
 
-  return isMobile ? <DrawerContent {...props} /> : <DialogContent {...props} />;
+  const isDrawer = isMobile && useMobileDialog;
+
+  return isDrawer ? <DrawerContent {...props} /> : <DialogContent {...props} />;
 }
 
 function ResponsiveDialogDescription(props: DialogDescriptionProps) {
   const isMobile = useIsMobile();
+  const { useMobileDialog } = useSettingsStore();
 
-  return isMobile ? (
+  const isDrawer = isMobile && useMobileDialog;
+
+  return isDrawer ? (
     <DrawerDescription {...props} />
   ) : (
     <DialogDescription {...props} />
@@ -64,38 +77,56 @@ function ResponsiveDialogDescription(props: DialogDescriptionProps) {
 
 function ResponsiveDialogFooter(props: React.HTMLAttributes<HTMLDivElement>) {
   const isMobile = useIsMobile();
+  const { useMobileDialog } = useSettingsStore();
 
-  return isMobile ? <DrawerFooter {...props} /> : <DialogFooter {...props} />;
+  const isDrawer = isMobile && useMobileDialog;
+
+  return isDrawer ? <DrawerFooter {...props} /> : <DialogFooter {...props} />;
 }
 
 function ResponsiveDialogHeader(props: React.HTMLAttributes<HTMLDivElement>) {
   const isMobile = useIsMobile();
+  const { useMobileDialog } = useSettingsStore();
 
-  return isMobile ? <DrawerHeader {...props} /> : <DialogHeader {...props} />;
+  const isDrawer = isMobile && useMobileDialog;
+
+  return isDrawer ? <DrawerHeader {...props} /> : <DialogHeader {...props} />;
 }
 
 function ResponsiveDialogOverlay(props: DialogOverlayProps) {
   const isMobile = useIsMobile();
+  const { useMobileDialog } = useSettingsStore();
 
-  return isMobile ? <DrawerOverlay {...props} /> : <DialogOverlay {...props} />;
+  const isDrawer = isMobile && useMobileDialog;
+
+  return isDrawer ? <DrawerOverlay {...props} /> : <DialogOverlay {...props} />;
 }
 
 function ResponsiveDialogPortal(props: DialogPortalProps) {
   const isMobile = useIsMobile();
+  const { useMobileDialog } = useSettingsStore();
 
-  return isMobile ? <DrawerPortal {...props} /> : <DialogPortal {...props} />;
+  const isDrawer = isMobile && useMobileDialog;
+
+  return isDrawer ? <DrawerPortal {...props} /> : <DialogPortal {...props} />;
 }
 
 function ResponsiveDialogTitle(props: DialogTitleProps) {
   const isMobile = useIsMobile();
+  const { useMobileDialog } = useSettingsStore();
 
-  return isMobile ? <DrawerTitle {...props} /> : <DialogTitle {...props} />;
+  const isDrawer = isMobile && useMobileDialog;
+
+  return isDrawer ? <DrawerTitle {...props} /> : <DialogTitle {...props} />;
 }
 
 function ResponsiveDialogTrigger(props: DialogTriggerProps) {
   const isMobile = useIsMobile();
+  const { useMobileDialog } = useSettingsStore();
 
-  return isMobile ? <DrawerTrigger {...props} /> : <DialogTrigger {...props} />;
+  const isDrawer = isMobile && useMobileDialog;
+
+  return isDrawer ? <DrawerTrigger {...props} /> : <DialogTrigger {...props} />;
 }
 
 export {
