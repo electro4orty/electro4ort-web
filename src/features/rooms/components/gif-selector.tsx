@@ -48,35 +48,39 @@ export default function GifSelector({ onSelect }: GifSelectorProps) {
         <ResponsiveDialogDescription className="sr-only">
           Search GIFs
         </ResponsiveDialogDescription>
-        <Input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search GIFs"
-        />
       </ResponsiveDialogHeader>
 
-      <div className="overflow-auto pr-1 grid grid-cols-3">
-        {data?.results.map((gif) => (
-          <button
-            key={gif.id}
-            type="button"
-            onClick={() => onSelect(gif.media_formats.loopedmp4.url)}
-          >
-            <video
-              src={gif.media_formats.loopedmp4.url}
-              loop
-              autoPlay
-              muted
-              playsInline
-            />
-          </button>
-        ))}
-      </div>
+      {data && (
+        <div className="overflow-auto pr-1 grid grid-cols-3">
+          {data.results.map((gif) => (
+            <button
+              key={gif.id}
+              type="button"
+              onClick={() => onSelect(gif.media_formats.loopedmp4.url)}
+            >
+              <video
+                src={gif.media_formats.loopedmp4.url}
+                loop
+                autoPlay
+                muted
+                playsInline
+              />
+            </button>
+          ))}
+        </div>
+      )}
+
       {data?.next && (
         <Button type="button" variant="secondary" onClick={loadMore}>
           Load more
         </Button>
       )}
+
+      <Input
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search GIFs"
+      />
     </>
   );
 }

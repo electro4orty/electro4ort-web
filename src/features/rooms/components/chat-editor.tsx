@@ -286,7 +286,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
         open={isGifDialogOpen}
         onOpenChange={setIsGifDialogOpen}
       >
-        <ResponsiveDialogContent>
+        <ResponsiveDialogContent className="!h-[70vh]">
           <GifSelector
             onSelect={(url) =>
               user &&
