@@ -8,6 +8,7 @@ import {
   ResponsiveDialogDescription,
   ResponsiveDialogTitle,
 } from '@/components/ui/responsive-dialog';
+import { useMutation } from '@tanstack/react-query';
 
 interface AudioRecorderProps {
   roomId: string;
@@ -30,21 +31,26 @@ export default function AudioRecorder({
   const [recordedAudio, setRecordedAudio] = useState<Blob | null>(null);
   const [isRecording, setIsRecording] = useState(false);
 
-  const handleSubmit = () => {
-    if (!recordedAudio) {
-      return;
-    }
-
-    uploadAudioService(recordedAudio).then((res) => {
+  const { mutate } = useMutation({
+    mutationFn: uploadAudioService,
+    onSuccess: (data) => {
       sendMessage({
-        body: res.fileName,
-        text: res.fileName,
+        body: data.fileName,
+        text: 'Audio',
         roomId,
         userId,
         attachments: [],
         type: MessageType.AUDIO,
       });
-    });
+    },
+  });
+
+  const handleSubmit = () => {
+    if (!recordedAudio) {
+      return;
+    }
+
+    mutate(recordedAudio);
     setRecordedAudio(null);
   };
 

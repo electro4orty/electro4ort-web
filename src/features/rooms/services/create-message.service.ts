@@ -1,18 +1,18 @@
 import { socket } from '@/lib/socket';
 import { Message, MessageType } from '@/types/message';
 
+export interface AttachmentDTO {
+  fileName: string;
+  size: number;
+  mimeType: string;
+}
+
 export interface CreateMessageDTO {
   roomId: string;
   userId: string;
   body: string;
   text: string;
-  attachments:
-    | {
-        fileName: string;
-        size: number;
-        mimeType: string;
-      }[]
-    | null;
+  attachments: AttachmentDTO[] | null;
   type: MessageType;
 }
 

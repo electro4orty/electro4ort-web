@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  CreateMessageDTO,
+  AttachmentDTO,
   createMessageService,
 } from '../services/create-message.service';
 import { useAuthStore } from '@/store/auth-store';
-import { ImagePlay, Mic, Plus, Send, Upload, Video, X } from 'lucide-react';
+import { Send, X } from 'lucide-react';
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -15,7 +15,7 @@ import {
   ResponsiveDialogTitle,
 } from '@/components/ui/responsive-dialog';
 import { Input } from '@/components/ui/input';
-import { uploadFilesService } from '../services/upload-file.service';
+import { uploadFilesService } from '../services/upload-files.service';
 import { appendMessage } from '../utils/append-message';
 import { User } from '@/types/user';
 import { socket } from '@/lib/socket';
@@ -25,12 +25,6 @@ import { MessageType } from '@/types/message';
 import Editor from './editor';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { useLongPress } from '@/hooks/use-long-press';
 import {
   Tooltip,
@@ -41,6 +35,8 @@ import AudioRecorder from './audio-recorder';
 import VideoRecorder from './video-recorder';
 import ShortcutsHelper from './shortcuts-helper';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
+import AddDropdown from './add-dropdown';
+import AttachmentsPreview from './attachments-preview';
 
 interface ChatEditorProps {
   roomId: string;
@@ -53,8 +49,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
   const [isGifDialogOpen, setIsGifDialogOpen] = useState(false);
   const [isAudioDialogOpen, setIsAudioDialogOpen] = useState(false);
   const [isVideoDialogOpen, setIsVideoDialogOpen] = useState(false);
-  const [attachments, setAttachments] =
-    useState<CreateMessageDTO['attachments']>(null);
+  const [attachments, setAttachments] = useState<AttachmentDTO[] | null>(null);
   const queryClient = useQueryClient();
   const [typingUser, setTypingUser] = useState<User | null>(null);
   const [debouncedTypingUser] = useDebounce(typingUser, 100);
@@ -136,78 +131,72 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
     }
   }, [message, roomId, user]);
 
+  const { mutate: uploadFilesMutate } = useMutation({
+    mutationFn: uploadFilesService,
+    onSuccess: (data) => {
+      setAttachments((prev) => (prev ? [...prev, ...data] : data));
+      setIsUploadDialogOpen(false);
+    },
+  });
+
+  const handleMediaPaste = (files: FileList) => {
+    uploadFilesMutate(files);
+  };
+
+  const handleUploadFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const inputElem = e.currentTarget.elements.namedItem(
+      'files'
+    ) as HTMLInputElement;
+    const { files } = inputElem;
+    if (files) {
+      uploadFilesMutate(files);
+    }
+  };
+
+  const handleGifSubmit = (url: string) => {
+    if (user) {
+      mutate({
+        attachments: null,
+        body: url,
+        text: 'GIF',
+        roomId,
+        userId: user.id,
+        type: MessageType.GIF,
+      });
+    }
+  };
+
+  const removeAttachment = (attachment: AttachmentDTO) => {
+    setAttachments((prev) =>
+      prev ? prev.filter((item) => item.fileName !== attachment.fileName) : null
+    );
+  };
+
   return (
     <div className="px-2 py-3">
       {attachments && attachments.length !== 0 && (
-        <div className="flex flex-wrap gap-1 mb-2">
-          {attachments.map((attachment) => (
-            <div key={attachment.fileName} className="relative group">
-              <img
-                src={`${process.env.VITE_API_URL}/api/attachments/${attachment.fileName}`}
-                className="block size-[80px] object-cover object-center overflow-hidden rounded-lg"
-              />
-              <button
-                type="button"
-                className="absolute inset-0 hidden group-hover:flex justify-center items-center bg-black/50"
-                onClick={() =>
-                  setAttachments((prev) =>
-                    prev
-                      ? prev.filter(
-                          (item) => item.fileName !== attachment.fileName
-                        )
-                      : null
-                  )
-                }
-              >
-                <X />
-              </button>
-            </div>
-          ))}
-        </div>
+        <AttachmentsPreview
+          attachments={attachments}
+          onRemove={removeAttachment}
+        />
       )}
 
       <div className="flex items-end gap-1 mb-1.5">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button type="button" size="icon" variant="ghost">
-              <Plus className="size-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => setIsUploadDialogOpen(true)}>
-              <Upload className="size-4 mr-2" />
-              Upload attachments
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setIsGifDialogOpen(true)}>
-              <ImagePlay className="size-4 mr-2" />
-              Send GIFs
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setIsAudioDialogOpen(true)}>
-              <Mic className="size-4 mr-2" />
-              Record audio
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setIsVideoDialogOpen(true)}>
-              <Video className="size-4 mr-2" />
-              Record video
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <AddDropdown
+          onAudioClick={() => setIsAudioDialogOpen(true)}
+          onGifClick={() => setIsGifDialogOpen(true)}
+          onUploadClick={() => setIsUploadDialogOpen(true)}
+          onVideoClick={() => setIsVideoDialogOpen(true)}
+        />
         <div className="grow self-stretch">
           <Editor
             value={message}
             onChange={setMessage}
             onEnter={handleSubmit}
             isPreview={isPreview}
-            onMediaPaste={(files) => {
-              const formData = new FormData();
-              Array.from(files).forEach((file) => {
-                formData.append('files', file);
-              });
-              uploadFilesService(roomId, formData).then((res) => {
-                setAttachments((prev) => (prev ? [...prev, ...res] : res));
-                setIsUploadDialogOpen(false);
-              });
-            }}
+            onMediaPaste={handleMediaPaste}
           />
         </div>
         <div className="flex gap-1 items-end">
@@ -268,18 +257,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
               File upload
             </ResponsiveDialogDescription>
           </ResponsiveDialogHeader>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-
-              uploadFilesService(roomId, new FormData(e.currentTarget)).then(
-                (res) => {
-                  setAttachments((prev) => (prev ? [...prev, ...res] : res));
-                  setIsUploadDialogOpen(false);
-                }
-              );
-            }}
-          >
+          <form onSubmit={handleUploadFormSubmit}>
             <div className="mb-3">
               <Input type="file" name="files" accept="image/*" multiple />
               <p className="text-muted-foreground text-sm mt-1">Max: 5mb</p>
@@ -291,19 +269,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
 
       <Dialog open={isGifDialogOpen} onOpenChange={setIsGifDialogOpen}>
         <DialogContent className="!h-[70vh]">
-          <GifSelector
-            onSelect={(url) =>
-              user &&
-              mutate({
-                attachments: null,
-                body: url,
-                text: 'GIF',
-                roomId,
-                userId: user.id,
-                type: MessageType.GIF,
-              })
-            }
-          />
+          <GifSelector onSelect={handleGifSubmit} />
         </DialogContent>
       </Dialog>
 

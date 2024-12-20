@@ -1,6 +1,5 @@
 import { Recorder } from '@/utils/recorder';
 import { useRef, useState } from 'react';
-import { uploadAudioService } from '../services/upload-audio.service';
 import { CreateMessageDTO } from '../services/create-message.service';
 import { MessageType } from '@/types/message';
 import { Button } from '@/components/ui/button';
@@ -8,6 +7,8 @@ import {
   ResponsiveDialogDescription,
   ResponsiveDialogTitle,
 } from '@/components/ui/responsive-dialog';
+import { uploadVideoService } from '../services/upload-video.service';
+import { useMutation } from '@tanstack/react-query';
 
 interface VideoRecorderProps {
   roomId: string;
@@ -30,22 +31,26 @@ export default function VideoRecorder({
   );
   const [recordedVideo, setRecordedVideo] = useState<Blob | null>(null);
   const [isRecording, setIsRecording] = useState(false);
+  const { mutate } = useMutation({
+    mutationFn: uploadVideoService,
+    onSuccess: (data) => {
+      sendMessage({
+        body: data.fileName,
+        text: 'Video',
+        roomId,
+        userId,
+        attachments: null,
+        type: MessageType.VIDEO,
+      });
+    },
+  });
 
   const handleSubmit = () => {
     if (!recordedVideo) {
       return;
     }
 
-    uploadAudioService(recordedVideo).then((res) => {
-      sendMessage({
-        body: res.fileName,
-        text: res.fileName,
-        roomId,
-        userId,
-        attachments: [],
-        type: MessageType.VIDEO,
-      });
-    });
+    mutate(recordedVideo);
     setRecordedVideo(null);
   };
 
