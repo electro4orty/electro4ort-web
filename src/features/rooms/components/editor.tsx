@@ -16,6 +16,7 @@ import { PopoverAnchor } from '@radix-ui/react-popover';
 import { Popover, PopoverContent } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { useDebouncedCallback } from 'use-debounce';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface EditorProps {
   value: string;
@@ -41,6 +42,7 @@ export default function Editor({
   });
   const { isSendMessageUsingModifier } = useSettingsStore();
   const [isFormatDropdownOpen, setIsFormatDropdownOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const openFormatDropdown = useDebouncedCallback(() => {
     setIsFormatDropdownOpen(true);
@@ -137,7 +139,7 @@ export default function Editor({
         />
       ) : (
         <Popover
-          open={isFormatDropdownOpen}
+          open={isFormatDropdownOpen && !isMobile}
           onOpenChange={setIsFormatDropdownOpen}
           modal={false}
         >
