@@ -4,7 +4,6 @@ import { toast } from 'sonner';
 import { useSwipeable } from 'react-swipeable';
 import AppSidebar from '../components/app-sidebar';
 import { useAuthCheck } from '../hooks/use-auth-check';
-import WsStatus from '../components/ws-status';
 import {
   SidebarRoot,
   SidebarTrigger,
@@ -75,7 +74,6 @@ export default function HubLayout() {
           <button type="button" onClick={() => window.location.reload()}>
             <img src="/logo-wide.png" width="180px" alt="Electro4ort" />
           </button>
-          <WsStatus />
         </div>
       </div>
     </SidebarRoot>
