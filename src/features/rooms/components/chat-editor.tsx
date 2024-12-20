@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  AttachmentDTO,
-  createMessageService,
-} from '../services/create-message.service';
+import { createMessageService } from '../services/create-message.service';
 import { useAuthStore } from '@/store/auth-store';
 import { Send, X } from 'lucide-react';
 import {
@@ -20,7 +17,7 @@ import { User } from '@/types/user';
 import { socket } from '@/lib/socket';
 import { useDebounce } from 'use-debounce';
 import GifSelector from './gif-selector';
-import { MessageType } from '@/types/message';
+import { Message, MessageType } from '@/types/message';
 import Editor from './editor';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
@@ -35,8 +32,21 @@ import VideoRecorder from './video-recorder';
 import ShortcutsHelper from './shortcuts-helper';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import AddDropdown from './add-dropdown';
-import AttachmentsPreview from './attachments-preview';
 import UploadFilesForm from './upload-files-form';
+
+const getTextFromMarkdown = (markdown: string) => {
+  const parser = new DOMParser();
+  const document = parser.parseFromString(
+    DOMPurify.sanitize(
+      marked.parse(markdown, {
+        async: false,
+      })
+    ),
+    'text/html'
+  );
+  const text = document.body.textContent ?? 'New message';
+  return text;
+};
 
 interface ChatEditorProps {
   roomId: string;
@@ -49,12 +59,12 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
   const [isGifDialogOpen, setIsGifDialogOpen] = useState(false);
   const [isAudioDialogOpen, setIsAudioDialogOpen] = useState(false);
   const [isVideoDialogOpen, setIsVideoDialogOpen] = useState(false);
-  const [attachments, setAttachments] = useState<AttachmentDTO[] | null>(null);
   const queryClient = useQueryClient();
   const [typingUser, setTypingUser] = useState<User | null>(null);
   const [debouncedTypingUser] = useDebounce(typingUser, 100);
   const [message, setMessage] = useState('');
   const [isPreview, setIsPreview] = useState(false);
+  const [pastedFiles, setPastedFiles] = useState<FileList | null>(null);
 
   const onLongPressSend = useCallback(() => {
     setIsPreview(true);
@@ -81,47 +91,35 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
     };
   });
 
+  const handleMessageSendSuccess = (message: Message) => {
+    appendMessage(queryClient, message);
+    setIsGifDialogOpen(false);
+    setIsAudioDialogOpen(false);
+    setIsVideoDialogOpen(false);
+    setIsUploadDialogOpen(false);
+    onSend();
+  };
+
   const { mutate, isPending } = useMutation({
     mutationFn: createMessageService,
-    onSuccess: (message) => {
-      appendMessage(queryClient, message);
-      setIsGifDialogOpen(false);
-      setIsAudioDialogOpen(false);
-      setIsVideoDialogOpen(false);
-      onSend();
-    },
+    onSuccess: handleMessageSendSuccess,
   });
 
   const handleSubmit = () => {
-    if (
-      !user ||
-      (message.trim().length === 0 &&
-        (!attachments || attachments.length === 0)) ||
-      isPending
-    ) {
+    if (!user || !message.trim().length || isPending) {
       return;
     }
 
-    const parser = new DOMParser();
-    const document = parser.parseFromString(
-      DOMPurify.sanitize(
-        marked.parse(message, {
-          async: false,
-        })
-      ),
-      'text/html'
-    );
-    const text = document.body.textContent ?? 'New message';
+    const text = getTextFromMarkdown(message);
 
     mutate({
       body: message.trim(),
       text,
       roomId,
       userId: user.id,
-      attachments,
+      attachments: null,
       type: MessageType.TEXT,
     });
-    setAttachments(null);
     setMessage('');
   };
 
@@ -131,13 +129,29 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
     }
   }, [message, roomId, user]);
 
-  const { mutate: uploadFilesMutate } = useMutation({
-    mutationFn: uploadFilesService,
-    onSuccess: (data) => {
-      setAttachments((prev) => (prev ? [...prev, ...data] : data));
-      setIsUploadDialogOpen(false);
-    },
-  });
+  const { mutate: uploadFilesMutate, isPending: isUploadFilesPending } =
+    useMutation({
+      mutationFn: async ({ files, text }: { files: File[]; text: string }) => {
+        if (!user) {
+          throw new Error('Unauthorized');
+        }
+
+        const rawText = getTextFromMarkdown(text);
+
+        const uploadedFiles = await uploadFilesService(files);
+        const message = await createMessageService({
+          attachments: uploadedFiles,
+          body: text.trim(),
+          roomId,
+          text: rawText,
+          type: MessageType.TEXT,
+          userId: user.id,
+        });
+
+        return message;
+      },
+      onSuccess: handleMessageSendSuccess,
+    });
 
   const handleGifSubmit = (url: string) => {
     if (user) {
@@ -152,21 +166,13 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
     }
   };
 
-  const removeAttachment = (attachment: AttachmentDTO) => {
-    setAttachments((prev) =>
-      prev ? prev.filter((item) => item.fileName !== attachment.fileName) : null
-    );
+  const handleMediaPaste = (files: FileList) => {
+    setPastedFiles(files);
+    setIsUploadDialogOpen(true);
   };
 
   return (
     <div className="px-2 py-3">
-      {attachments && attachments.length !== 0 && (
-        <AttachmentsPreview
-          attachments={attachments}
-          onRemove={removeAttachment}
-        />
-      )}
-
       <div className="flex items-end gap-1 mb-1.5">
         <AddDropdown
           onAudioClick={() => setIsAudioDialogOpen(true)}
@@ -180,7 +186,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
             onChange={setMessage}
             onEnter={handleSubmit}
             isPreview={isPreview}
-            onMediaPaste={uploadFilesMutate}
+            onMediaPaste={handleMediaPaste}
           />
         </div>
         <div className="flex gap-1 items-end">
@@ -205,11 +211,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
                     longPressSendOnTouchEnd();
                     handleSubmit();
                   }}
-                  disabled={
-                    (message.trim().length === 0 &&
-                      (!attachments || attachments.length === 0)) ||
-                    isPending
-                  }
+                  disabled={!message.trim() || isPending}
                   {...longPressSendProps}
                 >
                   <Send className="size-4" />
@@ -241,7 +243,11 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
               File upload
             </ResponsiveDialogDescription>
           </ResponsiveDialogHeader>
-          <UploadFilesForm onSubmit={uploadFilesMutate} />
+          <UploadFilesForm
+            onSubmit={uploadFilesMutate}
+            initialFiles={pastedFiles}
+            isLoading={isUploadFilesPending}
+          />
         </ResponsiveDialogContent>
       </ResponsiveDialog>
 

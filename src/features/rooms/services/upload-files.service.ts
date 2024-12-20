@@ -6,7 +6,7 @@ interface UploadFilesResponse {
   mimeType: string;
 }
 
-export async function uploadFilesService(files: FileList) {
+export async function uploadFilesService(files: FileList | File[]) {
   const formData = new FormData();
   Array.from(files).forEach((file) => {
     formData.append('files', file);

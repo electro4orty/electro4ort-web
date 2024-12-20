@@ -23,6 +23,7 @@ interface EditorProps {
   onEnter: () => void;
   isPreview: boolean;
   onMediaPaste: (files: FileList) => void;
+  id?: string;
 }
 
 export default function Editor({
@@ -31,6 +32,7 @@ export default function Editor({
   onEnter,
   isPreview,
   onMediaPaste,
+  id,
 }: EditorProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const selectionRef = useRef({
@@ -142,6 +144,7 @@ export default function Editor({
         >
           <PopoverAnchor asChild>
             <Textarea
+              id={id}
               ref={inputRef}
               placeholder="Write a message"
               value={value}

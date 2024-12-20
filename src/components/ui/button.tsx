@@ -24,7 +24,7 @@ const buttonVariants = cva(
         sm: 'h-9 rounded-md px-3 [&>svg]:size-4 [&>svg]:mr-2',
         lg: 'h-11 rounded-md px-8 [&>svg]:size-4 [&>svg]:mr-2',
         icon: 'size-10 [&>svg]:size-4',
-        'icon-sm': 'size-7',
+        'icon-sm': 'size-7 [&>svg]:size-4',
         'no-padding': 'rounded-md',
       },
     },
