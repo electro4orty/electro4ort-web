@@ -65,7 +65,8 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
     setIsPreview(true);
   }, []);
 
-  const longPressSendProps = useLongPress(onLongPressSend);
+  const { onTouchEnd: longPressSendOnTouchEnd, ...longPressSendProps } =
+    useLongPress(onLongPressSend);
 
   useEffect(() => {
     const handleTyping = (user: User) => {
@@ -226,6 +227,11 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
                   type="button"
                   size="icon"
                   onClick={handleSubmit}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    longPressSendOnTouchEnd();
+                    handleSubmit();
+                  }}
                   disabled={
                     (message.trim().length === 0 &&
                       (!attachments || attachments.length === 0)) ||

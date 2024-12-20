@@ -10,7 +10,6 @@ import {
   Italic,
   Link,
   Strikethrough,
-  Underline,
 } from 'lucide-react';
 import { PopoverAnchor } from '@radix-ui/react-popover';
 import { Popover, PopoverContent } from '@/components/ui/popover';
@@ -20,7 +19,6 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 interface EditorProps {
   value: string;
-  disabled?: boolean;
   onChange: (value: string) => void;
   onEnter: () => void;
   isPreview: boolean;
@@ -29,7 +27,6 @@ interface EditorProps {
 
 export default function Editor({
   value,
-  disabled,
   onChange,
   onEnter,
   isPreview,
@@ -146,7 +143,6 @@ export default function Editor({
           <PopoverAnchor asChild>
             <Textarea
               ref={inputRef}
-              disabled={disabled}
               placeholder="Write a message"
               value={value}
               onChange={(e) => onChange(e.currentTarget.value)}
@@ -177,7 +173,10 @@ export default function Editor({
                 type="button"
                 variant="ghost"
                 size="icon"
-                onClick={() => wrapSelectedText('**')}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  wrapSelectedText('**');
+                }}
               >
                 <Bold />
               </Button>
@@ -185,7 +184,10 @@ export default function Editor({
                 type="button"
                 variant="ghost"
                 size="icon"
-                onClick={() => wrapSelectedText('*')}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  wrapSelectedText('*');
+                }}
               >
                 <Italic />
               </Button>
@@ -193,7 +195,10 @@ export default function Editor({
                 type="button"
                 variant="ghost"
                 size="icon"
-                onClick={() => wrapSelectedText('~~')}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  wrapSelectedText('~~');
+                }}
               >
                 <Strikethrough />
               </Button>
@@ -201,15 +206,10 @@ export default function Editor({
                 type="button"
                 variant="ghost"
                 size="icon"
-                onClick={() => wrapSelectedText('___')}
-              >
-                <Underline />
-              </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => wrapSelectedText('`')}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  wrapSelectedText('`');
+                }}
               >
                 <Code />
               </Button>
@@ -217,7 +217,10 @@ export default function Editor({
                 type="button"
                 variant="ghost"
                 size="icon"
-                onClick={makeDetails}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  makeDetails();
+                }}
               >
                 <CodeSquare />
               </Button>
@@ -225,7 +228,10 @@ export default function Editor({
                 type="button"
                 variant="ghost"
                 size="icon"
-                onClick={makeLink}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  makeLink();
+                }}
               >
                 <Link />
               </Button>
