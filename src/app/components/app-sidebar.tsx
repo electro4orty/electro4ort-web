@@ -17,8 +17,6 @@ import Participants from './participants';
 import { useState } from 'react';
 import HubsSearch from './hubs-search';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import Version from './version';
-import WsStatus from './ws-status';
 
 export default function AppSidebar() {
   const { hubSlug } = useParams();
@@ -79,10 +77,6 @@ export default function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <UserDropdown />
-            <div className="flex justify-between items-center">
-              <WsStatus />
-              <Version />
-            </div>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

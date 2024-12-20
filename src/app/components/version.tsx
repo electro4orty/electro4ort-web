@@ -14,7 +14,7 @@ export default function Version() {
     <Button
       variant="link"
       size="sm"
-      className="h-auto min-w-0 text-muted-foreground"
+      className="h-auto min-w-0 text-muted-foreground p-0"
       asChild
     >
       <a href={data?.html_url} target="_blank" rel="noreferrer noopener">

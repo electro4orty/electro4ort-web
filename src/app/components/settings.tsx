@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useSettingsStore } from '@/store/settings-store';
+import Version from './version';
 
 export default function Settings() {
   const {
@@ -68,6 +69,10 @@ export default function Settings() {
           <SelectItem value="violet">Violet</SelectItem>
         </SelectContent>
       </Select>
+
+      <div className="text-right">
+        <Version />
+      </div>
     </div>
   );
 }
