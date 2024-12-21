@@ -1,10 +1,6 @@
-import { Fragment, useEffect } from 'react';
-import { socket } from '@/lib/socket';
+import { useMemo } from 'react';
 import { useMessages } from '../hooks/use-messages';
 import ChatMessage from './message/chat-message';
-import { Message } from '@/types/message';
-import { appendMessage } from '../utils/append-message';
-import { useQueryClient } from '@tanstack/react-query';
 import ChatMessagesSkeletons from './chat-messages-skeletons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ChatMessagesInfo from './chat-messages-info';
@@ -15,22 +11,11 @@ interface ChatMessagesProps {
 
 export default function ChatMessages({ roomId }: ChatMessagesProps) {
   const { data, isLoading, hasNextPage, fetchNextPage } = useMessages(roomId);
-  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const handleMessage = (message: Message) => {
-      appendMessage(queryClient, message);
-    };
-
-    socket.on('message', handleMessage);
-
-    return () => {
-      socket.off('message', handleMessage);
-    };
-  }, [queryClient]);
-
-  const dataLength =
-    data?.pages.reduce((prev, page) => prev + page.data.length, 0) ?? 0;
+  const dataLength = useMemo(
+    () => data?.pages.reduce((prev, page) => prev + page.data.length, 0) ?? 0,
+    [data?.pages]
+  );
 
   return (
     <InfiniteScroll
@@ -45,13 +30,11 @@ export default function ChatMessages({ roomId }: ChatMessagesProps) {
     >
       {isLoading && <ChatMessagesSkeletons />}
       {!isLoading &&
-        data?.pages.map((page, i) => (
-          <Fragment key={i}>
-            {page.data.map((message) => (
-              <ChatMessage key={message.id} message={message} />
-            ))}
-          </Fragment>
-        ))}
+        data?.pages.map((page) =>
+          page.data.map((message) => (
+            <ChatMessage key={message.id} message={message} />
+          ))
+        )}
     </InfiniteScroll>
   );
 }
