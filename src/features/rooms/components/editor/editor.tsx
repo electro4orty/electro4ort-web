@@ -47,6 +47,10 @@ export default function Editor({
     setIsFormatDropdownOpen(true);
   }, 350);
 
+  const closeFormatDropdown = useDebouncedCallback(() => {
+    setIsFormatDropdownOpen(false);
+  }, 350);
+
   useEffect(() => {
     const input = inputRef.current;
     if (!input) {
@@ -58,7 +62,7 @@ export default function Editor({
   }, [value, isPreview]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    openFormatDropdown();
+    closeFormatDropdown();
 
     if (e.code === 'Enter') {
       if (isSendMessageUsingModifier && e.ctrlKey) {
@@ -120,6 +124,17 @@ export default function Editor({
     );
   };
 
+  const handleSelect = (e: React.SyntheticEvent<HTMLTextAreaElement>) => {
+    selectionRef.current = {
+      start: e.currentTarget.selectionStart,
+      end: e.currentTarget.selectionEnd,
+    };
+
+    if (e.currentTarget.selectionStart !== e.currentTarget.selectionEnd) {
+      openFormatDropdown();
+    }
+  };
+
   return (
     <div className="h-full">
       {isPreview ? (
@@ -152,14 +167,7 @@ export default function Editor({
               onKeyDown={handleKeyDown}
               className="max-h-[200px] resize-none py-[7px] text-base md:text-base"
               onPaste={(e) => onMediaPaste(e.clipboardData.files)}
-              onSelect={(e) => {
-                selectionRef.current = {
-                  start: e.currentTarget.selectionStart,
-                  end: e.currentTarget.selectionEnd,
-                };
-
-                openFormatDropdown();
-              }}
+              onSelect={handleSelect}
             />
           </PopoverAnchor>
           <PopoverContent
