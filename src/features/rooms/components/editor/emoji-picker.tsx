@@ -30,44 +30,44 @@ export default function EmojiPicker({ onPick }: EmojiPickerProps) {
           ))}
         </TabsList>
       </div>
-      <TabsContent value="recent" className="h-64 overflow-y-auto">
+      <TabsContent value="recent">
         {recentEmojis.length === 0 && (
           <p className="text-muted-foreground h-full flex items-center justify-center">
             Nothing here yet
           </p>
         )}
-        {recentEmojis.map((emoji) => (
-          <Button
-            key={emoji.slug}
-            type="button"
-            size="icon"
-            variant="ghost"
-            className="w-9 text-xl"
-            onClick={() => handleClick(emoji)}
-          >
-            {emoji.emoji}
-          </Button>
-        ))}
-      </TabsContent>
-
-      {emojis.map((item) => (
-        <TabsContent
-          key={item.slug}
-          value={item.slug}
-          className="h-64 overflow-y-auto"
-        >
-          {item.emojis.map((emoji) => (
+        <div className="h-64 overflow-y-auto grid grid-cols-7 md:grid-cols-10">
+          {recentEmojis.map((emoji) => (
             <Button
               key={emoji.slug}
               type="button"
               size="icon"
               variant="ghost"
-              className="w-9 text-xl"
+              className="w-full aspect-square text-xl"
               onClick={() => handleClick(emoji)}
             >
               {emoji.emoji}
             </Button>
           ))}
+        </div>
+      </TabsContent>
+
+      {emojis.map((item) => (
+        <TabsContent key={item.slug} value={item.slug}>
+          <div className="h-64 overflow-y-auto grid grid-cols-7 md:grid-cols-10">
+            {item.emojis.map((emoji) => (
+              <Button
+                key={emoji.slug}
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="w-full aspect-square text-xl"
+                onClick={() => handleClick(emoji)}
+              >
+                {emoji.emoji}
+              </Button>
+            ))}
+          </div>
         </TabsContent>
       ))}
     </Tabs>

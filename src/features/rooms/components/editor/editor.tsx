@@ -201,7 +201,7 @@ export default function Editor({
                     <Smile />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent align="end">
+                <PopoverContent align="end" className="w-auto max-w-[100vw]">
                   <EmojiPicker
                     onPick={(emoji) => {
                       insertAfter(emoji);
