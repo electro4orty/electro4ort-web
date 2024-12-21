@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import ChatEditor from './chat-editor';
+import ChatEditor from './editor/chat-editor';
 import ChatMessages from './chat-messages';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';

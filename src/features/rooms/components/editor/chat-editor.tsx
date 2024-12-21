@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createMessageService } from '../services/create-message.service';
+import { createMessageService } from '../../services/create-message.service';
 import { useAuthStore } from '@/store/auth-store';
 import { Send, X } from 'lucide-react';
 import {
@@ -11,8 +11,8 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
 } from '@/components/ui/responsive-dialog';
-import { uploadFilesService } from '../services/upload-files.service';
-import { appendMessage } from '../utils/append-message';
+import { uploadFilesService } from '../../services/upload-files.service';
+import { appendMessage } from '../../utils/append-message';
 import { User } from '@/types/user';
 import { socket } from '@/lib/socket';
 import { useDebounce } from 'use-debounce';

@@ -5,7 +5,7 @@ import { X } from 'lucide-react';
 import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
-import Editor from './editor';
+import Editor from './editor/editor';
 
 interface UploadFilesFormProps {
   onSubmit: (data: { files: File[]; text: string }) => void;
