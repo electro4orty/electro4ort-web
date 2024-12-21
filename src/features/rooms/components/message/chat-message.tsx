@@ -21,6 +21,7 @@ import UserInfo from '@/components/user-info';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import VideoMessage from './video-message';
+import { useMemo } from 'react';
 
 interface ChatMessageProps {
   message: Message;
@@ -34,6 +35,19 @@ export default function ChatMessage({ message }: ChatMessageProps) {
   const isTiktok = message.body.includes('tiktok.com');
 
   let content;
+
+  const html = useMemo(
+    () =>
+      DOMPurify.sanitize(
+        marked.parse(message.body, {
+          async: false,
+        }),
+        {
+          ADD_ATTR: ['target'],
+        }
+      ),
+    [message.body]
+  );
 
   if (isTiktok) {
     content = <TiktokMessage url={message.body} />;
@@ -52,14 +66,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
           )}
           <div
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(
-                marked.parse(message.body, {
-                  async: false,
-                }),
-                {
-                  ADD_ATTR: ['target'],
-                }
-              ),
+              __html: html,
             }}
             className="mb-1 markdown"
           />
