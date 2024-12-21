@@ -9,13 +9,19 @@ import {
   CodeSquare,
   Italic,
   Link,
+  Smile,
   Strikethrough,
 } from 'lucide-react';
 import { PopoverAnchor } from '@radix-ui/react-popover';
-import { Popover, PopoverContent } from '@/components/ui/popover';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { useDebouncedCallback } from 'use-debounce';
 import { useIsMobile } from '@/hooks/use-mobile';
+import EmojiPicker from './emoji-picker';
 
 interface EditorProps {
   value: string;
@@ -42,6 +48,7 @@ export default function Editor({
   const { isSendMessageUsingModifier } = useSettingsStore();
   const [isFormatDropdownOpen, setIsFormatDropdownOpen] = useState(false);
   const isMobile = useIsMobile();
+  const [isEmojiOpen, setIsEmojiOpen] = useState(false);
 
   const openFormatDropdown = useDebouncedCallback(() => {
     setIsFormatDropdownOpen(true);
@@ -92,6 +99,16 @@ export default function Editor({
         selectionStart,
         selectionEnd
       )}${str}${value.substring(selectionEnd, value.length)}`
+    );
+  };
+
+  const insertAfter = (str: string) => {
+    const { end: selectionEnd } = selectionRef.current;
+    onChange(
+      `${value.substring(0, selectionEnd)}${str}${value.substring(
+        selectionEnd,
+        value.length
+      )}`
     );
   };
 
@@ -158,17 +175,43 @@ export default function Editor({
           modal={false}
         >
           <PopoverAnchor asChild>
-            <Textarea
-              id={id}
-              ref={inputRef}
-              placeholder="Write a message"
-              value={value}
-              onChange={(e) => onChange(e.currentTarget.value)}
-              onKeyDown={handleKeyDown}
-              className="max-h-[200px] resize-none py-[7px] text-base md:text-base"
-              onPaste={(e) => onMediaPaste(e.clipboardData.files)}
-              onSelect={handleSelect}
-            />
+            <div className="relative">
+              <Textarea
+                id={id}
+                ref={inputRef}
+                placeholder="Write a message"
+                value={value}
+                onChange={(e) => onChange(e.currentTarget.value)}
+                onKeyDown={handleKeyDown}
+                className="max-h-[200px] resize-none py-[7px] pr-9 text-base md:text-base"
+                onPaste={(e) =>
+                  e.clipboardData.files.length !== 0 &&
+                  onMediaPaste(e.clipboardData.files)
+                }
+                onSelect={handleSelect}
+              />
+              <Popover open={isEmojiOpen} onOpenChange={setIsEmojiOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    type="button"
+                    size="icon-sm"
+                    variant="ghost"
+                    className="absolute right-1 top-1/2 -translate-y-1/2"
+                  >
+                    <Smile />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="end">
+                  <EmojiPicker
+                    onPick={(emoji) => {
+                      insertAfter(emoji);
+                      setIsEmojiOpen(false);
+                      inputRef.current?.focus();
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
           </PopoverAnchor>
           <PopoverContent
             align="start"
