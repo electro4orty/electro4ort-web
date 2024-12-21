@@ -18,17 +18,19 @@ export default function EmojiPicker({ onPick }: EmojiPickerProps) {
 
   return (
     <Tabs defaultValue="recent">
-      <TabsList className="overflow-x-auto w-full justify-start">
-        <TabsTrigger value="recent" className="px-[11px] py-2">
-          <Clock className="size-4" />
-        </TabsTrigger>
-        {emojis.map((item) => (
-          <TabsTrigger key={item.slug} value={item.slug}>
-            {item.emojis[0].emoji}
+      <div className="overflow-x-auto electro4ort-scrollbar">
+        <TabsList>
+          <TabsTrigger value="recent" className="px-[11px] py-2">
+            <Clock className="size-4" />
           </TabsTrigger>
-        ))}
-      </TabsList>
-      <TabsContent value="recent" className="h-64 overflow-y-auto px-1">
+          {emojis.map((item) => (
+            <TabsTrigger key={item.slug} value={item.slug}>
+              {item.emojis[0].emoji}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </div>
+      <TabsContent value="recent" className="h-64 overflow-y-auto">
         {recentEmojis.length === 0 && (
           <p className="text-muted-foreground h-full flex items-center justify-center">
             Nothing here yet
