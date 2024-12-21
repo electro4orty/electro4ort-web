@@ -1,13 +1,13 @@
 import { Recorder } from '@/utils/recorder';
 import { useRef, useState } from 'react';
-import { CreateMessageDTO } from '../services/create-message.service';
+import { CreateMessageDTO } from '../../services/create-message.service';
 import { MessageType } from '@/types/message';
 import { Button } from '@/components/ui/button';
 import {
   ResponsiveDialogDescription,
   ResponsiveDialogTitle,
 } from '@/components/ui/responsive-dialog';
-import { uploadVideoService } from '../services/upload-video.service';
+import { uploadVideoService } from '../../services/upload-video.service';
 import { useMutation } from '@tanstack/react-query';
 
 interface VideoRecorderProps {

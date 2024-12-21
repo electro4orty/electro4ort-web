@@ -1,7 +1,7 @@
 import { Recorder } from '@/utils/recorder';
 import { useRef, useState } from 'react';
-import { uploadAudioService } from '../services/upload-audio.service';
-import { CreateMessageDTO } from '../services/create-message.service';
+import { uploadAudioService } from '../../services/upload-audio.service';
+import { CreateMessageDTO } from '../../services/create-message.service';
 import { MessageType } from '@/types/message';
 import { Button } from '@/components/ui/button';
 import {
