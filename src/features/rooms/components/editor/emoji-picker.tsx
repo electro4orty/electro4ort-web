@@ -32,7 +32,7 @@ export default function EmojiPicker({ onPick }: EmojiPickerProps) {
       </div>
       <TabsContent value="recent">
         {recentEmojis.length === 0 && (
-          <p className="text-muted-foreground h-full flex items-center justify-center">
+          <p className="h-64 text-muted-foreground flex items-center justify-center">
             Nothing here yet
           </p>
         )}
