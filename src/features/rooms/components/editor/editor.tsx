@@ -11,8 +11,9 @@ import {
   Link,
   Smile,
   Strikethrough,
+  X,
 } from 'lucide-react';
-import { PopoverAnchor } from '@radix-ui/react-popover';
+import { PopoverAnchor, PopoverClose } from '@radix-ui/react-popover';
 import {
   Popover,
   PopoverContent,
@@ -49,6 +50,12 @@ export default function Editor({
   const [isFormatDropdownOpen, setIsFormatDropdownOpen] = useState(false);
   const isMobile = useIsMobile();
   const [isEmojiOpen, setIsEmojiOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isEmojiOpen) {
+      inputRef.current?.focus();
+    }
+  }, [isEmojiOpen]);
 
   const openFormatDropdown = useDebouncedCallback(() => {
     setIsFormatDropdownOpen(true);
@@ -202,11 +209,19 @@ export default function Editor({
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent align="end" className="w-auto max-w-[100vw]">
+                  <PopoverClose asChild>
+                    <Button
+                      type="button"
+                      size="icon-sm"
+                      variant="ghost"
+                      className="flex ml-auto mb-2"
+                    >
+                      <X />
+                    </Button>
+                  </PopoverClose>
                   <EmojiPicker
                     onPick={(emoji) => {
                       insertAfter(emoji);
-                      setIsEmojiOpen(false);
-                      inputRef.current?.focus();
                     }}
                   />
                 </PopoverContent>
