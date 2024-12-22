@@ -4,7 +4,6 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSkeleton,
@@ -12,7 +11,6 @@ import {
 import { getHubRoomsService } from '@/features/hubs/services/get-hub-rooms.service';
 import { useQuery } from '@tanstack/react-query';
 import { roomTypeIcons } from '../constants/room-type-icons';
-import { Badge } from '@/components/ui/badge';
 import { NavLink } from 'react-router-dom';
 import { getRoomPath } from '../../constants/router-paths';
 import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible';
@@ -94,9 +92,6 @@ export default function Rooms({ hubSlug }: RoomsProps) {
                           <span>{room.name}</span>
                         </NavLink>
                       </SidebarMenuButton>
-                      <SidebarMenuBadge>
-                        <Badge size="dot" />
-                      </SidebarMenuBadge>
                     </SidebarMenuItem>
                   );
                 })}
