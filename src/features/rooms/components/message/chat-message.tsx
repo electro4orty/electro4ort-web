@@ -22,12 +22,18 @@ import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import VideoMessage from './video-message';
 import { useMemo } from 'react';
+import { Button } from '@/components/ui/button';
+import { Reply } from 'lucide-react';
 
 interface ChatMessageProps {
   message: Message;
+  onReplyClick: (message: Message) => void;
 }
 
-export default function ChatMessage({ message }: ChatMessageProps) {
+export default function ChatMessage({
+  message,
+  onReplyClick,
+}: ChatMessageProps) {
   const { user } = useAuthStore();
 
   const isMine = user && message.authorId === user.id;
@@ -78,52 +84,81 @@ export default function ChatMessage({ message }: ChatMessageProps) {
   return (
     <div
       className={cn(
-        'self-start flex gap-2 md:max-w-[80%] bg-neutral-900 rounded-lg pl-2 pr-3 py-1 max-w-full',
-        isMine &&
-          'self-end xl:self-start flex-row-reverse xl:flex-row pl-3 pr-2 bg-neutral-800'
+        'flex flex-col self-start max-w-full md:max-w-[80%] bg-neutral-900 rounded-lg pl-2 pr-3 py-2',
+        isMine && 'self-end pl-3 pr-2 bg-neutral-800'
       )}
     >
-      <div className="py-1.5">
-        <ResponsiveDialog>
-          <ResponsiveDialogTrigger className="relative">
-            <Avatar>
-              <AvatarImage
-                src={
-                  message.author.avatar
-                    ? getFileUrl(message.author.avatar)
-                    : undefined
-                }
-                alt={message.author.displayName}
-                className="size-10"
-              />
-              <AvatarFallback>
-                {message.author.displayName[0].toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <UserStatusIndicator userId={message.authorId} />
-          </ResponsiveDialogTrigger>
-          <ResponsiveDialogContent>
-            <ResponsiveDialogHeader>
-              <ResponsiveDialogTitle>Profile</ResponsiveDialogTitle>
-              <ResponsiveDialogDescription className="sr-only">
-                Profile
-              </ResponsiveDialogDescription>
-            </ResponsiveDialogHeader>
-            <UserInfo userId={message.authorId} />
-          </ResponsiveDialogContent>
-        </ResponsiveDialog>
-      </div>
-      <div className="flex flex-col max-w-[calc(100%-40px-0.5rem)]">
-        <h5 className="font-semibold text-sm text-muted-foreground">
-          {message.author.displayName}
-        </h5>
-        {content}
-        <time
-          dateTime={message.createdAt}
-          className="text-sm text-muted-foreground leading-tight block"
+      {message.replyTo && (
+        <div
+          className={cn(
+            'bg-neutral-800 px-2 py-0.5 rounded border-l-4 border-primary mb-1',
+            isMine && 'bg-neutral-900'
+          )}
         >
-          {format(message.createdAt, 'dd.MM.yyyy HH:mm')}
-        </time>
+          {message.replyTo.body}
+        </div>
+      )}
+
+      <div
+        className={cn(
+          'flex gap-2 w-full',
+          isMine && 'xl:self-start flex-row-reverse xl:flex-row'
+        )}
+      >
+        <div className="py-1.5">
+          <ResponsiveDialog>
+            <ResponsiveDialogTrigger className="relative">
+              <Avatar>
+                <AvatarImage
+                  src={
+                    message.author.avatar
+                      ? getFileUrl(message.author.avatar)
+                      : undefined
+                  }
+                  alt={message.author.displayName}
+                  className="size-10"
+                />
+                <AvatarFallback>
+                  {message.author.displayName[0].toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <UserStatusIndicator userId={message.authorId} />
+            </ResponsiveDialogTrigger>
+            <ResponsiveDialogContent>
+              <ResponsiveDialogHeader>
+                <ResponsiveDialogTitle>Profile</ResponsiveDialogTitle>
+                <ResponsiveDialogDescription className="sr-only">
+                  Profile
+                </ResponsiveDialogDescription>
+              </ResponsiveDialogHeader>
+              <UserInfo userId={message.authorId} />
+            </ResponsiveDialogContent>
+          </ResponsiveDialog>
+        </div>
+        <div className="flex flex-col max-w-[calc(100%-40px-0.5rem)]">
+          <h5 className="font-semibold text-sm text-muted-foreground">
+            {message.author.displayName}
+          </h5>
+          {content}
+          <time
+            dateTime={message.createdAt}
+            className="text-sm text-muted-foreground leading-tight block mb-1"
+          >
+            {format(message.createdAt, 'dd.MM.yyyy HH:mm')}
+          </time>
+          <div className="flex">
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              className="px-1 h-5"
+              onClick={() => onReplyClick(message)}
+            >
+              <Reply />
+              Reply
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

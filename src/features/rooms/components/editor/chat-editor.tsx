@@ -51,9 +51,16 @@ const getTextFromMarkdown = (markdown: string) => {
 interface ChatEditorProps {
   roomId: string;
   onSend: () => void;
+  replyMessage: Message | null;
+  onReplyClear: () => void;
 }
 
-export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
+export default function ChatEditor({
+  roomId,
+  onSend,
+  replyMessage,
+  onReplyClear,
+}: ChatEditorProps) {
   const { user } = useAuthStore();
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [isGifDialogOpen, setIsGifDialogOpen] = useState(false);
@@ -119,6 +126,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
       userId: user.id,
       attachments: null,
       type: MessageType.TEXT,
+      replyToId: replyMessage?.id ?? null,
     });
     setMessage('');
   };
@@ -146,6 +154,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
           text: rawText,
           type: MessageType.TEXT,
           userId: user.id,
+          replyToId: replyMessage?.id ?? null,
         });
 
         return message;
@@ -162,6 +171,7 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
         roomId,
         userId: user.id,
         type: MessageType.GIF,
+        replyToId: replyMessage?.id ?? null,
       });
     }
   };
@@ -181,6 +191,22 @@ export default function ChatEditor({ roomId, onSend }: ChatEditorProps) {
           onVideoClick={() => setIsVideoDialogOpen(true)}
         />
         <div className="grow self-stretch">
+          {replyMessage && (
+            <div className="bg-neutral-900 p-1 rounded-t-lg flex items-center gap-1">
+              <Button
+                size="icon-sm"
+                type="button"
+                className="size-5"
+                variant="ghost"
+                onClick={onReplyClear}
+              >
+                <X />
+              </Button>
+              <div className="text-sm">
+                Reply to {replyMessage.author.displayName}
+              </div>
+            </div>
+          )}
           <Editor
             value={message}
             onChange={setMessage}

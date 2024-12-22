@@ -4,12 +4,17 @@ import ChatMessage from './message/chat-message';
 import ChatMessagesSkeletons from './chat-messages-skeletons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ChatMessagesInfo from './chat-messages-info';
+import { Message } from '@/types/message';
 
 interface ChatMessagesProps {
   roomId: string;
+  onReplyClick: (message: Message) => void;
 }
 
-export default function ChatMessages({ roomId }: ChatMessagesProps) {
+export default function ChatMessages({
+  roomId,
+  onReplyClick,
+}: ChatMessagesProps) {
   const { data, isLoading, hasNextPage, fetchNextPage } = useMessages(roomId);
 
   const dataLength = useMemo(
@@ -32,7 +37,11 @@ export default function ChatMessages({ roomId }: ChatMessagesProps) {
       {!isLoading &&
         data?.pages.map((page) =>
           page.data.map((message) => (
-            <ChatMessage key={message.id} message={message} />
+            <ChatMessage
+              key={message.id}
+              message={message}
+              onReplyClick={onReplyClick}
+            />
           ))
         )}
     </InfiniteScroll>

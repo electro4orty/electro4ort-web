@@ -18,4 +18,6 @@ export interface Message {
   body: string;
   attachments: Attachment[] | null;
   type: MessageType;
+  replyToId: string | null;
+  replyTo: Message | null;
 }

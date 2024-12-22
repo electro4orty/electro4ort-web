@@ -14,6 +14,7 @@ export interface CreateMessageDTO {
   text: string;
   attachments: AttachmentDTO[] | null;
   type: MessageType;
+  replyToId: string | null;
 }
 
 export async function createMessageService(data: CreateMessageDTO) {

@@ -4,6 +4,7 @@ import ChatMessages from './chat-messages';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
+import { Message } from '@/types/message';
 
 interface ChatProps {
   roomId: string;
@@ -12,6 +13,7 @@ interface ChatProps {
 export default function Chat({ roomId }: ChatProps) {
   const chatMessagesScrollRef = useRef<HTMLDivElement>(null);
   const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(false);
+  const [replyMessage, setReplyMessage] = useState<Message | null>(null);
 
   const scrollToBottom = () => {
     chatMessagesScrollRef.current?.scrollTo({
@@ -39,7 +41,7 @@ export default function Chat({ roomId }: ChatProps) {
           setIsScrollToBottomVisible(e.currentTarget.scrollTop < -300)
         }
       >
-        <ChatMessages roomId={roomId} />
+        <ChatMessages roomId={roomId} onReplyClick={setReplyMessage} />
         <AnimatePresence>
           {isScrollToBottomVisible && (
             <Button
@@ -72,7 +74,12 @@ export default function Chat({ roomId }: ChatProps) {
           )}
         </AnimatePresence>
       </div>
-      <ChatEditor roomId={roomId} onSend={handleMessageSend} />
+      <ChatEditor
+        roomId={roomId}
+        onSend={handleMessageSend}
+        replyMessage={replyMessage}
+        onReplyClear={() => setReplyMessage(null)}
+      />
     </div>
   );
 }
