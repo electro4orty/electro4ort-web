@@ -15,6 +15,8 @@ export default function Chat({ roomId }: ChatProps) {
   const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(false);
   const [replyMessage, setReplyMessage] = useState<Message | null>(null);
 
+  const clearReplyMessage = () => setReplyMessage(null);
+
   const scrollToBottom = () => {
     chatMessagesScrollRef.current?.scrollTo({
       top: 0,
@@ -24,6 +26,7 @@ export default function Chat({ roomId }: ChatProps) {
 
   const handleMessageSend = () => {
     setTimeout(scrollToBottom, 0);
+    clearReplyMessage();
   };
 
   const scrollbarWidth = chatMessagesScrollRef.current
