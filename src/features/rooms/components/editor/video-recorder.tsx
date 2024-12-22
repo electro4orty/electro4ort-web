@@ -41,6 +41,7 @@ export default function VideoRecorder({
         userId,
         attachments: null,
         type: MessageType.VIDEO,
+        replyToId: null,
       });
     },
   });

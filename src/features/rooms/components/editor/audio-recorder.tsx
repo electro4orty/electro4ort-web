@@ -41,6 +41,7 @@ export default function AudioRecorder({
         userId,
         attachments: [],
         type: MessageType.AUDIO,
+        replyToId: null,
       });
     },
   });
