@@ -34,6 +34,22 @@ export default function HubLayout() {
     socket.emit('join', {
       hubSlug,
     });
+
+    const handleConnect = () => {
+      if (!hubSlug) {
+        return;
+      }
+
+      socket.emit('join', {
+        hubSlug,
+      });
+    };
+
+    socket.on('connect', handleConnect);
+
+    return () => {
+      socket.off('connect', handleConnect);
+    };
   }, [hubSlug]);
 
   useEffect(() => {
