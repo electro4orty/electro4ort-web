@@ -32,6 +32,21 @@ export default function RoomScreen() {
 
       prevRoomId.current = roomId;
     }
+
+    const handleConnect = () => {
+      if (roomId) {
+        socket.emit('roomJoin', {
+          roomId,
+        });
+        prevRoomId.current = roomId;
+      }
+    };
+
+    socket.on('connect', handleConnect);
+
+    return () => {
+      socket.off('connect', handleConnect);
+    };
   }, [roomId]);
 
   useEffect(() => {
