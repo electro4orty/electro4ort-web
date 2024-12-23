@@ -9,6 +9,7 @@ import { getMissedMessagesService } from '../services/get-missed-messages.servic
 import { socket } from '@/lib/socket';
 import { Message } from '@/types/message';
 import { appendMessage, appendMessages } from '../utils/append-message';
+import { editMessage } from '../utils/edit-message';
 
 export function useMessages(roomId: string) {
   const queryClient = useQueryClient();
@@ -64,6 +65,20 @@ export function useMessages(roomId: string) {
 
     return () => {
       socket.off('message', handleMessage);
+    };
+  }, [queryClient]);
+
+  useEffect(() => {
+    const handleMessageEdit = (
+      message: Omit<Message, 'attachments' | 'author' | 'replyTo'>
+    ) => {
+      editMessage(queryClient, message);
+    };
+
+    socket.on('message/edit', handleMessageEdit);
+
+    return () => {
+      socket.off('message/edit', handleMessageEdit);
     };
   }, [queryClient]);
 

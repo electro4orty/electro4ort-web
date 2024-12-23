@@ -23,16 +23,18 @@ import { marked } from 'marked';
 import VideoMessage from './video-message';
 import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
-import { Reply } from 'lucide-react';
+import { Pencil, Reply } from 'lucide-react';
 
 interface ChatMessageProps {
   message: Message;
   onReplyClick: (message: Message) => void;
+  onEditClick: (message: Message) => void;
 }
 
 export default function ChatMessage({
   message,
   onReplyClick,
+  onEditClick,
 }: ChatMessageProps) {
   const { user } = useAuthStore();
 
@@ -157,6 +159,18 @@ export default function ChatMessage({
               <Reply />
               Reply
             </Button>
+            {isMine && (
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                className="px-1 h-5"
+                onClick={() => onEditClick(message)}
+              >
+                <Pencil />
+                Edit
+              </Button>
+            )}
           </div>
         </div>
       </div>

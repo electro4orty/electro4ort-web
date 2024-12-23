@@ -14,6 +14,7 @@ export default function Chat({ roomId }: ChatProps) {
   const chatMessagesScrollRef = useRef<HTMLDivElement>(null);
   const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(false);
   const [replyMessage, setReplyMessage] = useState<Message | null>(null);
+  const [editedMessage, setEditedMessage] = useState<Message | null>(null);
 
   const clearReplyMessage = () => setReplyMessage(null);
 
@@ -44,7 +45,11 @@ export default function Chat({ roomId }: ChatProps) {
           setIsScrollToBottomVisible(e.currentTarget.scrollTop < -300)
         }
       >
-        <ChatMessages roomId={roomId} onReplyClick={setReplyMessage} />
+        <ChatMessages
+          roomId={roomId}
+          onReplyClick={setReplyMessage}
+          onEditClick={setEditedMessage}
+        />
         <AnimatePresence>
           {isScrollToBottomVisible && (
             <Button
@@ -81,7 +86,9 @@ export default function Chat({ roomId }: ChatProps) {
         roomId={roomId}
         onSend={handleMessageSend}
         replyMessage={replyMessage}
+        editedMessage={editedMessage}
         onReplyClear={() => setReplyMessage(null)}
+        onEditedClear={() => setEditedMessage(null)}
       />
     </div>
   );

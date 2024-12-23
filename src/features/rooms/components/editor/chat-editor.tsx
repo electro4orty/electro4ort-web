@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createMessageService } from '../../services/create-message.service';
 import { useAuthStore } from '@/store/auth-store';
-import { Send, X } from 'lucide-react';
+import { Check, Send, X } from 'lucide-react';
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -33,6 +33,8 @@ import ShortcutsHelper from './shortcuts-helper';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import AddDropdown from './add-dropdown';
 import UploadFilesForm from './upload-files-form';
+import { editMessageService } from '../../services/edit-message.service';
+import { editMessage } from '../../utils/edit-message';
 
 const getTextFromMarkdown = (markdown: string) => {
   const parser = new DOMParser();
@@ -53,6 +55,8 @@ interface ChatEditorProps {
   onSend: () => void;
   replyMessage: Message | null;
   onReplyClear: () => void;
+  editedMessage: Message | null;
+  onEditedClear: () => void;
 }
 
 export default function ChatEditor({
@@ -60,6 +64,8 @@ export default function ChatEditor({
   onSend,
   replyMessage,
   onReplyClear,
+  editedMessage,
+  onEditedClear,
 }: ChatEditorProps) {
   const { user } = useAuthStore();
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
@@ -72,6 +78,12 @@ export default function ChatEditor({
   const [message, setMessage] = useState('');
   const [isPreview, setIsPreview] = useState(false);
   const [pastedFiles, setPastedFiles] = useState<FileList | null>(null);
+
+  useEffect(() => {
+    if (editedMessage) {
+      setMessage(editedMessage.body);
+    }
+  }, [editedMessage]);
 
   const onLongPressSend = useCallback(() => {
     setIsPreview(true);
@@ -107,9 +119,25 @@ export default function ChatEditor({
     onSend();
   };
 
+  const handleMessageEditSuccess = (
+    message: Omit<Message, 'attachments' | 'author' | 'replyTo'>
+  ) => {
+    editMessage(queryClient, message);
+    setIsGifDialogOpen(false);
+    setIsAudioDialogOpen(false);
+    setIsVideoDialogOpen(false);
+    setIsUploadDialogOpen(false);
+    onSend();
+  };
+
   const { mutate, isPending } = useMutation({
     mutationFn: createMessageService,
     onSuccess: handleMessageSendSuccess,
+  });
+
+  const { mutate: editMutate, isPending: isEditPending } = useMutation({
+    mutationFn: editMessageService,
+    onSuccess: handleMessageEditSuccess,
   });
 
   const handleSubmit = () => {
@@ -119,15 +147,24 @@ export default function ChatEditor({
 
     const text = getTextFromMarkdown(message);
 
-    mutate({
-      body: message.trim(),
-      text,
-      roomId,
-      userId: user.id,
-      attachments: null,
-      type: MessageType.TEXT,
-      replyToId: replyMessage?.id ?? null,
-    });
+    if (editedMessage) {
+      editMutate({
+        body: message.trim(),
+        messageId: editedMessage.id,
+      });
+      onEditedClear();
+    } else {
+      mutate({
+        body: message.trim(),
+        text,
+        roomId,
+        userId: user.id,
+        attachments: null,
+        type: MessageType.TEXT,
+        replyToId: replyMessage?.id ?? null,
+      });
+    }
+
     setMessage('');
   };
 
@@ -207,6 +244,20 @@ export default function ChatEditor({
               </div>
             </div>
           )}
+          {editedMessage && (
+            <div className="bg-neutral-900 p-1 rounded-t-lg flex items-center gap-1">
+              <Button
+                size="icon-sm"
+                type="button"
+                className="size-5"
+                variant="ghost"
+                onClick={onEditedClear}
+              >
+                <X />
+              </Button>
+              <div className="text-sm">Editing message</div>
+            </div>
+          )}
           <Editor
             value={message}
             onChange={setMessage}
@@ -237,10 +288,10 @@ export default function ChatEditor({
                     longPressSendOnTouchEnd();
                     handleSubmit();
                   }}
-                  disabled={!message.trim() || isPending}
+                  disabled={!message.trim() || isPending || isEditPending}
                   {...longPressSendProps}
                 >
-                  <Send className="size-4" />
+                  {editedMessage ? <Check /> : <Send />}
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Long press to show preview</TooltipContent>

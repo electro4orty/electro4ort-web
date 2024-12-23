@@ -9,11 +9,13 @@ import { Message } from '@/types/message';
 interface ChatMessagesProps {
   roomId: string;
   onReplyClick: (message: Message) => void;
+  onEditClick: (message: Message) => void;
 }
 
 export default function ChatMessages({
   roomId,
   onReplyClick,
+  onEditClick,
 }: ChatMessagesProps) {
   const { data, isLoading, hasNextPage, fetchNextPage } = useMessages(roomId);
 
@@ -41,6 +43,7 @@ export default function ChatMessages({
               key={message.id}
               message={message}
               onReplyClick={onReplyClick}
+              onEditClick={onEditClick}
             />
           ))
         )}
