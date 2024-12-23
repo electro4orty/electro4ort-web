@@ -11,16 +11,18 @@ import {
 } from '@/components/ui/sidebar';
 import { socket, WsException } from '@/lib/socket';
 import { useAuthStore } from '@/store/auth-store';
+import { useSettingsStore } from '@/store/settings-store';
 
 export default function HubLayout() {
   useAuthCheck();
   const { user } = useAuthStore();
   const { hubSlug } = useParams();
   const { isMobile, setOpenMobile } = useSidebar();
+  const { useSidebarSwipe } = useSettingsStore();
 
   const swipeHandlers = useSwipeable({
     onSwipedRight: () => {
-      if (isMobile) {
+      if (isMobile && useSidebarSwipe) {
         setOpenMobile(true);
       }
     },

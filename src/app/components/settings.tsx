@@ -19,6 +19,8 @@ export default function Settings() {
     setTheme,
     useMobileDialog,
     setUseMobileDialog,
+    useSidebarSwipe,
+    setUseSidebarSwipe,
   } = useSettingsStore();
 
   return (
@@ -80,6 +82,15 @@ export default function Settings() {
           id="useMobileDialogInput"
         />
         <Label htmlFor="useMobileDialogInput">Use mobile dialog</Label>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <Checkbox
+          checked={useSidebarSwipe}
+          onCheckedChange={setUseSidebarSwipe}
+          id="useSidebarSwipe"
+        />
+        <Label htmlFor="useSidebarSwipe">Use swipe to open sidebar</Label>
       </div>
 
       <div className="text-right">

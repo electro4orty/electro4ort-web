@@ -8,6 +8,8 @@ interface SettingsStore {
   setTheme: (value: string) => void;
   useMobileDialog: boolean;
   setUseMobileDialog: (value: boolean) => void;
+  useSidebarSwipe: boolean;
+  setUseSidebarSwipe: (value: boolean) => void;
 }
 
 export const useSettingsStore = create<SettingsStore>()(
@@ -23,6 +25,8 @@ export const useSettingsStore = create<SettingsStore>()(
       },
       useMobileDialog: true,
       setUseMobileDialog: (value) => set({ useMobileDialog: value }),
+      useSidebarSwipe: false,
+      setUseSidebarSwipe: (value) => set({ useSidebarSwipe: value }),
     }),
     {
       name: 'settings-store',
