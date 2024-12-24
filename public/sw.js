@@ -16,7 +16,7 @@ const handleNotification = debounce((message) => {
     icon: './favicon.svg',
     data: message.data,
   });
-}, 5000);
+}, 1000);
 
 self.addEventListener('push', (e) => {
   const message = e.data.json();
