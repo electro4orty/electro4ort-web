@@ -19,14 +19,18 @@ export default function Chat({ roomId }: ChatProps) {
   const clearReplyMessage = () => setReplyMessage(null);
 
   const scrollToBottom = () => {
-    chatMessagesScrollRef.current?.scrollTo({
+    const chatMessagesScrollElem = chatMessagesScrollRef.current;
+    if (!chatMessagesScrollElem) {
+      return;
+    }
+
+    chatMessagesScrollElem.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
   };
 
   const handleMessageSend = () => {
-    setTimeout(scrollToBottom, 0);
     clearReplyMessage();
   };
 
