@@ -10,6 +10,7 @@ import {
   ResponsiveDialog,
   ResponsiveDialogContent,
 } from '@/components/ui/responsive-dialog';
+import { useSettingsStore } from '@/store/settings-store';
 
 export default function DashboardScreen() {
   const { data } = useQuery({
@@ -18,6 +19,7 @@ export default function DashboardScreen() {
   });
   const [isCreateHubDialogOpen, setIsCreateHubDialogOpen] = useState(false);
   const [isJoinHubDialogOpen, setIsJoinHubDialogOpen] = useState(false);
+  const { lastVisited } = useSettingsStore();
 
   if (!data || data.length === 0) {
     return (
@@ -57,5 +59,9 @@ export default function DashboardScreen() {
     );
   }
 
-  return <Navigate to={getHubPath(data[0].slug)} />;
+  return (
+    <Navigate
+      to={getHubPath(lastVisited ? lastVisited.hubSlug : data[0].slug)}
+    />
+  );
 }

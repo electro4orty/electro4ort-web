@@ -6,11 +6,13 @@ import { getDashboardPath } from '@/constants/router-paths';
 import { useEffect, useRef } from 'react';
 import { socket } from '@/lib/socket';
 import { useSidebar } from '@/components/ui/sidebar';
+import { useSettingsStore } from '@/store/settings-store';
 
 export default function RoomScreen() {
-  const { roomId } = useParams();
+  const { roomId, hubSlug } = useParams();
   const prevRoomId = useRef<string | null>(null);
   const { isMobile, setOpenMobile } = useSidebar();
+  const { setLastVisited } = useSettingsStore();
 
   const { isError } = useQuery({
     queryKey: ['rooms', roomId],
@@ -54,6 +56,15 @@ export default function RoomScreen() {
       setOpenMobile(false);
     }
   }, [roomId, setOpenMobile, isMobile]);
+
+  useEffect(() => {
+    if (roomId && hubSlug) {
+      setLastVisited({
+        roomId,
+        hubSlug,
+      });
+    }
+  }, [roomId, hubSlug, setLastVisited]);
 
   if (!roomId) {
     return null;
