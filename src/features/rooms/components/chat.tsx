@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Message } from '@/types/message';
+import { useTypingStatus } from '../hooks/use-typing-status';
+import { Badge } from '@/components/ui/badge';
 
 interface ChatProps {
   roomId: string;
@@ -15,6 +17,7 @@ export default function Chat({ roomId }: ChatProps) {
   const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(false);
   const [replyMessage, setReplyMessage] = useState<Message | null>(null);
   const [editedMessage, setEditedMessage] = useState<Message | null>(null);
+  const typingUsers = useTypingStatus();
 
   const clearReplyMessage = () => setReplyMessage(null);
 
@@ -40,7 +43,7 @@ export default function Chat({ roomId }: ChatProps) {
     : 0;
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full relative">
       <div
         ref={chatMessagesScrollRef}
         className="grow overflow-y-auto flex flex-col-reverse electro4ort-scrollbar"
@@ -94,6 +97,32 @@ export default function Chat({ roomId }: ChatProps) {
         onReplyClear={() => setReplyMessage(null)}
         onEditedClear={() => setEditedMessage(null)}
       />
+      <AnimatePresence>
+        {typingUsers.length !== 0 && (
+          <Badge
+            className="absolute top-3 left-1/2"
+            variant="secondary"
+            asChild
+          >
+            <motion.div
+              initial={{
+                opacity: 0,
+                transform: 'translate(-50%, -4px)',
+              }}
+              animate={{
+                opacity: 1,
+                transform: 'translate(-50%, 0)',
+              }}
+              exit={{
+                opacity: 0,
+                transform: 'translate(-50%, -4px)',
+              }}
+            >
+              {typingUsers.map((user) => user.displayName).join(', ')} is typing
+            </motion.div>
+          </Badge>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

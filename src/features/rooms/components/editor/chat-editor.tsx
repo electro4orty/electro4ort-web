@@ -13,9 +13,7 @@ import {
 } from '@/components/ui/responsive-dialog';
 import { uploadFilesService } from '../../services/upload-files.service';
 import { appendMessage } from '../../utils/append-message';
-import { User } from '@/types/user';
 import { socket } from '@/lib/socket';
-import { useDebounce } from 'use-debounce';
 import GifSelector from './gif-selector';
 import { Message, MessageType } from '@/types/message';
 import Editor from './editor';
@@ -73,8 +71,6 @@ export default function ChatEditor({
   const [isAudioDialogOpen, setIsAudioDialogOpen] = useState(false);
   const [isVideoDialogOpen, setIsVideoDialogOpen] = useState(false);
   const queryClient = useQueryClient();
-  const [typingUser, setTypingUser] = useState<User | null>(null);
-  const [debouncedTypingUser] = useDebounce(typingUser, 100);
   const [message, setMessage] = useState('');
   const [isPreview, setIsPreview] = useState(false);
   const [pastedFiles, setPastedFiles] = useState<FileList | null>(null);
@@ -91,24 +87,6 @@ export default function ChatEditor({
 
   const { onTouchEnd: longPressSendOnTouchEnd, ...longPressSendProps } =
     useLongPress(onLongPressSend);
-
-  useEffect(() => {
-    const handleTyping = (user: User) => {
-      setTypingUser(user);
-    };
-
-    const handleTypingStopped = () => {
-      setTypingUser(null);
-    };
-
-    socket.on('typing', handleTyping);
-    socket.on('typingStopped', handleTypingStopped);
-
-    return () => {
-      socket.off('typing', handleTyping);
-      socket.off('typingStopped', handleTypingStopped);
-    };
-  });
 
   const handleMessageSendSuccess = (message: Message) => {
     appendMessage(queryClient, message);
@@ -302,11 +280,6 @@ export default function ChatEditor({
 
       <div className="flex justify-between items-end min-h-3.5">
         <ShortcutsHelper />
-        {debouncedTypingUser && (
-          <p className="text-sm text-muted-foreground leading-none">
-            {debouncedTypingUser.displayName} is typing
-          </p>
-        )}
       </div>
 
       <ResponsiveDialog
