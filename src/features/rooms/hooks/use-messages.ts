@@ -10,6 +10,7 @@ import { socket } from '@/lib/socket';
 import { Message } from '@/types/message';
 import { appendMessage, appendMessages } from '../utils/append-message';
 import { editMessage } from '../utils/edit-message';
+import { toast } from 'sonner';
 
 export function useMessages(roomId: string) {
   const queryClient = useQueryClient();
@@ -59,6 +60,9 @@ export function useMessages(roomId: string) {
   useEffect(() => {
     const handleMessage = (message: Message) => {
       appendMessage(queryClient, message);
+      if (roomId !== message.roomId) {
+        toast.info(message.body);
+      }
     };
 
     socket.on('message', handleMessage);
@@ -66,11 +70,11 @@ export function useMessages(roomId: string) {
     return () => {
       socket.off('message', handleMessage);
     };
-  }, [queryClient]);
+  }, [queryClient, roomId]);
 
   useEffect(() => {
     const handleMessageEdit = (
-      message: Omit<Message, 'attachments' | 'author' | 'replyTo'>
+      message: Omit<Message, 'attachments' | 'author' | 'replyTo'>,
     ) => {
       editMessage(queryClient, message);
     };
