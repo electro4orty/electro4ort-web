@@ -5,8 +5,9 @@ import { getRoomService } from '../services/get-room.service';
 import { getDashboardPath } from '@/constants/router-paths';
 import { useEffect, useRef } from 'react';
 import { socket } from '@/lib/socket';
-import { useSidebar } from '@/components/ui/sidebar';
+import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
 import { useSettingsStore } from '@/store/settings-store';
+import { Dot } from 'lucide-react';
 
 export default function RoomScreen() {
   const { roomId, hubSlug } = useParams();
@@ -14,7 +15,7 @@ export default function RoomScreen() {
   const { isMobile, setOpenMobile } = useSidebar();
   const { setLastVisited } = useSettingsStore();
 
-  const { isError } = useQuery({
+  const { data: room, isError } = useQuery({
     queryKey: ['rooms', roomId],
     queryFn: () => (roomId ? getRoomService(roomId) : null),
     enabled: !!roomId,
@@ -74,5 +75,19 @@ export default function RoomScreen() {
     return <Navigate to={getDashboardPath()} />;
   }
 
-  return <Chat roomId={roomId} />;
+  return (
+    <div className="flex flex-col h-full">
+      <div className="h-16 bg-secondary flex items-center gap-1 px-4">
+        <SidebarTrigger className="md:hidden" />
+        <button type="button" onClick={() => window.location.reload()}>
+          <img src="/logo-wide.png" width="180px" alt="Electro4ort" />
+        </button>
+        <Dot />
+        <span className="text-lg font-bold">{room?.name}</span>
+      </div>
+      <div className="h-[calc(100%-4rem)] overflow-hidden">
+        <Chat roomId={roomId} />
+      </div>
+    </div>
+  );
 }
