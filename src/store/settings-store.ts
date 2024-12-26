@@ -6,6 +6,15 @@ interface SettingsStore {
   setIsSendMessageUsingModifier: (value: boolean) => void;
   theme: string;
   setTheme: (value: string) => void;
+  useMobileDialog: boolean;
+  setUseMobileDialog: (value: boolean) => void;
+  useSidebarSwipe: boolean;
+  setUseSidebarSwipe: (value: boolean) => void;
+  lastVisited: {
+    roomId: string;
+    hubSlug: string;
+  } | null;
+  setLastVisited: (data: { roomId: string; hubSlug: string }) => void;
 }
 
 export const useSettingsStore = create<SettingsStore>()(
@@ -19,6 +28,12 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ theme: value });
         document.documentElement.className = value === 'default' ? '' : value;
       },
+      useMobileDialog: true,
+      setUseMobileDialog: (value) => set({ useMobileDialog: value }),
+      useSidebarSwipe: false,
+      setUseSidebarSwipe: (value) => set({ useSidebarSwipe: value }),
+      lastVisited: null,
+      setLastVisited: (data) => set({ lastVisited: data }),
     }),
     {
       name: 'settings-store',
@@ -26,6 +41,6 @@ export const useSettingsStore = create<SettingsStore>()(
         document.documentElement.className =
           !state || state.theme === 'default' ? '' : state.theme;
       },
-    }
-  )
+    },
+  ),
 );

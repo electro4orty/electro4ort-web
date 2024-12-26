@@ -26,15 +26,15 @@ import { useState } from 'react';
 import UserStatusIndicator from '@/components/user-status-indicator';
 import { getFileUrl } from '@/utils/get-file-url';
 import { AppSidebarDropdownTrigger } from './app-sidebar-dropdown-trigger';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import UserInfo from '@/components/user-info';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogTrigger,
+} from '@/components/ui/responsive-dialog';
 
 interface ParticipantsProps {
   hubSlug: string;
@@ -85,8 +85,8 @@ export default function Participants({ hubSlug }: ParticipantsProps) {
               {!isLoading &&
                 data?.map((user) => (
                   <SidebarMenuItem key={user.id}>
-                    <Dialog>
-                      <DialogTrigger asChild>
+                    <ResponsiveDialog>
+                      <ResponsiveDialogTrigger asChild>
                         <SidebarMenuButton>
                           <div className="flex items-center gap-2">
                             <div className="relative">
@@ -111,17 +111,17 @@ export default function Participants({ hubSlug }: ParticipantsProps) {
                             <span>{user.displayName}</span>
                           </div>
                         </SidebarMenuButton>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Profile</DialogTitle>
-                          <DialogDescription className="sr-only">
+                      </ResponsiveDialogTrigger>
+                      <ResponsiveDialogContent>
+                        <ResponsiveDialogHeader>
+                          <ResponsiveDialogTitle>Profile</ResponsiveDialogTitle>
+                          <ResponsiveDialogDescription className="sr-only">
                             Profile
-                          </DialogDescription>
-                        </DialogHeader>
+                          </ResponsiveDialogDescription>
+                        </ResponsiveDialogHeader>
                         <UserInfo userId={user.id} />
-                      </DialogContent>
-                    </Dialog>
+                      </ResponsiveDialogContent>
+                    </ResponsiveDialog>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <SidebarMenuAction showOnHover>

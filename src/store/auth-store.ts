@@ -1,3 +1,5 @@
+import { registerSW } from '@/utils/register-sw';
+import { socket } from '@/lib/socket';
 import { User } from '@/types/user';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -15,7 +17,11 @@ export const useAuthStore = create<AuthStore>()(
     (set) => ({
       user: null,
       token: null,
-      login: ({ user, token }) => set({ user, token }),
+      login: ({ user, token }) => {
+        set({ user, token });
+        socket.connect();
+        registerSW(user);
+      },
       logout: () => set({ user: null, token: null }),
       setUser: (user) => set({ user }),
     }),

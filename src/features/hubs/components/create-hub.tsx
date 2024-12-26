@@ -1,10 +1,4 @@
 import { Button } from '@/components/ui/button';
-import {
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -12,10 +6,15 @@ import { createHubService } from '../services/create-hub.service';
 import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
 import { getHubPath } from '@/constants/router-paths';
+import {
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from '@/components/ui/responsive-dialog';
 
 interface CreateHubFormData {
   name: string;
-  avatar: FileList | undefined;
 }
 
 interface CreateHubProps {
@@ -28,8 +27,6 @@ export default function CreateHub({ onClose }: CreateHubProps) {
       name: '',
     },
   });
-
-  const avatar = form.watch('avatar');
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -54,10 +51,12 @@ export default function CreateHub({ onClose }: CreateHubProps) {
 
   return (
     <>
-      <DialogHeader>
-        <DialogTitle>Create hub</DialogTitle>
-        <DialogDescription>Configure new hub</DialogDescription>
-      </DialogHeader>
+      <ResponsiveDialogHeader>
+        <ResponsiveDialogTitle>Create hub</ResponsiveDialogTitle>
+        <ResponsiveDialogDescription>
+          Configure new hub
+        </ResponsiveDialogDescription>
+      </ResponsiveDialogHeader>
 
       <form
         id="createHubForm"
@@ -74,31 +73,13 @@ export default function CreateHub({ onClose }: CreateHubProps) {
             {...form.register('name')}
           />
         </div>
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="createHubAvatar">Avatar</Label>
-          <div>
-            <Input
-              type="file"
-              id="createHubAvatar"
-              required
-              {...form.register('avatar')}
-            />
-          </div>
-
-          {avatar?.[0] && (
-            <img
-              src={URL.createObjectURL(avatar[0])}
-              className="size-24 rounded-full object-cover object-center"
-            />
-          )}
-        </div>
       </form>
 
-      <DialogFooter>
+      <ResponsiveDialogFooter>
         <Button type="submit" form="createHubForm" disabled={isPending}>
           Create
         </Button>
-      </DialogFooter>
+      </ResponsiveDialogFooter>
     </>
   );
 }

@@ -16,9 +16,10 @@ import CreateHub from '@/features/hubs/components/create-hub';
 import Participants from './participants';
 import { useState } from 'react';
 import HubsSearch from './hubs-search';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
-import Version from './version';
-import WsStatus from './ws-status';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+} from '@/components/ui/responsive-dialog';
 
 export default function AppSidebar() {
   const { hubSlug } = useParams();
@@ -79,22 +80,18 @@ export default function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <UserDropdown />
-            <div className="flex justify-between items-center">
-              <WsStatus />
-              <Version />
-            </div>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
 
-      <Dialog
+      <ResponsiveDialog
         open={isCreateHubDialogOpen}
         onOpenChange={setIsCreateHubDialogOpen}
       >
-        <DialogContent>
+        <ResponsiveDialogContent>
           <CreateHub onClose={() => setIsCreateHubDialogOpen(false)} />
-        </DialogContent>
-      </Dialog>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
     </Sidebar>
   );
 }

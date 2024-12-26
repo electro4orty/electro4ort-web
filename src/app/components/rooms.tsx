@@ -4,7 +4,6 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSkeleton,
@@ -12,16 +11,18 @@ import {
 import { getHubRoomsService } from '@/features/hubs/services/get-hub-rooms.service';
 import { useQuery } from '@tanstack/react-query';
 import { roomTypeIcons } from '../constants/room-type-icons';
-import { Badge } from '@/components/ui/badge';
 import { NavLink } from 'react-router-dom';
 import { getRoomPath } from '../../constants/router-paths';
 import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import CreateRoom from '@/features/rooms/components/create-room';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { useState } from 'react';
 import { AppSidebarDropdownTrigger } from './app-sidebar-dropdown-trigger';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+} from '@/components/ui/responsive-dialog';
 
 const skeletons = Array.from({ length: 5 }).map((_, index) => (
   <SidebarMenuItem key={index}>
@@ -56,17 +57,17 @@ export default function Rooms({ hubSlug }: RoomsProps) {
               <Plus />
             </Button>
 
-            <Dialog
+            <ResponsiveDialog
               open={isCreateRoomDialogOpen}
               onOpenChange={setIsCreateRoomDialogOpen}
             >
-              <DialogContent>
+              <ResponsiveDialogContent>
                 <CreateRoom
                   hubSlug={hubSlug}
                   onClose={() => setIsCreateRoomDialogOpen(false)}
                 />
-              </DialogContent>
-            </Dialog>
+              </ResponsiveDialogContent>
+            </ResponsiveDialog>
           </SidebarGroupAction>
         </SidebarGroupLabel>
         <CollapsibleContent className="mt-2">
@@ -91,9 +92,6 @@ export default function Rooms({ hubSlug }: RoomsProps) {
                           <span>{room.name}</span>
                         </NavLink>
                       </SidebarMenuButton>
-                      <SidebarMenuBadge>
-                        <Badge size="dot" />
-                      </SidebarMenuBadge>
                     </SidebarMenuItem>
                   );
                 })}

@@ -239,7 +239,7 @@
     color-scheme: light dark;
   }
   body {
-    @apply bg-background text-foreground overflow-hidden;
+    @apply bg-background text-foreground overflow-hidden font-sans;
   }
   details {
     cursor: pointer;
@@ -310,7 +310,7 @@
   }
 
   .electro4ort-scrollbar::-webkit-scrollbar {
-    @apply w-2;
+    @apply w-2 h-2;
   }
 
   .electro4ort-scrollbar::-webkit-scrollbar-track {
@@ -324,4 +324,13 @@
   .electro4ort-scrollbar::-webkit-scrollbar-thumb:hover {
     @apply bg-neutral-400;
   }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+}
+
+@font-face {
+  font-family: 'Noto Color Emoji';
+  src: url(/NotoColorEmoji.ttf);
 }

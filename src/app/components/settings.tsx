@@ -8,6 +8,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useSettingsStore } from '@/store/settings-store';
+import Version from './version';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export default function Settings() {
   const {
@@ -15,6 +17,10 @@ export default function Settings() {
     setIsSendMessageUsingModifier,
     theme,
     setTheme,
+    useMobileDialog,
+    setUseMobileDialog,
+    useSidebarSwipe,
+    setUseSidebarSwipe,
   } = useSettingsStore();
 
   return (
@@ -68,6 +74,28 @@ export default function Settings() {
           <SelectItem value="violet">Violet</SelectItem>
         </SelectContent>
       </Select>
+
+      <div className="flex items-center gap-2">
+        <Checkbox
+          checked={useMobileDialog}
+          onCheckedChange={setUseMobileDialog}
+          id="useMobileDialogInput"
+        />
+        <Label htmlFor="useMobileDialogInput">Use mobile dialog</Label>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <Checkbox
+          checked={useSidebarSwipe}
+          onCheckedChange={setUseSidebarSwipe}
+          id="useSidebarSwipe"
+        />
+        <Label htmlFor="useSidebarSwipe">Use swipe to open sidebar</Label>
+      </div>
+
+      <div className="text-right">
+        <Version />
+      </div>
     </div>
   );
 }

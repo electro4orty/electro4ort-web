@@ -13,7 +13,7 @@ export default function Attachments({ attachments }: AttachmentsProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="flex flex-wrap gap-1">
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(120px,1fr))] xl:grid-cols-[repeat(auto-fit,minmax(120px,0.75fr))] gap-1">
       {attachments.map((attachment, i) => (
         <button
           key={attachment.fileName}
@@ -26,7 +26,7 @@ export default function Attachments({ attachments }: AttachmentsProps) {
           <img
             src={getFileUrl(attachment.fileName)}
             alt={attachment.fileName}
-            className="block size-40 object-cover object-center overflow-hidden rounded-lg"
+            className="block size-full object-cover object-center overflow-hidden rounded-lg"
           />
         </button>
       ))}

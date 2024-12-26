@@ -10,6 +10,9 @@ export interface WsException {
 
 interface ListenEvents {
   message: (message: Message) => void;
+  'message/edit': (
+    message: Omit<Message, 'attachments' | 'author' | 'replyTo'>
+  ) => void;
   exception: (exception: WsException) => void;
   userStatusUpdate: (user: User) => void;
   typing: (user: User) => void;
@@ -19,6 +22,10 @@ interface ListenEvents {
 interface EmitEvents {
   message: (
     data: { roomId: string; userId: string; body: string },
+    callback: (message: Message) => void
+  ) => void;
+  'message/edit': (
+    data: { messageId: string; body: string },
     callback: (message: Message) => void
   ) => void;
   join: (data: { hubSlug: string }) => void;

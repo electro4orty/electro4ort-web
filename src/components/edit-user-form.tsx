@@ -2,7 +2,6 @@ import { User } from '@/types/user';
 import { useForm } from 'react-hook-form';
 import FormField from '@/components/ui/form-field';
 import { Button } from '@/components/ui/button';
-import { DialogFooter } from '@/components/ui/dialog';
 import { useMutation } from '@tanstack/react-query';
 import { updateUserService } from '@/services/update-user.service';
 import { Calendar } from '@/components/ui/calendar';
@@ -16,6 +15,7 @@ import { format, formatISO } from 'date-fns';
 import { Form, FormField as FormController } from '@/components/ui/form';
 import AvatarField from './avatar-field';
 import { EditUserFormData } from './edit-user-form.config';
+import { ResponsiveDialogFooter } from './ui/responsive-dialog';
 
 interface EditUserFormProps {
   user: User;
@@ -114,14 +114,14 @@ export default function EditUserForm({
           />
         </div>
 
-        <DialogFooter>
+        <ResponsiveDialogFooter>
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel
           </Button>
           <Button type="submit" disabled={isPending}>
             Save
           </Button>
-        </DialogFooter>
+        </ResponsiveDialogFooter>
       </form>
     </Form>
   );

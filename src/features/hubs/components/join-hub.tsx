@@ -1,18 +1,18 @@
 import { getHubPath } from '@/constants/router-paths';
 import { Button } from '@/components/ui/button';
-import {
-  DialogClose,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { joinHubService } from '@/features/hubs/services/join-hub.service';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import {
+  ResponsiveDialogClose,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from '@/components/ui/responsive-dialog';
 
 interface JoinHubFormData {
   slug: string;
@@ -45,10 +45,12 @@ export default function JoinHub({ onClose }: JoinHubDialogProps) {
 
   return (
     <>
-      <DialogHeader>
-        <DialogTitle>Join hub</DialogTitle>
-        <DialogDescription>Find and join your favorite hubs</DialogDescription>
-      </DialogHeader>
+      <ResponsiveDialogHeader>
+        <ResponsiveDialogTitle>Join hub</ResponsiveDialogTitle>
+        <ResponsiveDialogDescription>
+          Find and join your favorite hubs
+        </ResponsiveDialogDescription>
+      </ResponsiveDialogHeader>
       <form id="joinHubForm" onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="flex flex-col gap-2 mb-3">
           <Label htmlFor="joinHubSlug">Hub slug</Label>
@@ -62,16 +64,16 @@ export default function JoinHub({ onClose }: JoinHubDialogProps) {
         </div>
       </form>
 
-      <DialogFooter>
-        <DialogClose asChild>
+      <ResponsiveDialogFooter>
+        <ResponsiveDialogClose asChild>
           <Button variant="ghost" disabled={isPending}>
             Cancel
           </Button>
-        </DialogClose>
+        </ResponsiveDialogClose>
         <Button type="submit" form="joinHubForm" disabled={isPending}>
           Join
         </Button>
-      </DialogFooter>
+      </ResponsiveDialogFooter>
     </>
   );
 }
